@@ -1,5 +1,6 @@
 target/
 !.mvn/wrapper/maven-wrapper.jar
+.gitignore
 
 ### STS ###
 .apt_generated
@@ -22,3 +23,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/src/main/resources/**
