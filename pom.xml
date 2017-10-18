@@ -9,14 +9,12 @@
 	<packaging>war</packaging>
 	<name>scapi</name>
 	<description>source control api</description>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.4.RELEASE</version>
 		<relativePath/>
 	</parent>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -146,58 +144,24 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<configuration>
-					<sonar.sources>src/main/java</sonar.sources>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/common/*</sonar.exclusions>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/config/*</sonar.exclusions>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/controller/*</sonar.exclusions>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/entity/*</sonar.exclusions>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/model/*</sonar.exclusions>
-					<sonar.exclusions>file:**/src/main/java/com/paasta/scapi/repository/*</sonar.exclusions>
-				</configuration>
-			</plugin>-->
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.5.201505241946</version>
-				<configuration>
-					<excludes>
-						<exclude>**/common/**</exclude>
-						<exclude>**/config/**</exclude>
-						<exclude>**/controller/**</exclude>
-						<exclude>**/entity/**</exclude>
-						<exclude>**/model/**</exclude>
-						<exclude>**/repository/**</exclude>
-					</excludes>
-					<destFile>${project.basedir}/../target/jacoco.exec</destFile>
-					<append>true</append>
-				</configuration>
-				<executions>
-					<execution>
-						<id>jacoco-initialize</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>jacoco-site</id>
-						<phase>package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 			<groupId>org.jacoco</groupId>
+			<version>0.7.9</version>
 			<artifactId>jacoco-maven-plugin</artifactId>
 			<configuration>
 				<skip>${maven.test.skip}</skip>
 				<destFile>\${basedir}/target/jacoco/jacoco-overall.exec</destFile>
 				<output>file</output>
+				<append>true</append>
+				<excludes>
+					<exclude>**/common/**</exclude>
+					<exclude>**/config/**</exclude>
+					<exclude>**/controller/**</exclude>
+					<exclude>**/entity/**</exclude>
+					<exclude>**/model/**</exclude>
+					<exclude>**/repository/**</exclude>
+				</excludes>
+				<destFile>${project.basedir}/../target/jacoco.exec</destFile>
 				<append>true</append>
 			</configuration>
 			<executions>
@@ -223,6 +187,13 @@
 					<configuration>
 						<dataFile>target/jacoco/jacoco.exec</dataFile>
 					</configuration>
+				</execution>
+				<execution>
+					<id>jacoco-site</id>
+					<phase>package</phase>
+					<goals>
+						<goal>report</goal>
+					</goals>
 				</execution>
 			</executions>
 			</plugin>
