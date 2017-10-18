@@ -40,10 +40,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.boot</groupId>-->
-			<!--<artifactId>spring-boot-starter-security</artifactId>-->
-		<!--</dependency>-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -161,8 +162,6 @@
 					<exclude>**/model/**</exclude>
 					<exclude>**/repository/**</exclude>
 				</excludes>
-				<destFile>${project.basedir}/../target/jacoco.exec</destFile>
-				<append>true</append>
 			</configuration>
 			<executions>
 				<execution>
@@ -185,7 +184,8 @@
 						<goal>report</goal>
 					</goals>
 					<configuration>
-						<dataFile>target/jacoco/jacoco.exec</dataFile>
+						<dataFile>${project.build.directory}/target/jacoco/jacoco.exec</dataFile>
+                        <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
 					</configuration>
 				</execution>
 				<execution>
