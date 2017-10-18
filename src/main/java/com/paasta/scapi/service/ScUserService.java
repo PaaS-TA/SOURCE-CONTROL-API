@@ -212,7 +212,7 @@ public class ScUserService extends CommonService {
 			user.setAdmin(admin);
 			user.setMail(mail);
 			if(!Common.empty(passwordSet)){
-				Map map =user.getProperties();;
+				Map map =user.getProperties();
 				user.setProperty("PasswordSet",passwordSet);
 			}
 

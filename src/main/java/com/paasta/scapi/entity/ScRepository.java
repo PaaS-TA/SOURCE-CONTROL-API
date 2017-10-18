@@ -35,7 +35,7 @@ public class ScRepository {
     @Column(name = "CREATED_TIME")
     private String createTime;
 
-    public ScRepository(){};
+    public ScRepository(){}
     public ScRepository(String id, String reponame, String mail, String desc) { }
 
     public ScRepository(String repoScmId, String repoName, String repoDesc, String instanceId,String createUserId, String ownerUserId) {

@@ -11,9 +11,7 @@ import java.util.List;
 
 public interface ScServiceInstanceRepository extends JpaRepository<ScServiceInstance, String>{
 
-    //List<ScServiceInstance> findByOrganizationNameContaining(String OrganizationName, PageRequest pageRequest);
-
-    List findByCreateUserId(String createUserId);
+    List<ScServiceInstance> findByCreateUserId(String createUserId);
 
     Page<ScServiceInstance> findAll(Specification<ScServiceInstance> scRepositorySpecification, Pageable pageable);
 }

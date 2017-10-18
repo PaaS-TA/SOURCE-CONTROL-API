@@ -279,7 +279,7 @@ public class RepoPermissionApiService extends CommonService{
                 pageRequest = new PageRequest(page, size);//, sort);
             }
             int start = pageRequest.getPageNumber() * rstRtnList.size();
-            rstRtnList = (List) rstRtnList.stream().skip(start).limit(rstRtnList.size()).collect(toList());
+            rstRtnList = rstRtnList.stream().skip(start).limit(rstRtnList.size()).collect(toList());
             Page pageImpl = new PageImpl(rstRtnList, pageRequest, rstRtnList.size());
             Map rtnMap = new HashMap();
             rtnMap.put("rtnMap", pageImpl);

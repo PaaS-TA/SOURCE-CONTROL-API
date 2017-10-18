@@ -18,6 +18,6 @@ public interface ScRepositoryRepository extends JpaRepository<ScRepository, Inte
 
     Integer deleteByRepoScmId(String id);
 
-    List findAllByInstanceId(String instanceId);
+    List<ScRepository> findAllByInstanceId(String instanceId);
 
 }

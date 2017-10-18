@@ -26,7 +26,7 @@ public class CommonTest {
     @Test
     public void stringNullCheck() throws Exception {
         String string = null;
-        assertFalse(Common.stringNullCheck(string)==true);
+        assertFalse(Common.stringNullCheck(string));
     }
 
     @Test

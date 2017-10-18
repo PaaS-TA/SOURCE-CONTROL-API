@@ -15,9 +15,9 @@ public interface RepoPermissionRepository extends JpaRepository<RepoPermission, 
 
     void delete(int no);
 
-    List findAllByRepoNo(int repo_no);
+    List<RepoPermission>  findAllByRepoNo(int repo_no);
 
-    List findAllByRepoNoAndPermission(int repo_no, String permission);
+    List<RepoPermission>  findAllByRepoNoAndPermission(int repo_no, String permission);
 
     Page<RepoPermission> findAllByRepoNo(int repo_no, Pageable pageable);
 

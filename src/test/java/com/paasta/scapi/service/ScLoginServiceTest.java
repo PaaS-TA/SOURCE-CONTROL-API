@@ -1,13 +1,11 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.PropertiesUtilTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import sonia.scm.user.User;
@@ -25,8 +23,7 @@ public class ScLoginServiceTest {
 
     @InjectMocks
     private ScLoginService scLoginService;
-    @Autowired
-    private PropertiesUtilTest propertiesUtilTest;
+
     @Value("${admin.id}") String admin_id;
     @Before
     public void setup() throws Exception {

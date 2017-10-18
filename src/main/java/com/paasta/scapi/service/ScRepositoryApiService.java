@@ -161,7 +161,6 @@ public class ScRepositoryApiService extends  CommonService{
             resultMap.put("pageInfo", pageInfo);
         } catch (Exception e) {
             e.printStackTrace();
-            ;
         }
         return resultMap;
     }
@@ -354,7 +353,7 @@ public class ScRepositoryApiService extends  CommonService{
         HttpEntity<Object> entity = restClientUtil.restCommonHeader(null);
         String url = propertiesUtil.getApi_repo_branches().replace("{id}", id);
         ResponseEntity<sonia.scm.repository.Branches> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, sonia.scm.repository.Branches.class);
-        sonia.scm.repository.Branches repositories = (sonia.scm.repository.Branches) response.getBody();
+        sonia.scm.repository.Branches repositories = response.getBody();
         return repositories;
     }
 
@@ -386,7 +385,7 @@ public class ScRepositoryApiService extends  CommonService{
         url = url + param;
         logger.debug("url:::" + url);
         ResponseEntity<BrowserResult> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, BrowserResult.class);
-        BrowserResult repositories = (BrowserResult) response.getBody();
+        BrowserResult repositories = response.getBody();
         return repositories;
     }
 
