@@ -40,11 +40,11 @@ public class RestClientUtil extends CommonService{
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<T> response = null;
 
-        this.logger.info("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.base_url+url, responseType);
+        this.logger.info("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.baseUrl +url, responseType);
 
         try {
 
-            response = restTemplate.exchange(this.propertiesUtil.base_url+url, httpMethod, entity, responseType);
+            response = restTemplate.exchange(this.propertiesUtil.baseUrl +url, httpMethod, entity, responseType);
 
         } catch (HttpServerErrorException he) {
             //TODO exception 처리
@@ -72,7 +72,6 @@ public class RestClientUtil extends CommonService{
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         List lst =new ArrayList();
        lst.add(Charset.forName("euc-kr"));
-//        lst.add(Charset.forName("UTF-8"));
         headers.setAcceptCharset(lst);
         HttpEntity<Object> entity = new HttpEntity<Object>(param, headers);
 
@@ -115,9 +114,9 @@ public class RestClientUtil extends CommonService{
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<List<T>> response = null;
 
-        this.logger.debug("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.base_url+url, responseType);
+        this.logger.debug("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.baseUrl +url, responseType);
 
-        response = restTemplate.exchange(this.propertiesUtil.base_url+url, httpMethod, entity, responseType);
+        response = restTemplate.exchange(this.propertiesUtil.baseUrl +url, httpMethod, entity, responseType);
 
         //TODO Exception 처리
 

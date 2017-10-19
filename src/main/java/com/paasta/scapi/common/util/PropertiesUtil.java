@@ -18,87 +18,87 @@ public class PropertiesUtil {
     /**
      * The Base url.
      */
-    @Value("${api.base.url}") String base_url;
+    @Value("${api.base.url}") String baseUrl;
 
     /**
      * The Admin id.
      */
-    @Value("${admin.id}") String admin_id;
+    @Value("${admin.id}") String adminId;
 
     /**
      * The Admin pwd.
      */
-    @Value("${admin.pwd}") String admin_pwd;
+    @Value("${admin.pwd}") String adminPwd;
 
     //====== [Scm Server Authentication Resource Api]
     /**
      * The Api auth.
      */
-    @Value("${api.authentication}") String api_auth;
+    @Value("${api.authentication}") String apiAuth;
     /**
      * The Api auth login.
      */
-    @Value("${api.authentication.login}") String api_auth_login;
+    @Value("${api.authentication.login}") String apiAuthLogin;
 
     //====== [Scm Server Repository Resource Api]
     /**
      * The Api Repository.
      */
-    @Value("${api.repository}") String api_repo;
+    @Value("${api.repository}") String apiRepo;
     /**
      * The Api Repository id.
      */
-    @Value("${api.repository.id}") String api_repo_id;
+    @Value("${api.repository.id}") String apiRepoId;
     /**
      * The Api Repository blame.
      */
-    @Value("${api.repository.id.blame}") String api_repo_blame;
+    @Value("${api.repository.id.blame}") String apiRepoBlame;
     /**
      * The Api Repository branches.
      */
-    @Value("${api.repository.id.branches}") String api_repo_branches;
+    @Value("${api.repository.id.branches}") String apiRepoBranches;
     /**
      * The Api Repository Browse.
      */
-    @Value("${api.repository.id.browse}") String api_repo_browse;
+    @Value("${api.repository.id.browse}") String apiRepoBrowse;
     /**
      * The Api Repository changesets.
      */
-    @Value("${api.repository.id.changesets}") String api_repo_changesets;
+    @Value("${api.repository.id.changesets}") String apiRepoChangesets;
     /**
      * The Api Repository content.
      */
-    @Value("${api.repository.id.content}") String api_repo_content;
+    @Value("${api.repository.id.content}") String apiRepoContent;
     /**
      * The Api Repository diff.
      */
-    @Value("${api.repository.id.diff}") String api_repo_diff;
+    @Value("${api.repository.id.diff}") String apiRepoDiff;
     /**
      * The Api Repository healthcheck.
      */
-    @Value("${api.repository.id.healthcheck}") String api_repo_healthcheck;
+    @Value("${api.repository.id.healthcheck}") String apiRepoHealthcheck;
     /**
      * The Api Repository tags.
      */
-    @Value("${api.repository.id.tags}") String api_repo_tags;
+    @Value("${api.repository.id.tags}") String apiRepoTags;
     /**
      * The Api Repository name.
      */
-    @Value("${api.repository.type.name}") String api_repo_type_name;
+    @Value("${api.repository.type.name}") String apiRepoTypeName;
     /**
      * The Api Repository revision.
      */
-    @Value("${api.repository.id.changeset.revision}") String api_repo_revision;
+    @Value("${api.repository.id.changeset.revision}") String apiRepoRevision;
     /**
      * The Api Repository revision.
      */
-    @Value("${api.repository.id.content.path.revision}") String api_repository_id_content_path_revision;
+    @Value("${api.repository.id.content.path.revision}") String apiRepositoryIdContentPathRevision;
 
     //====== [Scm Server User Resource Api]
     /**
      * The Api users.
      */
-    @Value("${api.users}") String api_users;
+    @Value("${api.users}") String apiUsers;
 
     /**
      * Gets basic auth.
@@ -106,9 +106,33 @@ public class PropertiesUtil {
      * @return the basic auth
      */
     public String getBasicAuth() {
-        String basicAuth = "Basic " + (Base64.getEncoder().encodeToString((admin_id + ":" + admin_pwd).getBytes()));
+        String basicAuth = "Basic " + (Base64.getEncoder().encodeToString((adminId + ":" + adminPwd).getBytes()));
 
         return basicAuth;
     }
 
+    @Override
+    public String toString() {
+        return "PropertiesUtil{" +
+                "baseUrl='" + baseUrl + '\'' +
+                ", adminId='" + adminId + '\'' +
+                ", adminPwd='" + adminPwd + '\'' +
+                ", apiAuth='" + apiAuth + '\'' +
+                ", apiAuthLogin='" + apiAuthLogin + '\'' +
+                ", apiRepo='" + apiRepo + '\'' +
+                ", apiRepoId='" + apiRepoId + '\'' +
+                ", apiRepoBlame='" + apiRepoBlame + '\'' +
+                ", apiRepoBranches='" + apiRepoBranches + '\'' +
+                ", apiRepoBrowse='" + apiRepoBrowse + '\'' +
+                ", apiRepoChangesets='" + apiRepoChangesets + '\'' +
+                ", apiRepoContent='" + apiRepoContent + '\'' +
+                ", apiRepoDiff='" + apiRepoDiff + '\'' +
+                ", apiRepoHealthcheck='" + apiRepoHealthcheck + '\'' +
+                ", apiRepoTags='" + apiRepoTags + '\'' +
+                ", apiRepoTypeName='" + apiRepoTypeName + '\'' +
+                ", apiRepoRevision='" + apiRepoRevision + '\'' +
+                ", apiRepositoryIdContentPathRevision='" + apiRepositoryIdContentPathRevision + '\'' +
+                ", apiUsers='" + apiUsers + '\'' +
+                '}';
+    }
 }

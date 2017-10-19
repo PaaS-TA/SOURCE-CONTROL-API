@@ -17,7 +17,6 @@ import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScInstanceUserRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -98,7 +97,7 @@ public class RepoPermissionApiService extends CommonService{
                 e.printStackTrace();
             }
             HttpEntity<Object> httEntity = restClientUtil.restCommonHeader(repository);
-            entity = restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApi_repo() + "/" + repositoryId, httEntity, String.class);
+            entity = restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApiRepo() + "/" + repositoryId, httEntity, String.class);
             if (entity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
                 List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
                 permission.setRepoNo(scRepository.get(0).getRepoNo());
@@ -145,7 +144,7 @@ public class RepoPermissionApiService extends CommonService{
                 return new ResponseEntity(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
             }
             HttpEntity<Object> httEntity = this.restClientUtil.restCommonHeaders(param);
-            entity = this.restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApi_repo() + "/" + repositoryId, httEntity, String.class);
+            entity = this.restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApiRepo() + "/" + repositoryId, httEntity, String.class);
             if (entity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
                 return new ResponseEntity(entity.getHeaders(), HttpStatus.OK);
             }

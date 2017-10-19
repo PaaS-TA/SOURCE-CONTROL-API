@@ -143,13 +143,13 @@ public class Common {
      */
     public List<User> fillterUser(String username, List<User> list) {
         List rtnList = new ArrayList();
-        list.forEach(User -> {
+        list.forEach(user -> {
             if (Common.empty(username)) {
-                list.add(User);
+                list.add(user);
             }
             if (Common.notEmpty(username)) {
-                if (User.getName().contains(username) || User.getDisplayName().contains(username)) {
-                    list.add(User);
+                if (user.getName().contains(username) || user.getDisplayName().contains(username)) {
+                    list.add(user);
                 }
             }
         });

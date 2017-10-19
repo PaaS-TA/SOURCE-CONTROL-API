@@ -23,7 +23,7 @@ public class ScLoginService extends CommonService{
     public ResponseEntity login(User user) {
         try {
             logger.info("login Start : ");
-            ScmClientSession scmClientSession = ScmClient.createSession(propertiesUtil.getBase_url(),user.getName(), user.getPassword());
+            ScmClientSession scmClientSession = ScmClient.createSession(propertiesUtil.getBaseUrl(),user.getName(), user.getPassword());
             User rtnUser = scmClientSession.getUserHandler().get(user.getName());
             return new ResponseEntity(rtnUser, HttpStatus.OK);
         } catch (ScmUnauthorizedException e) {

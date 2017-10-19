@@ -10,7 +10,6 @@ import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.model.Permission;
 import com.paasta.scapi.model.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class ScRepositoryApiService extends  CommonService{
     private Repository scmRepositoryByNameTypePrivate(String type, String name) {
 
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(null);
-        String url = this.propertiesUtil.getApi_repo_type_name().replace("{type}", type);
+        String url = this.propertiesUtil.getApiRepoTypeName().replace("{type}", type);
         url = url.replace("{name}", name);
 
         ResponseEntity<Repository> response = this.restClientUtil.callRestApi(HttpMethod.GET, url, entity, Repository.class);
@@ -169,7 +168,7 @@ public class ScRepositoryApiService extends  CommonService{
     public Repository getRepositoryByIdApi(String id) throws RestException {
         // scm-manager search repository
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(null);
-        String url = propertiesUtil.getApi_repo_id().replace("{id}", id);
+        String url = propertiesUtil.getApiRepoId().replace("{id}", id);
         ResponseEntity<Repository> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, Repository.class);
 
         Repository repository = response.getBody();
@@ -178,7 +177,7 @@ public class ScRepositoryApiService extends  CommonService{
         int istartUrl = repositoryUrl.indexOf(":",7);
         repositoryUrl = repositoryUrl.substring(istartUrl);
         repositoryUrl = repositoryUrl.substring(repositoryUrl.indexOf("/")+4,repositoryUrl.length());
-        repository.setUrl(propertiesUtil.getBase_url() + repositoryUrl);
+        repository.setUrl(propertiesUtil.getBaseUrl() + repositoryUrl);
 
         return repository;
     }
@@ -211,7 +210,7 @@ public class ScRepositoryApiService extends  CommonService{
 
         // scm-manager delete repository
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(null);
-        String url = propertiesUtil.getApi_repo_id().replace("{id}", id);
+        String url = propertiesUtil.getApiRepoId().replace("{id}", id);
         ResponseEntity<String> response = this.restClientUtil.callRestApi(HttpMethod.DELETE, url, entity, String.class);
 
     }
@@ -275,7 +274,7 @@ public class ScRepositoryApiService extends  CommonService{
 
         ParameterizedTypeReference<List<Repository>> responseType = new ParameterizedTypeReference<List<Repository>>() {
         };
-        ResponseEntity<List<Repository>> response = restClientUtil.callRestApiReturnObjList(HttpMethod.GET, this.propertiesUtil.getApi_repo() + sSort, entity, responseType);
+        ResponseEntity<List<Repository>> response = restClientUtil.callRestApiReturnObjList(HttpMethod.GET, this.propertiesUtil.getApiRepo() + sSort, entity, responseType);
 
         List<Repository> repositories = response.getBody();
 
@@ -329,7 +328,7 @@ public class ScRepositoryApiService extends  CommonService{
             request.setCreationDate(new Long(0));
             request.setLastModified(new Date().getTime());
             HttpEntity<Object> entity = restClientUtil.restCommonHeaders(request);
-            return restClientUtil.callRestApi(HttpMethod.POST, this.propertiesUtil.getApi_repo(), entity, String.class);
+            return restClientUtil.callRestApi(HttpMethod.POST, this.propertiesUtil.getApiRepo(), entity, String.class);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
@@ -340,7 +339,7 @@ public class ScRepositoryApiService extends  CommonService{
     private ResponseEntity<String> scmUpdateRepository(Repository request) {
 
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(request);
-        String url = this.propertiesUtil.getApi_repo_id().replace("{id}", request.getId());
+        String url = this.propertiesUtil.getApiRepoId().replace("{id}", request.getId());
         ResponseEntity<String> response = this.restClientUtil.callRestApi(HttpMethod.PUT, url, entity, String.class);
 
         return response;
@@ -350,7 +349,7 @@ public class ScRepositoryApiService extends  CommonService{
     
     public sonia.scm.repository.Branches getBranches(String id) {
         HttpEntity<Object> entity = restClientUtil.restCommonHeader(null);
-        String url = propertiesUtil.getApi_repo_branches().replace("{id}", id);
+        String url = propertiesUtil.getApiRepoBranches().replace("{id}", id);
         ResponseEntity<sonia.scm.repository.Branches> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, sonia.scm.repository.Branches.class);
         sonia.scm.repository.Branches repositories = response.getBody();
         return repositories;
@@ -369,7 +368,7 @@ public class ScRepositoryApiService extends  CommonService{
 //    
 //    public BrowserResult getBrowse(String id) {
 //        HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
-//        String url = propertiesUtil.getApi_repo_browse().replace("{id}", id);
+//        String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
 //        ResponseEntity<BrowserResult> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, BrowserResult.class);
 //        BrowserResult repositories = (BrowserResult) response.getBody();
 //        return repositories;
@@ -379,7 +378,7 @@ public class ScRepositoryApiService extends  CommonService{
     
     public BrowserResult getBrowseByParam(String id, boolean disableLastCommit, boolean disableSubRepositoryDetection, String path, boolean recursive, String revision) throws NotSupportedFeatuerException, IOException {
         HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
-        String url = propertiesUtil.getApi_repo_browse().replace("{id}", id);
+        String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
         String param = "?disableLastCommit=" + disableLastCommit + "&disableSubRepositoryDetection=" + disableSubRepositoryDetection + "&path=" + path + "&recursive=" + recursive + "&revision=" + revision;
         url = url + param;
         logger.debug("url:::" + url);
@@ -433,7 +432,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     public ResponseEntity<byte[]> getContent(String id, String revision, String path, String _dc) throws NotSupportedFeatuerException, IOException {
-        String url = propertiesUtil.getApi_repository_id_content_path_revision().replace("{id}", id).replace("{path}", path);
+        String url = propertiesUtil.getApiRepositoryIdContentPathRevision().replace("{id}", id).replace("{path}", path);
         url = url.replace("{revision}", (String) Common.notNullrtnByobj(revision, ""));
         url = url.replace("{_dc}", (String) Common.notNullrtnByobj(_dc, ""));
 
