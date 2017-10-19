@@ -3,7 +3,6 @@ package com.paasta.scapi.common.util;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -14,7 +13,6 @@ import java.util.Base64;
 @Component
 @Setter
 @Getter
-@PropertySource("classpath:scapi.properties")
 public class PropertiesUtil {
 
     /**
