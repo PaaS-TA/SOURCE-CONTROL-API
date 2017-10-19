@@ -40,7 +40,6 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by lena on 2017-06-14.
  */
-@PropertySource("classpath:scapi.properties")
 @Service
 public class RepoPermissionApiService extends CommonService{
 
