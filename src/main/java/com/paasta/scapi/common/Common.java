@@ -89,15 +89,19 @@ public class Common {
      */
 
     public static Object notNullrtnByobj(Object obj, Object rtn) {
-        if (Common.empty(obj))
+        if (Common.empty(obj)) {
             return rtn;
-        else return obj;
+        } else {
+            return obj;
+        }
     }
 
     public static Map rtnMapByRequestParam(HttpServletRequest request) {
         Map parameterMap = new HashMap();
         Enumeration enumeration = request.getParameterNames();
-        if (enumeration == null) return parameterMap;
+        if (enumeration == null) {
+            return parameterMap;
+        }
         while (enumeration.hasMoreElements()) {
             String paramName = (String) enumeration.nextElement();
             String[] parameters = request.getParameterValues(paramName);
@@ -140,7 +144,9 @@ public class Common {
     public List<User> fillterUser(String username, List<User> list) {
         List rtnList = new ArrayList();
         list.forEach(User -> {
-            if (Common.empty(username)) list.add(User);
+            if (Common.empty(username)) {
+                list.add(User);
+            }
             if (Common.notEmpty(username)) {
                 if (User.getName().contains(username) || User.getDisplayName().contains(username)) {
                     list.add(User);
