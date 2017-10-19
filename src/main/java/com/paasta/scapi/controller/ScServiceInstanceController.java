@@ -39,6 +39,7 @@ public class ScServiceInstanceController {
     *형상관리 amdin 신청 목록
     * private static final int PAGE_SIZE = 3; => PageRequest pageable 로 변경
     */
+    @SuppressWarnings("unchecked")
     @ApiOperation(value = "", response = List.class)
     @ApiImplicitParam
     @GetMapping("")
@@ -55,6 +56,7 @@ public class ScServiceInstanceController {
     /*
      *형상관리 user 신청 목록
      */
+    @SuppressWarnings("unchecked")
     @ApiOperation(value = "", response = List.class)
     @ApiImplicitParam
     @GetMapping("/user")
@@ -71,6 +73,7 @@ public class ScServiceInstanceController {
      * @throws RestException
      * @version 1.0
      */
+    @SuppressWarnings("unchecked")
     @PostMapping
     @ApiImplicitParam
     @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))

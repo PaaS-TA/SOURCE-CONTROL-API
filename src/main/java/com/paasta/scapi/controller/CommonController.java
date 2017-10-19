@@ -8,5 +8,5 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class CommonController extends Common {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger logger = LoggerFactory.getLogger(getClass());
 }

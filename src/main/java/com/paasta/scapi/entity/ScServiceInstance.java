@@ -17,15 +17,15 @@ public class ScServiceInstance {
     private String instanceId;
     @Column(name = "ORGANIZATION_GUID")
     private String organizationGuid;
-    @Column(name = "ORGANIZATION_NAME", nullable =true)
+    @Column(name = "ORGANIZATION_NAME")
     private String organizationName;
     @Column(name = "PLAN_ID")
     private String planId;
-    @Column(name = "SERVICE_ID", nullable =true)
+    @Column(name = "SERVICE_ID")
     private String seryiceId;
     @Column(name = "SPACE_GUID")
     private String spaceGuid;
-    @Column(name = "CREATE_USER_ID", nullable =true)
+    @Column(name = "CREATE_USER_ID")
     private String createUserId;
     @Column(name = "CREATED_TIME")
     private String createdTime;

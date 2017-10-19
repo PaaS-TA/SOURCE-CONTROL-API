@@ -21,6 +21,7 @@ import java.util.Map;
 public class ScInstanceUserService{
 
 	@Autowired
+	private
 	ScInstanceUserRepository scInstanceUserRepository;
 
 	
@@ -38,7 +39,8 @@ public class ScInstanceUserService{
 	}
 
 	
-	@Transactional
+	@SuppressWarnings("unchecked")
+    @Transactional
 	public ResponseEntity createInstanceUser(Map<String, String> map){
 		ResponseEntity responseEntity ;
 		Map rtnMap = new HashMap();

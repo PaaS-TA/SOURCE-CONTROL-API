@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Created by User on 2017-06-23.
+ * Created by injeong Lee on 2017-06-23.
  */
 @Setter
 @Getter

@@ -167,6 +167,18 @@
 				<configuration>
 					<destFile>${project.basedir}/../target/jacoco.exec</destFile>
 					<append>true</append>
+					<skip>${maven.test.skip}</skip>
+					<destFile>\${basedir}/target/jacoco/jacoco-overall.exec</destFile>
+					<output>file</output>
+					<append>true</append>
+					<excludes>
+						<exclude>**/common/**</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/controller/**</exclude>
+						<exclude>**/entity/**</exclude>
+						<exclude>**/model/**</exclude>
+						<exclude>**/repository/**</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -182,50 +194,30 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>target/jacoco/jacoco.exec</dataFile>
+						</configuration>
+					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<configuration>
-				<skip>${maven.test.skip}</skip>
-				<destFile>\${basedir}/target/jacoco/jacoco-overall.exec</destFile>
-				<output>file</output>
-				<append>true</append>
-				<excludes>
-					<exclude>**/common/**</exclude>
-					<exclude>**/config/**</exclude>
-					<exclude>**/controller/**</exclude>
-					<exclude>**/entity/**</exclude>
-					<exclude>**/model/**</exclude>
-					<exclude>**/repository/**</exclude>
-				</excludes>
-			</configuration>
-			<executions>
-				<execution>
-					<id>prepare-agent</id>
-					<goals>
-						<goal>prepare-agent</goal>
-					</goals>
-				</execution>
-				<execution>
-					<id>report</id>
-					<phase>prepare-package</phase>
-					<goals>
-						<goal>report</goal>
-					</goals>
-				</execution>
-				<execution>
-					<id>post-unit-test</id>
-					<phase>test</phase>
-					<goals>
-						<goal>report</goal>
-					</goals>
-					<configuration>
-						<dataFile>target/jacoco/jacoco.exec</dataFile>
-					</configuration>
-				</execution>
-			</executions>
 			</plugin>
 		</plugins>
 	</build>

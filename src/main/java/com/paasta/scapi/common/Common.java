@@ -14,17 +14,13 @@ import java.util.*;
 public class Common {
 
     /**
-     * Get Token
-     *
+     * 날짜계산
      * @return string string
      */
 
 	/*@Autowired
     public MessageSource messageSource;*/
     public static int diffDay(Date d, Date accessDate) {
-        /**
-         * 날짜 계산
-         */
         Calendar curC = Calendar.getInstance();
         Calendar accessC = Calendar.getInstance();
         curC.setTime(d);
@@ -58,13 +54,13 @@ public class Common {
      */
     public static Boolean empty(Object obj) {
         if (obj instanceof String) {
-            return obj == null || "".equals(obj.toString().trim());
+            return "".equals(obj.toString().trim());
         } else if (obj instanceof List) {
-            return obj == null || ((List) obj).isEmpty();
+            return ((List) obj).isEmpty();
         } else if (obj instanceof Map) {
-            return obj == null || ((Map) obj).isEmpty();
+            return ((Map) obj).isEmpty();
         } else if (obj instanceof Object[]) {
-            return obj == null || Array.getLength(obj) == 0;
+            return Array.getLength(obj) == 0;
         } else {
             return obj == null;
         }
@@ -96,6 +92,7 @@ public class Common {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static Map rtnMapByRequestParam(HttpServletRequest request) {
         Map parameterMap = new HashMap();
         Enumeration enumeration = request.getParameterNames();
@@ -108,10 +105,10 @@ public class Common {
 
             // Parameter가 배열일 경우
             if (parameters.length > 1) {
-                List<Object> parmList = new ArrayList<Object>();
+                List<Object> parmList = new ArrayList<>();
 
-                for (int i = 0; i < parameters.length; i++) {
-                    parmList.add(parmList.size(), parameters[i]);
+                for (String parameter : parameters) {
+                    parmList.add(parmList.size(), parameter);
                 }
                 parameterMap.put(paramName, parmList);
                 // Parameter가 배열이 아닌 경우
@@ -128,9 +125,9 @@ public class Common {
      * 전체 사용자 조회를 하여 사용자 정보 를 가져와야 할 경우 사용.
      */
     public static User getUserByUserName(String username, List<User> lstUser) {
-        for (int i = 0; i < lstUser.size(); i++) {
-            if (username.equals(lstUser.get(i).getName())) {
-                return lstUser.get(i);
+        for (User aLstUser : lstUser) {
+            if (username.equals(aLstUser.getName())) {
+                return aLstUser;
             }
         }
         User emptyUser = new User();
@@ -141,6 +138,7 @@ public class Common {
     /**
      * 사용자 아이디 또는 이름 검색을 위한 List 필터
      */
+    @SuppressWarnings("unchecked")
     public List<User> fillterUser(String username, List<User> list) {
         List rtnList = new ArrayList();
         list.forEach(user -> {
@@ -156,6 +154,7 @@ public class Common {
         return rtnList;
     }
 
+    @SuppressWarnings("unchecked")
     public static Map convertMapByLinkedHashMap(LinkedHashMap linkedHashMap) {
         Map map = new HashMap();
         if (!Common.empty(linkedHashMap)) {

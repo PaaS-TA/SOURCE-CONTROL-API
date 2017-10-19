@@ -19,8 +19,10 @@ import java.util.Map;
 @Api(description = "Super Admin 을 위한 login Api")
 public class ScLoginController {
     @Autowired
+    private
     ScLoginService scLoginService;
 
+    @SuppressWarnings("unchecked")
     @PostMapping("/login")
     @ApiResponses({@ApiResponse(code = 200, message = "Success", response = Map.class)
             , @ApiResponse(code = 401, message = "You are not authorized to view the resource")

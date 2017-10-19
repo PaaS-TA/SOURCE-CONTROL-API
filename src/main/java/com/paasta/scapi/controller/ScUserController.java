@@ -28,6 +28,7 @@ public class ScUserController extends CommonController {
 	private ScUserService scUserService;
 
 	// 사용자 조회
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "모든 사용자 조회", response = List.class)
 	@GetMapping
 	@ApiImplicitParam
@@ -47,6 +48,7 @@ public class ScUserController extends CommonController {
 	 * @throws SQLException
 	 */
 
+	@SuppressWarnings("unchecked")
 	@ApiOperation("사용자 생성")
 	@PostMapping
 	@ApiImplicitParam
@@ -91,6 +93,7 @@ public class ScUserController extends CommonController {
 	}
 
 	// 사용자 수정
+	@SuppressWarnings("unchecked")
 	@ApiOperation("사용자 수정")
     @PutMapping("/{name}")
     @ApiImplicitParam
@@ -111,7 +114,7 @@ public class ScUserController extends CommonController {
 	public ResponseEntity<Map> getDetailUser(@PathVariable("name") String name) throws Exception {
 		try {
 			Map map = scUserService.getUser(name);
-			return new ResponseEntity<Map>(map, HttpStatus.OK);
+			return new ResponseEntity<>(map, HttpStatus.OK);
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new Exception(e);
@@ -129,6 +132,7 @@ public class ScUserController extends CommonController {
 	 */
 
 	// 인스턴스별 사용자 조회 (query)
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "인스턴스별 부분사용자 조회", response = Page.class)
     @GetMapping("/admin/{instanceId}")
 	@ApiImplicitParam
@@ -158,6 +162,7 @@ public class ScUserController extends CommonController {
 	 * @throws RestException
 	 */
 	// 레파지토리별 사용자 조회 (query)
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "레파지토리별부분사용자 조회", response = Page.class)
     @GetMapping("/repository/{repositoryId}")
 	@ApiImplicitParam

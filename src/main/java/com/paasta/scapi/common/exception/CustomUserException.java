@@ -19,6 +19,7 @@ public class CustomUserException extends Exception {
     public CustomUserException() {
     }
 
+    @SuppressWarnings("unchecked")
     public ResponseEntity CustomUserException(RuntimeException exception) {
         Map map = new HashMap();
         if("401 Unauthorized".equals(exception.getMessage())){

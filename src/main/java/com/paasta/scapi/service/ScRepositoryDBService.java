@@ -22,12 +22,14 @@ public class ScRepositoryDBService extends CommonService{
      * The Sc repository repository.
      */
     @Autowired
+    private
     ScRepositoryRepository scRepositoryRepository;
 
     /**
      * The Repo permition repository.
      */
     @Autowired
+    private
     RepoPermissionRepository repoPermissionRepository;
 
     
@@ -42,7 +44,7 @@ public class ScRepositoryDBService extends CommonService{
 
         ScRepository scRepository = new ScRepository(repository.getId(), repository.getName(),repository.getDescription(),instanceId , create_user , create_user);
         ScRepository result = this.scRepositoryRepository.save(scRepository);
-        RepoPermission repoPermission = new RepoPermission(result.getRepoNo(), result.getCreateUserId(), Constants.REPO_PERMITION_OWNER);
+        RepoPermission repoPermission = new RepoPermission(result.getRepoNo(), result.getCreateUserId());
         this.repoPermissionRepository.save(repoPermission);
 
         return scRepository;

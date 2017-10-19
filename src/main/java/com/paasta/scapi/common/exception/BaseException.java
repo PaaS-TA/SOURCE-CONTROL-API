@@ -10,7 +10,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 /**
- * Created by ijlee on 2017-07-12.
+ * Created by injeong Lee on 2017-07-12.
  */
 @Getter
 @Setter

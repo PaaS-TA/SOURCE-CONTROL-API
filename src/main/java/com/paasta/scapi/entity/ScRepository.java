@@ -24,7 +24,7 @@ public class ScRepository {
 
     @Column(name = "REPO_NAME")
     private String repoName;
-    @Column(name = "REPO_DESC", nullable =true)
+    @Column(name = "REPO_DESC")
     private String repoDesc;
     @Column(name = "INSTANCE_ID")
     private String instanceId;

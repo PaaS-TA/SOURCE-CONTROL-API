@@ -28,18 +28,23 @@ import java.util.Map;
 public class RepoPermissionDBService extends CommonService{
 
     @Autowired
+    private
     RepoPermissionRepository repoPermissionRepository;
 
     @Autowired
+    private
     ScUserRepository scUserRepository;
 
     @Autowired
+    private
     ScRepositoryRepository scRepositoryRepository;
 
     @Autowired
+    private
     ScInstanceUserRepository scInstanceUserRepository;
 
     @Autowired
+    private
     ScUserService scUserService;
 
     
@@ -68,12 +73,13 @@ public class RepoPermissionDBService extends CommonService{
     }
 
     
+    @SuppressWarnings("unchecked")
     @Transactional
     public List searchPermisionByUserIdAndRepositoryId(String searchUserId, String repoId){
         //아이디 검색된 사용자로 사용자를 가져온다.
         List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repoId);
         List<ScUser> lstScUserBefore = scUserRepository.findAllByUserIdContaining(searchUserId);
-        List<ScUser> lstScUser = new ArrayList<ScUser>();
+        List<ScUser> lstScUser = new ArrayList<>();
         List<User> lstUser = (List<User>) scUserService.apiGetUsers().getBody();
         for (ScUser scUser : lstScUserBefore) {
             for (User User : lstUser) {
@@ -85,22 +91,20 @@ public class RepoPermissionDBService extends CommonService{
         List<RepoPermission> lstRepoPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
         List<Map> rtnList = new ArrayList();
 
-        for(int i=0; i < lstScUser.size(); i++){
+        for (ScUser aLstScUser : lstScUser) {
             Map map = new HashMap();
-            ScUser scUser = lstScUser.get(i);
-            map.put("userId",Common.notNullrtnByobj(scUser.getUserId(),""));
-            map.put("userName", Common.notNullrtnByobj(scUser.getUserName(),""));
-            map.put("userEmail",Common.notNullrtnByobj(scUser.getUserMail(),""));
-            map.put("userPermission","");
-            map.put("userPermissionNo","");
+            map.put("userId", Common.notNullrtnByobj(aLstScUser.getUserId(), ""));
+            map.put("userName", Common.notNullrtnByobj(aLstScUser.getUserName(), ""));
+            map.put("userEmail", Common.notNullrtnByobj(aLstScUser.getUserMail(), ""));
+            map.put("userPermission", "");
+            map.put("userPermissionNo", "");
             rtnList.add(map);
         }
-        for(int j=0; j < lstRepoPermission.size(); j++){
-            for(int i=0; i < rtnList.size(); i++){
-                Map map = rtnList.get(i);
-                if(map.get("userId").equals(lstRepoPermission.get(j).getUserId())){
-                    map.replace("userPermission",lstRepoPermission.get(j).getPermission());
-                    map.replace("userPermissionNo",lstRepoPermission.get(j).getNo());
+        for (RepoPermission aLstRepoPermission : lstRepoPermission) {
+            for (Map map : rtnList) {
+                if (map.get("userId").equals(aLstRepoPermission.getUserId())) {
+                    map.replace("userPermission", aLstRepoPermission.getPermission());
+                    map.replace("userPermissionNo", aLstRepoPermission.getNo());
                 }
             }
         }
@@ -115,6 +119,7 @@ public class RepoPermissionDBService extends CommonService{
      * @return
      */
     
+    @SuppressWarnings("unchecked")
     @Transactional
     public List searchPermisionByUserIdAndInstanceId(String searchUserId, String instanceId, String repositoryId){
         List rtnList = new ArrayList();
@@ -126,33 +131,31 @@ public class RepoPermissionDBService extends CommonService{
             List<RepoPermission> lstRepoPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
 
 
-            for(int j=0; j < lstScInstanceUsers.size(); j++) {
+            for (ScInstanceUser lstScInstanceUser : lstScInstanceUsers) {
                 Map map = new HashMap();
-                ScInstanceUser scInstanceUser = lstScInstanceUsers.get(j);
-                for (int i = 0; i < lstScUser.size(); i++) {
-                    ScUser scUser = lstScUser.get(i);
-                    if(scUser.getUserId().equals(scInstanceUser.getUserId())) {
-                        map.put("no",lstScInstanceUsers.get(j).getNo());
+                for (ScUser scUser : lstScUser) {
+                    if (scUser.getUserId().equals(lstScInstanceUser.getUserId())) {
+                        map.put("no", lstScInstanceUser.getNo());
                         map.put("userId", Common.notNullrtnByobj(scUser.getUserId(), ""));
                         map.put("userName", Common.notNullrtnByobj(scUser.getUserName(), ""));
                         map.put("userEmail", Common.notNullrtnByobj(scUser.getUserMail(), ""));
-                        map.put("userRepoRole",lstScInstanceUsers.get(j).getRepoRole());
-                        map.put("userCreateYn",lstScInstanceUsers.get(j).getCreaterYn());
-                        map.put("userCreatedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1,scInstanceUser.getCreatedDate()));
-                        map.put("userModifiedDate",DateUtil.rtnFormatString(Constants.DATE_FORMAT_1,scInstanceUser.getModifiedDate()));
-                        map.put("userPermission","");
-                        map.put("userPermissionNo","");
-                        for(int k=0; k < lstRepoPermission.size(); k++){
-                            RepoPermission permission = lstRepoPermission.get(k);
-                            if(scUser.getUserId().equals(lstRepoPermission.get(k).getUserId())){
-                                map.replace("userPermission",permission.getPermission());
-                                map.replace("userPermissionNo",permission.getNo());
+                        map.put("userRepoRole", lstScInstanceUser.getRepoRole());
+                        map.put("userCreateYn", lstScInstanceUser.getCreaterYn());
+                        map.put("userCreatedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUser.getCreatedDate()));
+                        map.put("userModifiedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUser.getModifiedDate()));
+                        map.put("userPermission", "");
+                        map.put("userPermissionNo", "");
+                        for (RepoPermission permission : lstRepoPermission) {
+                            if (scUser.getUserId().equals(permission.getUserId())) {
+                                map.replace("userPermission", permission.getPermission());
+                                map.replace("userPermissionNo", permission.getNo());
                             }
                         }
                     }
                 }
                 rtnList.add(map);
-            }}catch(Exception e){
+            }
+        }catch(Exception e){
             e.printStackTrace();
         }
         return rtnList;

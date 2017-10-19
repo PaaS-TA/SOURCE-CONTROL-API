@@ -22,12 +22,12 @@ public class CommonService {
     @Value("${api.base.url}")  private String url;
     @Value("${admin.id}")  private String username;
     @Value("${admin.pwd}")  private String password;
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public ScmClientSession scmClientSession(){
+    ScmClientSession scmClientSession(){
         return ScmClient.createSession(url, username, password);
     }
-    public Object setPageInfo(Page reqPage, Object reqObject) {
+    Object setPageInfo(Page reqPage, Object reqObject) {
         try {
             Class<?> aClass = reqObject.getClass();
 
