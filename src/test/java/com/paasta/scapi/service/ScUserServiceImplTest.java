@@ -38,8 +38,8 @@ public class ScUserServiceImplTest {
     @Before
     public void setup() throws Exception{
         MockitoAnnotations.initMocks(this);
-
     }
+
     @Test
     public void getAll() throws Exception {
         Mockito.when(this.scUserService.getAll()).thenReturn(null);

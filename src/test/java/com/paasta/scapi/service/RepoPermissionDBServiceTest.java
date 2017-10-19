@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -49,18 +50,17 @@ public class RepoPermissionDBServiceTest {
 
     @Test
     public void searchPermisionByUserIdAndRepositoryId() throws Exception {
-//        List<User> lstUser = new ArrayList<>();
-//        User mockUser1 = Mockito.mock(User.class);
-//        lstUser.add(mockUser1);
         String searchUserId ="";
         String repoId="" ;
-
         repoPermissionDBService.searchPermisionByUserIdAndRepositoryId(searchUserId, repoId);
-
     }
 
     @Test
     public void searchPermisionByUserIdAndInstanceId() throws Exception {
+        String searchUserId ="";
+        String instanceId = "";
+        String repositoryId = "";
+        repoPermissionDBService.searchPermisionByUserIdAndInstanceId(searchUserId,instanceId,repositoryId);
     }
 
 }

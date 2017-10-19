@@ -30,7 +30,7 @@ public class ScRepositoryDBService extends CommonService{
     @Autowired
     RepoPermissionRepository repoPermissionRepository;
 
-    
+
     @Transactional
     public ScRepository createRepositoryDB(Repository repository) {
 
