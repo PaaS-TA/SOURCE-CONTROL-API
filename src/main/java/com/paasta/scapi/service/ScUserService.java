@@ -411,7 +411,7 @@ public class ScUserService extends CommonService {
 	
 	public ResponseEntity<Page> apiGetUsersByName(String instanceId, String userName, PageRequest pageRequest) {
 		try {
-            this.logger.info(getClass().getName() + " : apiGetUsers start");
+            this.logger.info(getClass().getName() + " : apiGetUsers start::instanceId::"+instanceId);
 
 			/** 인스턴스별 레파지 토리 정보가져오기 */
 
@@ -552,12 +552,12 @@ public class ScUserService extends CommonService {
 		instanceUsers.forEach(scInstanceUser -> {scInstanceUserRepository.delete(scInstanceUser.getNo());});
 
 		// 서비스 인스턴스별 repository ,참여자 정보삭제
-		List<com.paasta.scapi.model.Repository> InstanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instance,"");
-		InstanceRepositories.forEach(repository -> {
+		List<com.paasta.scapi.model.Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instance,"");
+		instanceRepositories.forEach(repository -> {
 			List lstPermission =new ArrayList();
-			repository.getPermissions().forEach(Permission -> {
-				if (!Permission.getName().equals(name)) {
-					lstPermission.add(Permission);
+			repository.getPermissions().forEach(permission -> {
+				if (!permission.getName().equals(name)) {
+					lstPermission.add(permission);
 				}
 			});
 			scRepositoryApiService.updateRepository(repository.getId(),repository);
