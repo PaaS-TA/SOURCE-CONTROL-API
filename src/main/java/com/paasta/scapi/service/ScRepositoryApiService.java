@@ -33,7 +33,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 /**
  * Created by lena on 2017-06-14.
  */
-@PropertySource("classpath:scapi.properties")
 @Service
 public class ScRepositoryApiService extends  CommonService{
 
