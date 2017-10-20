@@ -4,11 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.Constants;
 import com.paasta.scapi.common.exception.RestException;
-import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.model.Repository;
 import com.paasta.scapi.service.ScRepositoryApiService;
 import com.paasta.scapi.service.ScRepositoryDBService;
-import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +40,6 @@ public class ScRepositoryController {
 
     @Autowired
     private ScRepositoryDBService scRepositoryDBService;
-    @Autowired
-    private ScUserService scUserService;
     /**
      * Repository Creation.
      *
@@ -77,7 +73,7 @@ public class ScRepositoryController {
 
         // DB insert
         try {
-            ScRepository scRepository = scRepositoryDBService.createRepositoryDB(repository);
+            scRepositoryDBService.createRepositoryDB(repository);
         } catch (Exception e) {
 
             // Scm-Server api - Repository 삭제 호출
@@ -86,7 +82,7 @@ public class ScRepositoryController {
             throw new RestException(Constants.RESULT_STATUS_FAIL);
         }
 
-        return new ResponseEntity<Repository>(repository, HttpStatus.OK);
+        return new ResponseEntity<>(repository, HttpStatus.OK);
     }
 
     /**
@@ -104,11 +100,12 @@ public class ScRepositoryController {
      * @apiParam {number} start The start value for paging
      * @apiParam {number} end The end value for paging
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/admin")
     public ResponseEntity<Map<String,Object>> getAllRepositories(
             @RequestParam(value="instanceid", required=false) String instanceid,
             HttpServletRequest request
-            ) throws RestException, Exception {
+            ) throws Exception {
 
         Map map = request.getParameterMap();
         Map rtnMap = new HashMap();
@@ -118,7 +115,6 @@ public class ScRepositoryController {
             for(int i = 0 ; i < lstKey.size(); i++){
                 rtnMap.put(lstKey.get(i), lstValue.get(i)[0]);
             }
-
         }
         Map<String,Object> repositories = scRepositoryApiService. getAdminRepositories(
                 instanceid, (String)rtnMap.getOrDefault("userid", ""),
@@ -130,7 +126,7 @@ public class ScRepositoryController {
 
 //        repositories.stream().distinct().limit(10).collect(toList());
 
-        return new ResponseEntity<Map<String, Object>>(repositories, HttpStatus.OK);
+        return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 
     /**
@@ -170,7 +166,7 @@ public class ScRepositoryController {
         repositories.put("repoName",repoName);
         repositories.put("start",start);
         repositories.put("end",end);
-        return new ResponseEntity<Map<String, Object>>(repositories, HttpStatus.OK);
+        return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 
     /**
@@ -234,7 +230,7 @@ public class ScRepositoryController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<String>("삭제를 성공하였습니다.", HttpStatus.OK);
+        return new ResponseEntity<>("삭제를 성공하였습니다.", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -243,7 +239,7 @@ public class ScRepositoryController {
         // Scm-Server api - Repository 수정 호출
         sonia.scm.repository.Repository rtnRepository = scRepositoryApiService.updateRepository(id,request);
 
-        return new ResponseEntity<sonia.scm.repository.Repository>( rtnRepository , HttpStatus.OK);
+        return new ResponseEntity<>(rtnRepository, HttpStatus.OK);
     }
 
 
@@ -253,9 +249,10 @@ public class ScRepositoryController {
         // Scm-Server api - Repository 상세 조회 호출
         Repository repository = scRepositoryApiService.getRepositoryByIdApi(id);
 
-        return new ResponseEntity<Repository>(repository, HttpStatus.OK);
+        return new ResponseEntity<>(repository, HttpStatus.OK);
     }
 
+    @SuppressWarnings("unchecked")
     @GetMapping("/name/{type}/{name}")
     public ResponseEntity<Map> getRepositoryByIdAndType(@PathVariable String name, @PathVariable String type) throws RestException {
 
@@ -282,7 +279,7 @@ public class ScRepositoryController {
     @GetMapping(value = "/{id}/branches")
     public ResponseEntity<sonia.scm.repository.Branches> getBranches(@PathVariable String id) throws IOException, RepositoryException {
         sonia.scm.repository.Branches branches = scRepositoryApiService.getBranches(id);
-        return new ResponseEntity<sonia.scm.repository.Branches>(branches, HttpStatus.OK);
+        return new ResponseEntity<>(branches, HttpStatus.OK);
 }
 
     /**
@@ -301,7 +298,7 @@ public class ScRepositoryController {
     @GetMapping(value = "/{id}/tags")
     public ResponseEntity<sonia.scm.repository.Tags> getTags(@PathVariable String id) throws RestException {
         sonia.scm.repository.Tags tags = scRepositoryApiService.getTags(id);
-        return new ResponseEntity<sonia.scm.repository.Tags>(tags, HttpStatus.OK);
+        return new ResponseEntity<>(tags, HttpStatus.OK);
     }
 
     /**
@@ -331,7 +328,7 @@ public class ScRepositoryController {
                                                    @RequestParam(value = "revision", required = false, defaultValue = "") String revision
                                                     ) throws IOException, NotSupportedFeatuerException {
         BrowserResult browserResult = scRepositoryApiService.getBrowseByParam(id,disableLastCommit,disableSubRepositoryDetection,path,recursive,revision);
-        return new ResponseEntity<BrowserResult>(browserResult, HttpStatus.OK);
+        return new ResponseEntity<>(browserResult, HttpStatus.OK);
     }
 
     /**
@@ -350,7 +347,7 @@ public class ScRepositoryController {
     @GetMapping("/{id}/changesets")
     public ResponseEntity<ChangesetPagingResult> getChangesets(@PathVariable String id) throws RestException, NotSupportedFeatuerException {
         ChangesetPagingResult changesets = scRepositoryApiService.getChangesets(id);
-        return new ResponseEntity<ChangesetPagingResult>(changesets, HttpStatus.OK);
+        return new ResponseEntity<>(changesets, HttpStatus.OK);
     }
 
     /**

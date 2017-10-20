@@ -17,9 +17,10 @@ import sonia.scm.user.User;
 public class ScLoginService extends CommonService{
 
     @Autowired
-    public PropertiesUtil propertiesUtil;
+    private PropertiesUtil propertiesUtil;
 
     
+    @SuppressWarnings("unchecked")
     public ResponseEntity login(User user) {
         try {
             logger.info("login Start : ");

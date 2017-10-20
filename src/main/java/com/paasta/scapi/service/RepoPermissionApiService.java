@@ -46,24 +46,31 @@ public class RepoPermissionApiService extends CommonService{
      * The Rest client util.
      */
     @Autowired
+    private
     RestClientUtil restClientUtil;
 
     @Autowired
+    private
     PropertiesUtil propertiesUtil;
 
     @Autowired
+    private
     ScRepositoryApiService scRepositoryApiService;
 
     @Autowired
+    private
     ScRepositoryRepository scRepositoryRepository;
 
     @Autowired
+    private
     RepoPermissionRepository repoPermissionRepository;
 
     @Autowired
+    private
     RepoPermissionDBService repoPermissionDBService;
 
     @Autowired
+    private
     ScInstanceUserRepository scInstanceUserRepository;
 
 
@@ -74,6 +81,7 @@ public class RepoPermissionApiService extends CommonService{
      * @param permission  the permission
      * @return
      */
+    @SuppressWarnings("unchecked")
     @Transactional
     public ResponseEntity insertRepositoryForUserAuth(String repositoryId, RepoPermission permission) {
         ResponseEntity entity;
@@ -90,12 +98,15 @@ public class RepoPermissionApiService extends CommonService{
             repository.setPermissions(lstPermission);
             ObjectMapper jackson = new ObjectMapper();
             logger.info("repositoryForUserAuth Start : ");
+
             String param = null;
             try {
                 param = jackson.writeValueAsString(repository);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+            logger.info("repositoryForUserAuth Start :param:: "+param);
+
             HttpEntity<Object> httEntity = restClientUtil.restCommonHeader(repository);
             entity = restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApiRepo() + "/" + repositoryId, httEntity, String.class);
             if (entity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
@@ -112,6 +123,7 @@ public class RepoPermissionApiService extends CommonService{
     }
 
 
+    @SuppressWarnings("unchecked")
     @Transactional
     public ResponseEntity deleteRepositoryForUserAuth(Integer permisionNo) {
         ResponseEntity entity;
@@ -125,10 +137,9 @@ public class RepoPermissionApiService extends CommonService{
             List<Permission> lstPermission = repository.getPermissions();
             List rtnLstPermission = new ArrayList();
 
-            for(int i=0;i < lstPermission.size();i++){
-                Permission vo = lstPermission.get(i);
-                if(!(repoPermission.getUserId().equals(vo.getName()) && repoPermission.getPermission().equals(vo.getType()))){
-                    rtnLstPermission.add(lstPermission.get(i));
+            for (Permission vo : lstPermission) {
+                if (!(repoPermission.getUserId().equals(vo.getName()) && repoPermission.getPermission().equals(vo.getType()))) {
+                    rtnLstPermission.add(vo);
                 }
             }
             repository.setPermissions(rtnLstPermission);
@@ -136,7 +147,7 @@ public class RepoPermissionApiService extends CommonService{
             repoPermissionDBService.delete(permisionNo);
             ObjectMapper jackson = new ObjectMapper();
             logger.info("repositoryForUserAuth Start : ");
-            String param = null;
+            String param;
             try {
                 param = jackson.writeValueAsString(repository);
             } catch (JsonProcessingException e) {
@@ -150,7 +161,7 @@ public class RepoPermissionApiService extends CommonService{
             }
         } catch (RestException restException) {
             restException.printStackTrace();
-            return entity = new ResponseEntity(restException.getMessage(), HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity(restException.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
 
         return entity;
@@ -159,8 +170,9 @@ public class RepoPermissionApiService extends CommonService{
 
 
     
+    @SuppressWarnings("unchecked")
     @Transactional
-    public ResponseEntity getListPermitionByInstanceId(String instanceId, int page, int size, String username) throws Exception {
+    public ResponseEntity getListPermitionByInstanceId(String instanceId, int page, int size, String username) {
         try {
             logger.info("getListPermitionByInstanceId start : ");
             PageRequest pageRequest = new PageRequest(page, size);
@@ -187,13 +199,11 @@ public class RepoPermissionApiService extends CommonService{
             //해당 인스턴스 Repository 와 permission 아이디에 사용자 정보를 조합한다. permission {i} --> user {i}
             InstanceRepositories.forEach((Repository Repository) -> {
                 List lst = new ArrayList();
-                Repository.getPermissions().forEach((Permission Permission) -> {
-                    relstUser.forEach((User User) -> {
-                        if (User.getName().equals(Permission.getName())) {
-                            lst.add(User);
-                        }
-                    });
-                });
+                Repository.getPermissions().forEach((Permission Permission) -> relstUser.forEach((User User) -> {
+                    if (User.getName().equals(Permission.getName())) {
+                        lst.add(User);
+                    }
+                }));
                 //return 할 Repositories 객체에 Permsission정보를 넣어준다.
                 if (lst.size() > 0) {
                     Map addMap = new HashMap();
@@ -216,10 +226,11 @@ public class RepoPermissionApiService extends CommonService{
 
 
 
-    public Map permisionByInstanceIdAndParam(String instanceId, String searchUserId, String searchCreateYn, String searchActive,String sPage, String sSize){
+    @SuppressWarnings("unchecked")
+    public Map permisionByInstanceIdAndParam(String instanceId, String searchUserId, String searchCreateYn, String searchActive, String sPage, String sSize){
         try {
             //검색 아이디가 있을 경우 없을 경우
-            PageRequest pageRequest = null;
+            PageRequest pageRequest;
 
             List<ScInstanceUser> lstScInstanceUsers = scInstanceUserRepository.findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(instanceId, searchUserId, searchCreateYn);
 
@@ -227,23 +238,21 @@ public class RepoPermissionApiService extends CommonService{
             List<User> lstUser = userClientHandler.getAll();
             List<Map> rtnList = new ArrayList();
 
-            for (int i = 0; i < lstScInstanceUsers.size(); i++) {
+            for (ScInstanceUser lstScInstanceUser : lstScInstanceUsers) {
                 Map map = new HashMap();
-                ScInstanceUser scInstanceUser = lstScInstanceUsers.get(i);
-                map.put("no", scInstanceUser.getNo());
-                map.put("userId", Common.notNullrtnByobj(scInstanceUser.getUserId(), ""));
+                map.put("no", lstScInstanceUser.getNo());
+                map.put("userId", Common.notNullrtnByobj(lstScInstanceUser.getUserId(), ""));
                 map.put("userName", "");
                 map.put("userEmail", "");
                 map.put("userActive", false);
                 map.replace("userAdmin", false);
-                map.put("userRepoRole", lstScInstanceUsers.get(i).getRepoRole());
-                map.put("userCreateYn", lstScInstanceUsers.get(i).getCreaterYn());
-                map.put("userCreatedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUsers.get(i).getCreatedDate()));
-                map.put("userModifiedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUsers.get(i).getModifiedDate()));
+                map.put("userRepoRole", lstScInstanceUser.getRepoRole());
+                map.put("userCreateYn", lstScInstanceUser.getCreaterYn());
+                map.put("userCreatedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUser.getCreatedDate()));
+                map.put("userModifiedDate", DateUtil.rtnFormatString(Constants.DATE_FORMAT_1, lstScInstanceUser.getModifiedDate()));
 
-                for (int j = 0; j < lstUser.size(); j++) {
-                    User user = lstUser.get(j);
-                    if (scInstanceUser.getUserId().equals(user.getName())) {
+                for (User user : lstUser) {
+                    if (lstScInstanceUser.getUserId().equals(user.getName())) {
                         String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
                         String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
                         map.replace("userName", Common.notNullrtnByobj(user.getDisplayName(), ""));

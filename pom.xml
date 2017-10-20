@@ -71,11 +71,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<version>${spring.boot.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-test</artifactId>
+		<version>${spring.boot.version}</version>
+		<scope>test</scope>
+	</dependency>
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -152,6 +152,11 @@
 			<version>3.5</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>RELEASE</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${final.fileName}-${version}</finalName>
@@ -167,6 +172,18 @@
 				<configuration>
 					<destFile>${project.basedir}/../target/jacoco.exec</destFile>
 					<append>true</append>
+					<skip>${maven.test.skip}</skip>
+					<destFile>\${basedir}/target/jacoco/jacoco-overall.exec</destFile>
+					<output>file</output>
+					<append>true</append>
+					<excludes>
+						<exclude>**/common/**</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/controller/**</exclude>
+						<exclude>**/entity/**</exclude>
+						<exclude>**/model/**</exclude>
+						<exclude>**/repository/**</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -182,50 +199,30 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>target/jacoco/jacoco.exec</dataFile>
+						</configuration>
+					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<configuration>
-				<skip>${maven.test.skip}</skip>
-				<destFile>\${basedir}/target/jacoco/jacoco-overall.exec</destFile>
-				<output>file</output>
-				<append>true</append>
-				<excludes>
-					<exclude>**/common/**</exclude>
-					<exclude>**/config/**</exclude>
-					<exclude>**/controller/**</exclude>
-					<exclude>**/entity/**</exclude>
-					<exclude>**/model/**</exclude>
-					<exclude>**/repository/**</exclude>
-				</excludes>
-			</configuration>
-			<executions>
-				<execution>
-					<id>prepare-agent</id>
-					<goals>
-						<goal>prepare-agent</goal>
-					</goals>
-				</execution>
-				<execution>
-					<id>report</id>
-					<phase>prepare-package</phase>
-					<goals>
-						<goal>report</goal>
-					</goals>
-				</execution>
-				<execution>
-					<id>post-unit-test</id>
-					<phase>test</phase>
-					<goals>
-						<goal>report</goal>
-					</goals>
-					<configuration>
-						<dataFile>target/jacoco/jacoco.exec</dataFile>
-					</configuration>
-				</execution>
-			</executions>
 			</plugin>
 		</plugins>
 	</build>

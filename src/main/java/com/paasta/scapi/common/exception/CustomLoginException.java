@@ -20,6 +20,7 @@ public class CustomLoginException extends Exception {
     public CustomLoginException() {
     }
 
+    @SuppressWarnings("unchecked")
     public ResponseEntity CustomLoginException(ScmUnauthorizedException exception) {
         Map map = new HashMap();
         if (401 == exception.getStatusCode()) {
@@ -30,6 +31,7 @@ public class CustomLoginException extends Exception {
             return new ResponseEntity(exception.getCause(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @SuppressWarnings({"unchecked", "MismatchedQueryAndUpdateOfCollection"})
     public ResponseEntity CustomLoginException(Exception exception) {
         Map map = new HashMap();
         map.put("error", exception.getMessage());

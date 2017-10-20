@@ -9,13 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ScServiceInstanceService extends CommonService{
 
     @Autowired
+    private
     ScServiceInstanceRepository scServiceInstanceRepository;
 
     /**
@@ -63,7 +63,7 @@ public class ScServiceInstanceService extends CommonService{
         this.logger.info("  - creqteUserId :: {}", creqteUserId);
         this.logger.info(":::::::::::::::::::::::::::::::::::::::::::::");
 
-        List list = new ArrayList();
+        List list;
         if (Common.empty(creqteUserId) ){
             list = this.scServiceInstanceRepository.findAll();
         } else {

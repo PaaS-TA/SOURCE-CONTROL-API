@@ -106,9 +106,8 @@ public class PropertiesUtil {
      * @return the basic auth
      */
     public String getBasicAuth() {
-        String basicAuth = "Basic " + (Base64.getEncoder().encodeToString((adminId + ":" + adminPwd).getBytes()));
 
-        return basicAuth;
+        return "Basic " + (Base64.getEncoder().encodeToString((adminId + ":" + adminPwd).getBytes()));
     }
 
     @Override

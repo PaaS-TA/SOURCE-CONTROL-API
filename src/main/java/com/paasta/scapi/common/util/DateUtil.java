@@ -16,18 +16,16 @@ public class DateUtil extends Common {
     public static String currentDateTime() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);
-        String currentDateTime = sdf.format(new Date());
 
-        return currentDateTime;
+        return sdf.format(new Date());
 
     }
 
     public static String rtnFormatString(String strFormat, Date date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(strFormat, Locale.KOREA);
-        String rtnStr = sdf.format(date);
 
-        return rtnStr;
+        return sdf.format(date);
 
     }
 

@@ -49,22 +49,28 @@ import static java.util.stream.Collectors.toList;
 public class ScUserService extends CommonService {
 
 	@Autowired
+	private
 	ScUserRepository scUserRepository;
 
 	@Autowired
+	private
 	ScRepositoryRepository scRepositoryRepository;
 
 	@Autowired
+	private
 	RepoPermissionRepository repoPermissionRepository;
 
 	@Autowired
+	private
 	ScInstanceUserRepository scInstanceUserRepository;
 
 	@Autowired
+	private
 	ScRepositoryApiService scRepositoryApiService;
 	@Autowired
 	RepoPermissionApiService repoPermissionApiService;
 	@Autowired
+	private
 	RestClientUtil restClientUtil;
 
 	@Value("${api.users}")
@@ -152,8 +158,9 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	@Transactional
-	public String restDeleteUser(String name) {
+	public void restDeleteUser(String name) {
 		String rspApp = "";
         this.logger.info("restDeleteUser Start : ");
 		try {
@@ -164,7 +171,6 @@ public class ScUserService extends CommonService {
 			exception.printStackTrace();
 		}
         this.logger.info("restDeleteUser End "+ rspApp);
-		return rspApp;
 	}
 
 	/**
@@ -177,6 +183,7 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	@Transactional
 		public ScUser restUpdateUser(String name, LinkedHashMap jsonUser) {
 		ScUser rtnScUser = new ScUser();
@@ -238,6 +245,7 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public Map getUser(String name) {
 
 		Map rspApp = new HashMap();
@@ -281,8 +289,9 @@ public class ScUserService extends CommonService {
 	 * @version 1.0
 	 * @since 2017.09.15 최초작성
 	 */
-	
-	public ResponseEntity restGetAllUsers(String query){
+
+	@SuppressWarnings("unchecked")
+	private ResponseEntity restGetAllUsers(String query){
         this.logger.debug("getUser Start : " + query);
 		HttpEntity httEntity = this.restClientUtil.restCommonHeaders(query);
 		return this.restClientUtil.callRestApi(HttpMethod.GET, this.userUrl, httEntity, List.class);
@@ -298,6 +307,7 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public Map getUsers(String query) {
 
 		Map rspApp = new HashMap();
@@ -306,15 +316,13 @@ public class ScUserService extends CommonService {
 		ResponseEntity responseEntity = restGetAllUsers(query);
 		List<ScUser> users = this.getAll();
 		if (null != responseEntity.getBody()){
-			for (int i=0; i< users.size();i++){
-				ScUser scUser = users.get(i);
-				List<LinkedHashMap> list = (List<LinkedHashMap>)responseEntity.getBody();
-				for (int j=0;j<list.size();j++){
-					LinkedHashMap linkedHashMap = list.get(j);
+			for (ScUser scUser : users) {
+				List<LinkedHashMap> list = (List<LinkedHashMap>) responseEntity.getBody();
+				for (LinkedHashMap linkedHashMap : list) {
 					if (scUser.getUserId().equals(linkedHashMap.get("name"))) {
 						Map rtnMap = new HashMap();
-						String creationDate = String.valueOf(linkedHashMap.get("creationDate")) == "null" ? "" : String.valueOf(linkedHashMap.get("creationDate"));
-						String lastModified = String.valueOf(linkedHashMap.get("lastModified")) == "null" ? "" : String.valueOf(linkedHashMap.get("lastModified"));
+						String creationDate = Objects.equals(String.valueOf(linkedHashMap.get("creationDate")), "null") ? "" : String.valueOf(linkedHashMap.get("creationDate"));
+						String lastModified = Objects.equals(String.valueOf(linkedHashMap.get("lastModified")), "null") ? "" : String.valueOf(linkedHashMap.get("lastModified"));
 						linkedHashMap.replace("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
 						linkedHashMap.replace("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
 						rtnMap.putAll(linkedHashMap);
@@ -339,6 +347,7 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public ResponseEntity apiCreateUser(LinkedHashMap jsonUser) {
 		try {
@@ -389,11 +398,11 @@ public class ScUserService extends CommonService {
             this.logger.info(getClass().getName() + " : apiGetUsers start");
 			List userList = this.scmClientSession().getUserHandler().getAll();
             this.logger.info(getClass().getName() + " : apiGetUsers end");
-			return new ResponseEntity<List>(userList,null, HttpStatus.OK);
+			return new ResponseEntity<>(userList, null, HttpStatus.OK);
 
 		}catch (Exception e){
 			e.printStackTrace();
-			return new ResponseEntity<List>(null,null, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
 		}
 	}
 
@@ -424,11 +433,11 @@ public class ScUserService extends CommonService {
 //			List list = page.getContent();
 
             this.logger.info(getClass().getName() + " : apiGetUsers end");
-			return new ResponseEntity<Page>(page,null, HttpStatus.OK);
+			return new ResponseEntity<>(page, null, HttpStatus.OK);
 
 		}catch (Exception e){
 			e.printStackTrace();
-			return new ResponseEntity<Page>(null,null, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
 		}
 	}
 
@@ -446,6 +455,7 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public ResponseEntity<Map> getUsersByrepositoryId(String repositoryId, String searchUserName, String searchPermission, String active, PageRequest pageRequest) {
 		try {
             logger.info(getClass().getName() + " : apiGetUsers start");
@@ -471,23 +481,21 @@ public class ScUserService extends CommonService {
 			}
 
 			List rtnList = new ArrayList();
-			lstPermission.forEach(permission -> {
-				lstUser.forEach(user -> {
-					if (permission.getUserId().equals(user.getName())) {
-						Map rtnMap = new HashMap();
-						String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
-						String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
-						rtnMap.put("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
-						rtnMap.put("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
-						rtnMap.put("name", user.getName());
-						rtnMap.put("active", user.isActive());
-						rtnMap.put("admin", user.isAdmin());
-						rtnMap.put("displayName", user.getDisplayName());
-						rtnMap.put("permission", permission);
-						rtnList.add(rtnMap);
-					}
-				});
-			});
+			lstPermission.forEach(permission -> lstUser.forEach(user -> {
+                if (permission.getUserId().equals(user.getName())) {
+                    Map rtnMap = new HashMap();
+                    String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
+                    String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
+                    rtnMap.put("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
+                    rtnMap.put("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
+                    rtnMap.put("name", user.getName());
+                    rtnMap.put("active", user.isActive());
+                    rtnMap.put("admin", user.isAdmin());
+                    rtnMap.put("displayName", user.getDisplayName());
+                    rtnMap.put("permission", permission);
+                    rtnList.add(rtnMap);
+                }
+            }));
 
 			if(Common.notEmpty(searchUserName) || Common.notEmpty(active)) {
 				List rssList = new ArrayList();
@@ -521,15 +529,16 @@ public class ScUserService extends CommonService {
 			pageList = (List) pageList.stream().skip(start).limit(pageList.size()).collect(toList());
 			Page pageImpl = new PageImpl(pageList, pageRequest, pageList.size());
 			rssMap.replace("rtnList",pageImpl);
-			return new ResponseEntity<Map>(rssMap,null, HttpStatus.OK);
+			return new ResponseEntity<>(rssMap, null, HttpStatus.OK);
 
 		}catch (Exception exception){
 			exception.printStackTrace();
 
-			return new ResponseEntity<Map>(new HashMap(),null, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(new HashMap(), null, HttpStatus.FORBIDDEN);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public void restInstanceDeleteUser(String instance, String name) throws Exception{
 
@@ -537,6 +546,8 @@ public class ScUserService extends CommonService {
 
 		List<ScInstanceUser> lst = scInstanceUserRepository.findByUserId(name);
 		List<ScInstanceUser> instanceUsers = scInstanceUserRepository.findByInstanceIdAndUserId(instance, name);
+
+		List<ScRepository> lstScrepository = scRepositoryRepository.findAllByInstanceId(instance);
 
 		boolean userDeleteYn = true;
 		for (ScInstanceUser scInstanceUser : lst) {
@@ -548,25 +559,38 @@ public class ScUserService extends CommonService {
 		if(userDeleteYn){
 			restDeleteUser(name);
 		}
-		//인스턴스 사용자 정보삭제
-		instanceUsers.forEach(scInstanceUser -> {scInstanceUserRepository.delete(scInstanceUser.getNo());});
+		// DB 인스턴스 사용자 정보삭제
+		instanceUsers.forEach(scInstanceUser -> scInstanceUserRepository.delete(scInstanceUser.getNo()));
+
+		// DB 인스턴스 레파지토리 사용자 Permission 정보 삭제
+
+		lstScrepository.forEach(scRepository -> {
+			int repoNo = scRepository.getRepoNo();
+			String repoScmId = scRepository.getRepoScmId();
+
+
+
+		});
+
 
 		// 서비스 인스턴스별 repository ,참여자 정보삭제
 		List<com.paasta.scapi.model.Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instance,"");
-		instanceRepositories.forEach(repository -> {
-			List lstPermission =new ArrayList();
+		for (com.paasta.scapi.model.Repository repository : instanceRepositories) {
+			List lstPermission = new ArrayList();
 			repository.getPermissions().forEach(permission -> {
 				if (!permission.getName().equals(name)) {
 					lstPermission.add(permission);
 				}
 			});
-			scRepositoryApiService.updateRepository(repository.getId(),repository);
+			scRepositoryApiService.updateRepository(repository.getId(), repository);
 
 			ScRepository scRepository = scRepositoryRepository.findAllByRepoScmId(repository.getId()).get(0);
 			List<RepoPermission> repoPermissions = repoPermissionRepository.findAllByRepoNo(scRepository.getRepoNo());
-			repoPermissions.forEach(repoPermission -> {if(name.equals(repoPermission.getUserId())){repoPermissionRepository.delete(repoPermission.getNo());}});
-		});
-
-
+			repoPermissions.forEach(repoPermission -> {
+				if (name.equals(repoPermission.getUserId())) {
+					repoPermissionRepository.delete(repoPermission.getNo());
+				}
+			});
+		}
 	}
 }

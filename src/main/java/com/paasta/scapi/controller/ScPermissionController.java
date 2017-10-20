@@ -31,6 +31,7 @@ public class ScPermissionController {
     private RepoPermissionDBService repoPermissionDBService;
 
     @Autowired
+    private
     ScUserService scUserService;
 
     /**
@@ -43,6 +44,7 @@ public class ScPermissionController {
      * @return
      * @throws JsonProcessingException
      */
+    @SuppressWarnings("unchecked")
     @ApiOperation("레파지토리 참여자 권한 추가")
     @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
     @PutMapping("/{repositoryId}")
@@ -69,21 +71,21 @@ public class ScPermissionController {
      * @return
      * @throws JsonProcessingException
      */
+    @SuppressWarnings("unchecked")
     @ApiOperation("레파지토리 참여자 권한 삭제")
     @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
     @DeleteMapping("/{ids}")
     public ResponseEntity<String> deletePermissionByRepository(@PathVariable("ids") String permissionIds) throws JsonProcessingException {
-        ResponseEntity rssEntity;
         if (Common.notEmpty(permissionIds)) {
             try {
                 int id = Integer.parseInt(permissionIds);
-                rssEntity = repoPermissionApiService.deleteRepositoryForUserAuth(id);
+                repoPermissionApiService.deleteRepositoryForUserAuth(id);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 return new ResponseEntity(exception, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        return new ResponseEntity<String>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -92,18 +94,18 @@ public class ScPermissionController {
      * @return
      * @throws JsonProcessingException
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/{repoId}")
     public ResponseEntity getPermitionByRepoId(@PathVariable int repoId) throws JsonProcessingException {
 
-        List<Map> lstMap = new ArrayList<Map>();
+        List<Map> lstMap = new ArrayList<>();
         List<RepoPermission> lst = repoPermissionDBService.selectByRepoId(repoId);
         Map mapUser = scUserService.getUsers("");
         List lstUser = (List) mapUser.get("rtnUser");
-        for (int i = 0; i < lst.size(); i++) {
-            RepoPermission repoPermission = lst.get(i);
+        for (RepoPermission repoPermission : lst) {
             String srepoUserId = repoPermission.getUserId();
-            for (int j = 0; j < lstUser.size(); j++) {
-                HashMap hashMap = (HashMap) lstUser.get(j);
+            for (Object aLstUser : lstUser) {
+                HashMap hashMap = (HashMap) aLstUser;
                 if (hashMap.get("name").equals(srepoUserId)) {
                     hashMap.put("permission", repoPermission.getPermission());
                     lstMap.add(hashMap);
@@ -133,8 +135,7 @@ public class ScPermissionController {
                                                       @RequestParam(value = "page", required = false, defaultValue = "0") int start,
                                                       @RequestParam(value = "size", required = false, defaultValue = "10") int end
                                                     ) throws Exception {
-        ResponseEntity rss = this.repoPermissionApiService.getListPermitionByInstanceId(instanceId, start, end, username);
-        return rss;
+        return this.repoPermissionApiService.getListPermitionByInstanceId(instanceId, start, end, username);
 
     }
 
@@ -145,6 +146,7 @@ public class ScPermissionController {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/search/repositoryId/")
     public ResponseEntity searchPermisionByUserIdAndRepositoryId(@RequestParam(value = "searchUserId") String searchUserId,@RequestParam(value = "repositoryId") String repositoryId) throws Exception {
 
@@ -161,6 +163,7 @@ public class ScPermissionController {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/search/instanceId/{searchUserId}")
     public ResponseEntity searchPermisionByUserIdAndInstanceId(@PathVariable("searchUserId") String searchUserId
             ,@RequestParam(value = "instanceId") String instanceId
@@ -177,6 +180,7 @@ public class ScPermissionController {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @GetMapping("/user/{instanceId}")
     @ResponseBody
     public ResponseEntity searchPermisionByInstanceId(@PathVariable("instanceId") String instanceId,

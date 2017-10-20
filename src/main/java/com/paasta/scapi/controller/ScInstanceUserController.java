@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -39,13 +38,14 @@ public class ScInstanceUserController extends Common {
 	 * @version 1.0
 	 * @since 2017.8.16 최초작성
 	 */
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "모든 권한 조회", response = ResponseEntity.class)
 	@GetMapping
 	@ApiImplicitParam
     @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
 	public ResponseEntity getUsers(@RequestParam(value = "instanceId", required = false) String instanceId
 			, @RequestParam(value = "userId", required = false) String userId) throws RestException {
-		List<ScInstanceUser> lstInstanceUsers = new ArrayList<>();
+		List<ScInstanceUser> lstInstanceUsers;
 		if(Common.empty(instanceId)){
 			lstInstanceUsers = scInstanceUserService.getAll();
 		}else{
@@ -60,13 +60,10 @@ public class ScInstanceUserController extends Common {
 
 
 	@GetMapping("/synch")
-	public ResponseEntity synch() throws Exception{
+	public ResponseEntity synch() {
 
 		List<ScUser> lst = scUserService.getAll();
 		lst.forEach(scUser -> {
-
-			System.out.println("scUser.getUserId():::"+scUser.getUserId());
-			System.out.println("scUserService.getScmUser(scUser.getUserId()).getId():::"+(scUserService.getScmUser(scUser.getUserId()).getId()));
 			if(Common.empty(scUserService.getScmUser(scUser.getUserId()).getId())){
 				scUserService.delete(scUser.getUserId());
 			}

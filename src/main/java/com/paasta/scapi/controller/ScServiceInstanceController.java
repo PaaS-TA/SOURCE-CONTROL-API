@@ -39,6 +39,7 @@ public class ScServiceInstanceController {
     *형상관리 amdin 신청 목록
     * private static final int PAGE_SIZE = 3; => PageRequest pageable 로 변경
     */
+    @SuppressWarnings("unchecked")
     @ApiOperation(value = "", response = List.class)
     @ApiImplicitParam
     @GetMapping("")
@@ -55,6 +56,7 @@ public class ScServiceInstanceController {
     /*
      *형상관리 user 신청 목록
      */
+    @SuppressWarnings("unchecked")
     @ApiOperation(value = "", response = List.class)
     @ApiImplicitParam
     @GetMapping("/user")
@@ -71,6 +73,7 @@ public class ScServiceInstanceController {
      * @throws RestException
      * @version 1.0
      */
+    @SuppressWarnings("unchecked")
     @PostMapping
     @ApiImplicitParam
     @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
@@ -86,7 +89,6 @@ public class ScServiceInstanceController {
             String displayName = scInstanceUser.getOrDefault("displayName", "");
             String mail = scInstanceUser.getOrDefault("mail", "");
             String desc = scInstanceUser.getOrDefault("desc", "");
-            String password = scInstanceUser.getOrDefault("password", "__dummypassword__");
             //사용자 정보 : DB정보
             ScUser scUser = scUserService.findOne(userId);
             User rtnUser = scUserService.getScmUser(userId);

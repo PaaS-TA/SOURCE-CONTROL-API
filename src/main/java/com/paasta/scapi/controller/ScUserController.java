@@ -28,6 +28,7 @@ public class ScUserController extends CommonController {
 	private ScUserService scUserService;
 
 	// 사용자 조회
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "모든 사용자 조회", response = List.class)
 	@GetMapping
 	@ApiImplicitParam
@@ -47,6 +48,7 @@ public class ScUserController extends CommonController {
 	 * @throws SQLException
 	 */
 
+	@SuppressWarnings("unchecked")
 	@ApiOperation("사용자 생성")
 	@PostMapping
 	@ApiImplicitParam
@@ -83,7 +85,6 @@ public class ScUserController extends CommonController {
 	@ApiImplicitParam
     @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name) throws SQLException {
-		Map<String, Object> map = new HashMap<>();
         this.scUserService.restDeleteUser(name);
 		//scUserService.delete(name);
 		return new ResponseEntity(HttpStatus.OK);
@@ -91,12 +92,12 @@ public class ScUserController extends CommonController {
 	}
 
 	// 사용자 수정
+	@SuppressWarnings("unchecked")
 	@ApiOperation("사용자 수정")
     @PutMapping("/{name}")
     @ApiImplicitParam
     @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
     public ResponseEntity updateUser(@PathVariable("name") String id, @RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException {
-		Map<String, Object> map = new HashMap<>();
         ScUser scUser = scUserService.restUpdateUser((String)jsonUser.get("name"), jsonUser);
         return  new ResponseEntity(scUser,HttpStatus.OK);
 
@@ -111,7 +112,7 @@ public class ScUserController extends CommonController {
 	public ResponseEntity<Map> getDetailUser(@PathVariable("name") String name) throws Exception {
 		try {
 			Map map = scUserService.getUser(name);
-			return new ResponseEntity<Map>(map, HttpStatus.OK);
+			return new ResponseEntity<>(map, HttpStatus.OK);
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new Exception(e);
@@ -129,6 +130,7 @@ public class ScUserController extends CommonController {
 	 */
 
 	// 인스턴스별 사용자 조회 (query)
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "인스턴스별 부분사용자 조회", response = Page.class)
     @GetMapping("/admin/{instanceId}")
 	@ApiImplicitParam
@@ -158,6 +160,7 @@ public class ScUserController extends CommonController {
 	 * @throws RestException
 	 */
 	// 레파지토리별 사용자 조회 (query)
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "레파지토리별부분사용자 조회", response = Page.class)
     @GetMapping("/repository/{repositoryId}")
 	@ApiImplicitParam
@@ -175,9 +178,6 @@ public class ScUserController extends CommonController {
 		if(lstProperties.size()==0){
 			lstProperties.add("no");
 		}
-		String[] properties = (String[]) lstProperties.toArray(new String[0]);
-		Direction direction = Direction.fromString(sdirection);
-		Sort sort = new Sort(direction, properties);
 		PageRequest pageRequest =  new PageRequest(page, size);//, sort);
 		return scUserService.getUsersByrepositoryId(repositoryId, searchUserName, permission, active, pageRequest);
 
@@ -188,7 +188,6 @@ public class ScUserController extends CommonController {
 	@ApiImplicitParam
 	@ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name, @PathVariable("instance") String instanceid) throws Exception {
-		Map<String, Object> map = new HashMap<>();
 		scUserService.restInstanceDeleteUser(instanceid, name);
 		return new ResponseEntity(HttpStatus.OK);
 

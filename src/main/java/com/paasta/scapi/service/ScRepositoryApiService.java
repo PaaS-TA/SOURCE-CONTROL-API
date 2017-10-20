@@ -36,12 +36,15 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 public class ScRepositoryApiService extends  CommonService{
 
     @Autowired
+    private
     RestClientUtil restClientUtil;
 
     @Autowired
+    private
     ScRepositoryDBService scRepositoryDBService;
 
     @Autowired
+    private
     PropertiesUtil propertiesUtil;
 
     private Repository scmRepositoryByNameTypePrivate(String type, String name) {
@@ -58,6 +61,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getAllRepositories(String instanceid, int start, int end) throws Exception {
 
         Map<String, Object> resultMap = new HashMap();
@@ -84,6 +88,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getUserRepositories(String instanceid, String userid, int start, int end, String repoName, String type1, String type2, String reposort) throws Exception {
         Map<String, Object> resultMap = new HashMap();
         logger.debug("getUserRepositories::" + instanceid + "::userid::" + userid + "::start::" + start + "::end::" + end + "::repoName::" + repoName + "::type1::" + type1 + "::type2::" + type2 + "::reposort::" + reposort);
@@ -100,13 +105,6 @@ public class ScRepositoryApiService extends  CommonService{
                     boolean[] bRtn = {true};
                     boolean[] bType2 = {true};
                     //사용자 아이디 검색 하지 않음
-                    /**
-                     if(Common.notEmpty(userid)){
-                     if (!repository.getPermissions().isEmpty() && repository.getPermissions().stream().filter(pe -> userid.equals(pe.getName())).count() > 0) {
-                     bRtn = false;
-                     }
-                     }
-                     */
                     //레파지토리 이름 검색
                     if (Common.notEmpty(repoName)) {
                         if (!repository.getName().contains(repoName)) {
@@ -124,11 +122,9 @@ public class ScRepositoryApiService extends  CommonService{
                         String[] lstType2 = type2.split("_");
                         bType2[0] = false;
                         List<Permission> permissions = repository.getPermissions();
-                        for (int i = 0; i < permissions.size(); i++) {
-                            Permission permission = permissions.get(i);
-                            for (int j = 0; j < lstType2.length; j++) {
-                                String sType2 = lstType2[j];
-                                if (permission.getName().equals(userid) && permission.getType().equals(sType2.toString()))
+                        for (Permission permission : permissions) {
+                            for (String sType2 : lstType2) {
+                                if (permission.getName().equals(userid) && permission.getType().equals(sType2))
                                     bType2[0] = true;
                             }
                         }
@@ -191,9 +187,8 @@ public class ScRepositoryApiService extends  CommonService{
         scmCreateRepository(request);
 
         // step2. scm-managert get created repository info
-        Repository repository = scmRepositoryByNameTypePrivate(request.getType(), request.getName());
 
-        return repository;
+        return scmRepositoryByNameTypePrivate(request.getType(), request.getName());
     }
 
 
@@ -217,6 +212,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort) throws Exception {
         Map<String, Object> resultMap = new HashMap();
 
@@ -276,18 +272,15 @@ public class ScRepositoryApiService extends  CommonService{
         };
         ResponseEntity<List<Repository>> response = restClientUtil.callRestApiReturnObjList(HttpMethod.GET, this.propertiesUtil.getApiRepo() + sSort, entity, responseType);
 
-        List<Repository> repositories = response.getBody();
-
-        return repositories;
+        return response.getBody();
     }
 
 
     public sonia.scm.repository.Repository scmRepositoryByNameType(String type, String name) {
 
         RepositoryClientHandler repositoryClientHandler = scmClientSession().getRepositoryHandler();
-        sonia.scm.repository.Repository repository = repositoryClientHandler.get(type, name);
 
-        return repository;
+        return repositoryClientHandler.get(type, name);
 
     }
 
@@ -304,7 +297,7 @@ public class ScRepositoryApiService extends  CommonService{
         List<Repository> repositories = scmAllRepositories(sSort);
 
         // 인스턴스 아이디 존재하지 않을 경우, 모든 레파지토리 반환
-        List<Repository> repositoryList = new ArrayList<Repository>();
+        List<Repository> repositoryList = new ArrayList<>();
 
         // instance ID 가 존재하지 않는 경우, 모든 레파지토리 목록 반환
         if (StringUtils.isEmpty(instanceid)) {
@@ -325,13 +318,13 @@ public class ScRepositoryApiService extends  CommonService{
         ResponseEntity<String> response;
         try {
             logger.debug(request.toString());
-            request.setCreationDate(new Long(0));
+            request.setCreationDate(0L);
             request.setLastModified(new Date().getTime());
             HttpEntity<Object> entity = restClientUtil.restCommonHeaders(request);
             return restClientUtil.callRestApi(HttpMethod.POST, this.propertiesUtil.getApiRepo(), entity, String.class);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -340,9 +333,8 @@ public class ScRepositoryApiService extends  CommonService{
 
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(request);
         String url = this.propertiesUtil.getApiRepoId().replace("{id}", request.getId());
-        ResponseEntity<String> response = this.restClientUtil.callRestApi(HttpMethod.PUT, url, entity, String.class);
 
-        return response;
+        return this.restClientUtil.callRestApi(HttpMethod.PUT, url, entity, String.class);
     }
 
 
@@ -351,31 +343,17 @@ public class ScRepositoryApiService extends  CommonService{
         HttpEntity<Object> entity = restClientUtil.restCommonHeader(null);
         String url = propertiesUtil.getApiRepoBranches().replace("{id}", id);
         ResponseEntity<sonia.scm.repository.Branches> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, sonia.scm.repository.Branches.class);
-        sonia.scm.repository.Branches repositories = response.getBody();
-        return repositories;
+        return response.getBody();
     }
 
 
     
     public Tags getTags(String id) {
         sonia.scm.repository.Repository repository = scmClientSession().getRepositoryHandler().get(id);
-        Tags tags = scmClientSession().getRepositoryHandler().getTags(repository);
-        return tags;
+        return scmClientSession().getRepositoryHandler().getTags(repository);
     }
 
 
-//
-//    
-//    public BrowserResult getBrowse(String id) {
-//        HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
-//        String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
-//        ResponseEntity<BrowserResult> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, BrowserResult.class);
-//        BrowserResult repositories = (BrowserResult) response.getBody();
-//        return repositories;
-//    }
-
-
-    
     public BrowserResult getBrowseByParam(String id, boolean disableLastCommit, boolean disableSubRepositoryDetection, String path, boolean recursive, String revision) throws NotSupportedFeatuerException, IOException {
         HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
         String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
@@ -383,8 +361,7 @@ public class ScRepositoryApiService extends  CommonService{
         url = url + param;
         logger.debug("url:::" + url);
         ResponseEntity<BrowserResult> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, BrowserResult.class);
-        BrowserResult repositories = response.getBody();
-        return repositories;
+        return response.getBody();
     }
 
 
@@ -395,14 +372,9 @@ public class ScRepositoryApiService extends  CommonService{
         ClientChangesetHandler changesetHandler = repositoryHandler.getChangesetHandler(repository);
         // get 20 changesets started by 0
         ChangesetPagingResult changesets = changesetHandler.getChangesets(0, 10);
-        for (sonia.scm.repository.Changeset c : changesets) {
-            System.out.println(c.getId() + ": " + c.getDescription());
-        }
         return changesets;
     }
 
-
-    
     @Transactional
     public sonia.scm.repository.Repository updateRepository(String id, Repository repository) {
         try {

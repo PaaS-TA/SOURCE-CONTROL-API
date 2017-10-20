@@ -25,10 +25,10 @@ public class RepoPermission {
 
     public RepoPermission() { }
 
-    public RepoPermission(int repoNo, String userId, String permission) {
+    public RepoPermission(int repoNo, String userId) {
         this.repoNo = repoNo;
         this.userId = userId;
-        this.permission = permission;
+        this.permission = com.paasta.scapi.common.Constants.REPO_PERMITION_OWNER;
     }
 
     public RepoPermission(String userId, String permission) {

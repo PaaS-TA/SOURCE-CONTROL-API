@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +24,7 @@ public class RestClientUtil extends CommonService{
      * The Properties util.
      */
     @Autowired
+    private
     PropertiesUtil propertiesUtil;
     /**
      * Call rest api response model.
@@ -38,7 +39,7 @@ public class RestClientUtil extends CommonService{
     public <T> ResponseEntity<T> callRestApi(HttpMethod httpMethod, String url, HttpEntity<Object> entity, Class<T> responseType) {
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<T> response = null;
+        ResponseEntity<T> response;
 
         this.logger.info("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.baseUrl +url, responseType);
 
@@ -64,18 +65,18 @@ public class RestClientUtil extends CommonService{
      * @param param the param
      * @return the http model
      */
+    @SuppressWarnings("unchecked")
     public HttpEntity<Object> restCommonHeaders(Object param) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", this.propertiesUtil.getBasicAuth());
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         List lst =new ArrayList();
        lst.add(Charset.forName("euc-kr"));
         headers.setAcceptCharset(lst);
-        HttpEntity<Object> entity = new HttpEntity<Object>(param, headers);
 
-        return entity;
+        return new HttpEntity<>(param, headers);
     }
     /**
      * Header setting to result for sonia.scm.entity response Body
@@ -90,9 +91,7 @@ public class RestClientUtil extends CommonService{
         headers.set("Authorization", propertiesUtil.getBasicAuth());
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<Object> entity = new HttpEntity<Object>(param, headers);
-
-        return entity;
+        return new HttpEntity<>(param, headers);
     }
 
     /**
@@ -109,10 +108,10 @@ public class RestClientUtil extends CommonService{
      * @return the response entity
      * @throws Exception the exception
      */
-    public <T> ResponseEntity<List<T>> callRestApiReturnObjList(HttpMethod httpMethod, String url, HttpEntity<Object> entity, ParameterizedTypeReference<List<T>> responseType) throws Exception{
+    public <T> ResponseEntity<List<T>> callRestApiReturnObjList(HttpMethod httpMethod, String url, HttpEntity<Object> entity, ParameterizedTypeReference<List<T>> responseType) {
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<List<T>> response = null;
+        ResponseEntity<List<T>> response;
 
         this.logger.debug("Type : {}, URL : {}, ResponseType : {}", httpMethod, this.propertiesUtil.baseUrl +url, responseType);
 
