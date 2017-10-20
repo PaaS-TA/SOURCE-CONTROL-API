@@ -124,7 +124,7 @@ public class ScRepositoryApiService extends  CommonService{
                         List<Permission> permissions = repository.getPermissions();
                         for (Permission permission : permissions) {
                             for (String sType2 : lstType2) {
-                                if (permission.getName().equals(userid) && permission.getType().equals(sType2.toString()))
+                                if (permission.getName().equals(userid) && permission.getType().equals(sType2))
                                     bType2[0] = true;
                             }
                         }
@@ -354,18 +354,6 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-//
-//    
-//    public BrowserResult getBrowse(String id) {
-//        HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
-//        String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
-//        ResponseEntity<BrowserResult> response = restClientUtil.callRestApi(HttpMethod.GET, url, entity, BrowserResult.class);
-//        BrowserResult repositories = (BrowserResult) response.getBody();
-//        return repositories;
-//    }
-
-
-    
     public BrowserResult getBrowseByParam(String id, boolean disableLastCommit, boolean disableSubRepositoryDetection, String path, boolean recursive, String revision) throws NotSupportedFeatuerException, IOException {
         HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
         String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);

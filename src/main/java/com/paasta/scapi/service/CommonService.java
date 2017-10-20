@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 import sonia.scm.client.ScmClient;
 import sonia.scm.client.ScmClientSession;
 
@@ -13,7 +14,7 @@ import java.lang.reflect.Method;
 /**
  * Created by ijlee on 2017-07-16.
  */
-
+@Service
 public class CommonService {
 
     /**
@@ -52,15 +53,5 @@ public class CommonService {
         }
         return reqObject;
     }
-
-  /*  public ScmState getScmState(){
-        javax.ws.rs.client.Client client = javax.ws.rs.client.ClientBuilder.newClient();
-
-        ScmState result = client.target(baseUrl + "/authentication")
-                .get(ScmState.class);
-        return result;
-
-    }
-*/
 
 }

@@ -33,6 +33,7 @@ public class ScRepositoryDBService extends CommonService{
     RepoPermissionRepository repoPermissionRepository;
 
     
+    @SuppressWarnings("ConstantConditions")
     @Transactional
     public ScRepository createRepositoryDB(Repository repository) {
 

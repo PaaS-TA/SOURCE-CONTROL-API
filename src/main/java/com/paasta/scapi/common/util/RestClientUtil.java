@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,7 +71,7 @@ public class RestClientUtil extends CommonService{
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", this.propertiesUtil.getBasicAuth());
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         List lst =new ArrayList();
        lst.add(Charset.forName("euc-kr"));
         headers.setAcceptCharset(lst);

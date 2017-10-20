@@ -31,7 +31,7 @@ public class CustomLoginException extends Exception {
             return new ResponseEntity(exception.getCause(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "MismatchedQueryAndUpdateOfCollection"})
     public ResponseEntity CustomLoginException(Exception exception) {
         Map map = new HashMap();
         map.put("error", exception.getMessage());
