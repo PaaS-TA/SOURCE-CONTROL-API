@@ -372,14 +372,9 @@ public class ScRepositoryApiService extends  CommonService{
         ClientChangesetHandler changesetHandler = repositoryHandler.getChangesetHandler(repository);
         // get 20 changesets started by 0
         ChangesetPagingResult changesets = changesetHandler.getChangesets(0, 10);
-        for (sonia.scm.repository.Changeset c : changesets) {
-            System.out.println(c.getId() + ": " + c.getDescription());
-        }
         return changesets;
     }
 
-
-    
     @Transactional
     public sonia.scm.repository.Repository updateRepository(String id, Repository repository) {
         try {

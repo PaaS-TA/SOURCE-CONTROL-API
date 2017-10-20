@@ -60,13 +60,10 @@ public class ScInstanceUserController extends Common {
 
 
 	@GetMapping("/synch")
-	public ResponseEntity synch() throws Exception{
+	public ResponseEntity synch() {
 
 		List<ScUser> lst = scUserService.getAll();
 		lst.forEach(scUser -> {
-
-			System.out.println("scUser.getUserId():::"+scUser.getUserId());
-			System.out.println("scUserService.getScmUser(scUser.getUserId()).getId():::"+(scUserService.getScmUser(scUser.getUserId()).getId()));
 			if(Common.empty(scUserService.getScmUser(scUser.getUserId()).getId())){
 				scUserService.delete(scUser.getUserId());
 			}
