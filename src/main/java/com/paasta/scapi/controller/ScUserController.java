@@ -85,7 +85,6 @@ public class ScUserController extends CommonController {
 	@ApiImplicitParam
     @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name) throws SQLException {
-		Map<String, Object> map = new HashMap<>();
         this.scUserService.restDeleteUser(name);
 		//scUserService.delete(name);
 		return new ResponseEntity(HttpStatus.OK);
@@ -99,7 +98,6 @@ public class ScUserController extends CommonController {
     @ApiImplicitParam
     @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
     public ResponseEntity updateUser(@PathVariable("name") String id, @RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException {
-		Map<String, Object> map = new HashMap<>();
         ScUser scUser = scUserService.restUpdateUser((String)jsonUser.get("name"), jsonUser);
         return  new ResponseEntity(scUser,HttpStatus.OK);
 
@@ -180,9 +178,6 @@ public class ScUserController extends CommonController {
 		if(lstProperties.size()==0){
 			lstProperties.add("no");
 		}
-		String[] properties = (String[]) lstProperties.toArray(new String[0]);
-		Direction direction = Direction.fromString(sdirection);
-		Sort sort = new Sort(direction, properties);
 		PageRequest pageRequest =  new PageRequest(page, size);//, sort);
 		return scUserService.getUsersByrepositoryId(repositoryId, searchUserName, permission, active, pageRequest);
 
@@ -193,7 +188,6 @@ public class ScUserController extends CommonController {
 	@ApiImplicitParam
 	@ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name, @PathVariable("instance") String instanceid) throws Exception {
-		Map<String, Object> map = new HashMap<>();
 		scUserService.restInstanceDeleteUser(instanceid, name);
 		return new ResponseEntity(HttpStatus.OK);
 

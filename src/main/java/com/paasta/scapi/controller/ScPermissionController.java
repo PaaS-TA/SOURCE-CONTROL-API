@@ -76,7 +76,6 @@ public class ScPermissionController {
     @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
     @DeleteMapping("/{ids}")
     public ResponseEntity<String> deletePermissionByRepository(@PathVariable("ids") String permissionIds) throws JsonProcessingException {
-        ResponseEntity rssEntity;
         if (Common.notEmpty(permissionIds)) {
             try {
                 int id = Integer.parseInt(permissionIds);

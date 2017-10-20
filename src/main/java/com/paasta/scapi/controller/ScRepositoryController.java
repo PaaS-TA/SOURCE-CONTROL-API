@@ -4,11 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.Constants;
 import com.paasta.scapi.common.exception.RestException;
-import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.model.Repository;
 import com.paasta.scapi.service.ScRepositoryApiService;
 import com.paasta.scapi.service.ScRepositoryDBService;
-import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +40,6 @@ public class ScRepositoryController {
 
     @Autowired
     private ScRepositoryDBService scRepositoryDBService;
-    @Autowired
-    private ScUserService scUserService;
     /**
      * Repository Creation.
      *
@@ -77,7 +73,7 @@ public class ScRepositoryController {
 
         // DB insert
         try {
-            ScRepository scRepository = scRepositoryDBService.createRepositoryDB(repository);
+            scRepositoryDBService.createRepositoryDB(repository);
         } catch (Exception e) {
 
             // Scm-Server api - Repository 삭제 호출
@@ -119,7 +115,6 @@ public class ScRepositoryController {
             for(int i = 0 ; i < lstKey.size(); i++){
                 rtnMap.put(lstKey.get(i), lstValue.get(i)[0]);
             }
-
         }
         Map<String,Object> repositories = scRepositoryApiService. getAdminRepositories(
                 instanceid, (String)rtnMap.getOrDefault("userid", ""),

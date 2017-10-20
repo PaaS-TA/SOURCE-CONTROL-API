@@ -169,4 +169,19 @@ public class Common {
         return map;
     }
 
+    public static Map convertMapByRequest(HttpServletRequest request){
+
+        Map requestParameterMap = request.getParameterMap();
+        Map map = new HashMap();
+        if(!Common.empty(requestParameterMap)){
+            List<String> lstKey = new ArrayList(requestParameterMap .keySet());
+            List<Object[]> lstValue = new ArrayList(requestParameterMap .values());
+            for(int i = 0 ; i < lstKey.size(); i++){
+                map.put(lstKey.get(i), lstValue.get(i)[0]);
+            }
+
+        }
+        return map;
+
+    }
 }

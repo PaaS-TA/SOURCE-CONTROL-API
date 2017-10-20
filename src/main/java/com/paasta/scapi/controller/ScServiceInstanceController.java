@@ -89,7 +89,6 @@ public class ScServiceInstanceController {
             String displayName = scInstanceUser.getOrDefault("displayName", "");
             String mail = scInstanceUser.getOrDefault("mail", "");
             String desc = scInstanceUser.getOrDefault("desc", "");
-            String password = scInstanceUser.getOrDefault("password", "__dummypassword__");
             //사용자 정보 : DB정보
             ScUser scUser = scUserService.findOne(userId);
             User rtnUser = scUserService.getScmUser(userId);
