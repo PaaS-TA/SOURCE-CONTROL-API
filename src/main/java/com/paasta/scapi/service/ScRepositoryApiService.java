@@ -213,7 +213,8 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort) throws Exception {
+    public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort)
+    {
         Map<String, Object> resultMap = new HashMap();
 
         // 서비스 인스턴스별 repository
@@ -246,7 +247,6 @@ public class ScRepositoryApiService extends  CommonService{
         int totCnt = repositories.size();
         Map<String, Object> pageInfo = new HashMap<>();
         if (start == 0 || start > end) {
-//            Throwable cause = e.getCause();
             throw new RuntimeException("page error");
         } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
             resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
@@ -264,7 +264,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     // [ private Method ]=================================================================================================
-    private List<Repository> scmAllRepositories(String sSort) throws Exception {
+    private List<Repository> scmAllRepositories(String sSort) {
         // 모든 Repository 조회
         HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
 
@@ -285,7 +285,7 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-    public List<Repository> getRepositoryByInstanceId(String instanceid, String reposprt) throws Exception {
+    public List<Repository> getRepositoryByInstanceId(String instanceid, String reposprt) {
         String sSort = "";
         if (Common.notEmpty(reposprt)) {
             String[] sort = reposprt.split("_");
