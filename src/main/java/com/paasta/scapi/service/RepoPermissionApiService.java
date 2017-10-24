@@ -182,7 +182,7 @@ public class RepoPermissionApiService extends CommonService{
             List<Map> repositories = new ArrayList<>();
 
             // 서비스 인스턴스별 repository
-            List<Repository> InstanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instanceId,"");
+            List<Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instanceId,"");
 
             List<User> lstUser = userClientHandler.getAll();
             List<User> relstUser = new ArrayList<>();
@@ -197,7 +197,7 @@ public class RepoPermissionApiService extends CommonService{
             });
 
             //해당 인스턴스 Repository 와 permission 아이디에 사용자 정보를 조합한다. permission {i} --> user {i}
-            InstanceRepositories.forEach((Repository Repository) -> {
+            instanceRepositories.forEach((Repository Repository) -> {
                 List lst = new ArrayList();
                 Repository.getPermissions().forEach((Permission Permission) -> relstUser.forEach((User User) -> {
                     if (User.getName().equals(Permission.getName())) {
@@ -285,9 +285,11 @@ public class RepoPermissionApiService extends CommonService{
                 int size = Integer.parseInt(sSize);
                 pageRequest = new PageRequest(page, size);//, sort);
             }
-            int start = pageRequest.getPageNumber() * rstRtnList.size();
-            rstRtnList = rstRtnList.stream().skip(start).limit(rstRtnList.size()).collect(toList());
-            Page pageImpl = new PageImpl(rstRtnList, pageRequest, rstRtnList.size());
+            int start = pageRequest.getPageNumber()*Integer.parseInt(sSize);
+            long lSize = Long.parseLong(sSize);
+            long totalSize =  rstRtnList.size();
+            rstRtnList = rstRtnList.stream().skip(start).limit(lSize).collect(toList());
+            Page pageImpl = new PageImpl(rstRtnList, pageRequest, totalSize);
             Map rtnMap = new HashMap();
             rtnMap.put("rtnMap", pageImpl);
             return rtnMap;
