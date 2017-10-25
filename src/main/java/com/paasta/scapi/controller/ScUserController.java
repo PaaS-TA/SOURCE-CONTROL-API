@@ -3,6 +3,7 @@ package com.paasta.scapi.controller;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScUser;
+import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScUserService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class ScUserController extends CommonController {
 
 	@Autowired
 	private ScUserService scUserService;
+
+	@Autowired
+	private ScInstanceUserService scInstanceUserService;
 
 	// 사용자 조회
 	@SuppressWarnings("unchecked")
@@ -188,7 +192,7 @@ public class ScUserController extends CommonController {
 	@ApiImplicitParam
 	@ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name, @PathVariable("instance") String instanceid) throws Exception {
-		scUserService.restInstanceDeleteUser(instanceid, name);
+		scInstanceUserService.restInstanceDeleteUser(instanceid, name);
 		return new ResponseEntity(HttpStatus.OK);
 
 	}
