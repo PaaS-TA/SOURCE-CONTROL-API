@@ -538,59 +538,5 @@ public class ScUserService extends CommonService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	@Transactional
-	public void restInstanceDeleteUser(String instance, String name) throws Exception{
 
-		// 1. 사용자의 instance 정보 조회
-
-		List<ScInstanceUser> lst = scInstanceUserRepository.findByUserId(name);
-		List<ScInstanceUser> instanceUsers = scInstanceUserRepository.findByInstanceIdAndUserId(instance, name);
-
-		List<ScRepository> lstScrepository = scRepositoryRepository.findAllByInstanceId(instance);
-
-		boolean userDeleteYn = true;
-		for (ScInstanceUser scInstanceUser : lst) {
-			if (!instance.equals(scInstanceUser.getInstanceId())) {
-				userDeleteYn = false;
-			}
-		}
-		//다른 인스턴스에서 사용중이지 않은 사용자 (사용자 정보삭제)
-		if(userDeleteYn){
-			restDeleteUser(name);
-		}
-		// DB 인스턴스 사용자 정보삭제
-		instanceUsers.forEach(scInstanceUser -> scInstanceUserRepository.delete(scInstanceUser.getNo()));
-
-		// DB 인스턴스 레파지토리 사용자 Permission 정보 삭제
-
-		lstScrepository.forEach(scRepository -> {
-			int repoNo = scRepository.getRepoNo();
-			String repoScmId = scRepository.getRepoScmId();
-
-
-
-		});
-
-
-		// 서비스 인스턴스별 repository ,참여자 정보삭제
-		List<com.paasta.scapi.model.Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instance,"");
-		for (com.paasta.scapi.model.Repository repository : instanceRepositories) {
-			List lstPermission = new ArrayList();
-			repository.getPermissions().forEach(permission -> {
-				if (!permission.getName().equals(name)) {
-					lstPermission.add(permission);
-				}
-			});
-			scRepositoryApiService.updateRepository(repository.getId(), repository);
-
-			ScRepository scRepository = scRepositoryRepository.findAllByRepoScmId(repository.getId()).get(0);
-			List<RepoPermission> repoPermissions = repoPermissionRepository.findAllByRepoNo(scRepository.getRepoNo());
-			repoPermissions.forEach(repoPermission -> {
-				if (name.equals(repoPermission.getUserId())) {
-					repoPermissionRepository.delete(repoPermission.getNo());
-				}
-			});
-		}
-	}
 }
