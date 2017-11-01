@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ScServiceInstanceServiceTest {

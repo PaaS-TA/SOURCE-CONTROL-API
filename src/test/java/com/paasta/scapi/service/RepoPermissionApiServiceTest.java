@@ -96,6 +96,7 @@ public class RepoPermissionApiServiceTest {
 
     @Test
     public void permisionByInstanceIdAndParam() throws Exception {
+        repoPermissionApiService.permisionByInstanceIdAndParam("","","Y","","","");
     }
 
 }
