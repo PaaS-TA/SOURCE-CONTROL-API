@@ -491,6 +491,7 @@ public class ScUserService extends CommonService {
                     rtnMap.put("name", user.getName());
                     rtnMap.put("active", user.isActive());
                     rtnMap.put("admin", user.isAdmin());
+					rtnMap.put("email", user.getMail());
                     rtnMap.put("displayName", user.getDisplayName());
                     rtnMap.put("permission", permission);
                     rtnList.add(rtnMap);
