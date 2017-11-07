@@ -62,7 +62,7 @@ public class ScUserController extends CommonController {
 			scUser = scUserService.save(scUser);
 		}
 		if(Common.empty(rtnUser)){
-            scUserService.apiCreateUser(jsonUser).getBody();
+            scUserService.apiCreateUser(jsonUser);
 			rtnUser = scUserService.getScmUser((String) jsonUser.getOrDefault("name", ""));
 		}
 
@@ -78,7 +78,6 @@ public class ScUserController extends CommonController {
     @DeleteMapping("/{name}")
 	public ResponseEntity deleteUser(@PathVariable("name") String name) throws SQLException {
         this.scUserService.restDeleteUser(name);
-		//scUserService.delete(name);
 		return new ResponseEntity(HttpStatus.OK);
 
 	}

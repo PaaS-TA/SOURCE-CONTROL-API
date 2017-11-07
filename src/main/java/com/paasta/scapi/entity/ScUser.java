@@ -37,4 +37,13 @@ public class ScUser {
         this.userDesc = userDesc;
     }
 
+    @Override
+    public String toString() {
+        return "ScUser{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userMail='" + userMail + '\'' +
+                ", userDesc='" + userDesc + '\'' +
+                '}';
+    }
 }

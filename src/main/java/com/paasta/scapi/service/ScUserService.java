@@ -40,10 +40,6 @@ import static java.util.stream.Collectors.toList;
  * @author ijlee
  *
  */
-/**
- * @author ijlee
- *
- */
 @Service
 public class ScUserService extends CommonService {
 
@@ -133,21 +129,6 @@ public class ScUserService extends CommonService {
 		return scUserRepository.save(scUser);
 	}
 
-
-	/**
-	 * DB에서 사용자 변경 내역을 삭제한다.
-	 * @param
-	 * @param userId
-	 * @author 최세지
-	 * @version 1.0
-	 * @since 2017.09.15 최초작성
-	 */
-	
-	public void delete(String userId) {
-        scUserRepository.delete(userId);
-	}
-
-
 	/**
 	 * SCM API의 기능으로 사용자 삭제를 구현한다.
 	 * @param name
@@ -160,16 +141,17 @@ public class ScUserService extends CommonService {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public void restDeleteUser(String name) {
-		String rspApp = "";
+//		String rspApp = "";
         this.logger.info("restDeleteUser Start : ");
 		try {
-			HttpEntity httEntity = this.restClientUtil.restCommonHeaders(null);
-            this.delete(name);
-			rspApp = this.restClientUtil.callRestApi(HttpMethod.DELETE, this.userUrl +"/"+name, httEntity, Object.class).getBody().toString();
+//			HttpEntity httEntity = this.restClientUtil.restCommonHeaders(null);
+			scUserRepository.delete(name);
+			scmAdminSession().getUserHandler().delete(name);
+//			rspApp = this.restClientUtil.callRestApi(HttpMethod.DELETE, this.userUrl +"/"+name, httEntity, Object.class).getBody().toString();
 		}catch (Exception exception){
 			exception.printStackTrace();
 		}
-        this.logger.info("restDeleteUser End "+ rspApp);
+//        this.logger.info("restDeleteUser End "+ rspApp);
 	}
 
 	/**
@@ -312,7 +294,7 @@ public class ScUserService extends CommonService {
         this.logger.debug("getUser Start : ");
 		List rtnList = new ArrayList();
 		ResponseEntity responseEntity = restGetAllUsers();
-		List<ScUser> users = this.getAll();
+		List<ScUser> users = scUserRepository.findAll();
 		if (null != responseEntity.getBody()){
 			for (ScUser scUser : users) {
 				List<LinkedHashMap> list = (List<LinkedHashMap>) responseEntity.getBody();
@@ -346,7 +328,6 @@ public class ScUserService extends CommonService {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public ResponseEntity apiCreateUser(LinkedHashMap jsonUser) {
 		try {
             logger.info(getClass().getName() + " : apiCreateUser start");
