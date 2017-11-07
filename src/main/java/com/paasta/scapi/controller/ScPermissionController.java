@@ -6,9 +6,6 @@ import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.service.RepoPermissionApiService;
 import com.paasta.scapi.service.RepoPermissionDBService;
 import com.paasta.scapi.service.ScUserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +42,6 @@ public class ScPermissionController {
      * @throws JsonProcessingException
      */
     @SuppressWarnings("unchecked")
-    @ApiOperation("레파지토리 참여자 권한 추가")
-    @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
     @PutMapping("/{repositoryId}")
     @ResponseBody
     public ResponseEntity<String> updatePermissionByRepository(@PathVariable String repositoryId,  @RequestBody LinkedHashMap<?, Object> jsonMap) throws JsonProcessingException {
@@ -72,8 +67,6 @@ public class ScPermissionController {
      * @throws JsonProcessingException
      */
     @SuppressWarnings("unchecked")
-    @ApiOperation("레파지토리 참여자 권한 삭제")
-    @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
     @DeleteMapping("/{ids}")
     public ResponseEntity<String> deletePermissionByRepository(@PathVariable("ids") String permissionIds) throws JsonProcessingException {
         if (Common.notEmpty(permissionIds)) {
@@ -100,7 +93,7 @@ public class ScPermissionController {
 
         List<Map> lstMap = new ArrayList<>();
         List<RepoPermission> lst = repoPermissionDBService.selectByRepoId(repoId);
-        Map mapUser = scUserService.getUsers("");
+        Map mapUser = scUserService.getUsers();
         List lstUser = (List) mapUser.get("rtnUser");
         for (RepoPermission repoPermission : lst) {
             String srepoUserId = repoPermission.getUserId();

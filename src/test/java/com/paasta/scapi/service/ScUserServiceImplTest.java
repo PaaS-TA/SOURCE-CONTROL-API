@@ -13,12 +13,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Created by ij
  * lee on 2017-08-02.
  */
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class ScUserServiceImplTest {
 
     @InjectMocks
@@ -64,12 +66,10 @@ public class ScUserServiceImplTest {
     }
 /**
     @Test
-
     public void delete() throws Exception {
-        scUserService.delete("userId");
-        doNothing().doNothing();
+        Mockito.doNothing().when(scUserService).delete("userId");
     }
-
+/**
     @Test
     public void restDeleteUser() throws Exception {
         assertEquals(scUserService.restDeleteUser("name"),"");

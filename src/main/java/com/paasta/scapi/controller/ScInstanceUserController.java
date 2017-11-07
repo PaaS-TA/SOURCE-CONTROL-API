@@ -3,10 +3,8 @@ package com.paasta.scapi.controller;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScInstanceUser;
-import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScUserService;
-import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
-@Api(description = "Instance 권한 관리를 위한 Api")
 public class ScInstanceUserController extends Common {
 
 	@Autowired
@@ -39,10 +36,7 @@ public class ScInstanceUserController extends Common {
 	 * @since 2017.8.16 최초작성
 	 */
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "모든 권한 조회", response = ResponseEntity.class)
 	@GetMapping
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
 	public ResponseEntity getUsers(@RequestParam(value = "instanceId", required = false) String instanceId
 			, @RequestParam(value = "userId", required = false) String userId) throws RestException {
 		List<ScInstanceUser> lstInstanceUsers;
@@ -56,20 +50,6 @@ public class ScInstanceUserController extends Common {
 			}
 		}
 		return new ResponseEntity(lstInstanceUsers, HttpStatus.OK);
-	}
-
-
-	@GetMapping("/synch")
-	public ResponseEntity synch() {
-
-		List<ScUser> lst = scUserService.getAll();
-		lst.forEach(scUser -> {
-			if(Common.empty(scUserService.getScmUser(scUser.getUserId()).getId())){
-				scUserService.delete(scUser.getUserId());
-			}
-		});
-
-		return new ResponseEntity(HttpStatus.OK);
 	}
 
 }

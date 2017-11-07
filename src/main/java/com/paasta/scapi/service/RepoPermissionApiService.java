@@ -87,8 +87,8 @@ public class RepoPermissionApiService extends CommonService{
         ResponseEntity entity;
 
         try {
-            UserClientHandler userClientHandler = scmClientSession().getUserHandler();
-            User user = scmClientSession().getUserHandler().get(permission.getUserId());
+            UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
+            User user = scmAdminSession().getUserHandler().get(permission.getUserId());
             if(Common.empty(user)){
                 userClientHandler.create(new User(permission.getUserId()));
             }
@@ -176,7 +176,7 @@ public class RepoPermissionApiService extends CommonService{
         try {
             logger.info("getListPermitionByInstanceId start : ");
             PageRequest pageRequest = new PageRequest(page, size);
-            UserClientHandler userClientHandler = scmClientSession().getUserHandler();
+            UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
             int start = page * size + 1;
             int end = (page + 1) * size + 1;
             List<Map> repositories = new ArrayList<>();
@@ -234,7 +234,7 @@ public class RepoPermissionApiService extends CommonService{
 
             List<ScInstanceUser> lstScInstanceUsers = scInstanceUserRepository.findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(instanceId, searchUserId, searchCreateYn);
 
-            UserClientHandler userClientHandler = scmClientSession().getUserHandler();
+            UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
             List<User> lstUser = userClientHandler.getAll();
             List<Map> rtnList = new ArrayList();
 

@@ -5,7 +5,6 @@ import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.util.DateUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.RepoPermission;
-import com.paasta.scapi.entity.ScInstanceUser;
 import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.RepoPermissionRepository;
@@ -211,7 +210,7 @@ public class ScUserService extends CommonService {
 			if(Common.empty(displayName)){
 				displayName=name;
 			}
-			UserClientHandler userClientHandler = scmClientSession().getUserHandler();
+			UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
 			User user = userClientHandler.get(name);
 			user.setDisplayName(displayName);
 			user.setPassword(password);
@@ -223,7 +222,7 @@ public class ScUserService extends CommonService {
 				user.setProperty("PasswordSet",passwordSet);
 			}
 
-			scmClientSession().getUserHandler().modify(user);
+			scmAdminSession().getUserHandler().modify(user);
 
 //        this.restClientUtil.callRestApi(HttpMethod.PUT, this.userUrl +"/"+name , httEntity, String.class);
 			this.logger.info("restUpdateUser End " + rspApp);
@@ -278,12 +277,12 @@ public class ScUserService extends CommonService {
 	
 	public User getScmUser(String name) {
         this.logger.debug("getScmUser Start : " + name);
-		return scmClientSession().getUserHandler().get(name);
+		return scmAdminSession().getUserHandler().get(name);
 	}
 
 	/**
 	 * Scm APT의 기능으로 사용자의 상세정보를 확인한다.
-	 * @param query
+	 * @param
 	 * @return
 	 * @author 최세지
 	 * @version 1.0
@@ -291,16 +290,15 @@ public class ScUserService extends CommonService {
 	 */
 
 	@SuppressWarnings("unchecked")
-	private ResponseEntity restGetAllUsers(String query){
-        this.logger.debug("getUser Start : " + query);
-		HttpEntity httEntity = this.restClientUtil.restCommonHeaders(query);
+	private ResponseEntity restGetAllUsers(){
+        this.logger.debug("getUser Start : ");
+		HttpEntity httEntity = this.restClientUtil.restCommonHeaders(null);
 		return this.restClientUtil.callRestApi(HttpMethod.GET, this.userUrl, httEntity, List.class);
 	}
 
 
 	/**
 	 * DB에 입력된 사용자의 상세정보를 확인한다.
-	 * @param query
 	 * @return
 	 * @author 최세지
 	 * @version 1.0
@@ -308,12 +306,12 @@ public class ScUserService extends CommonService {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public Map getUsers(String query) {
+	public Map getUsers() {
 
 		Map rspApp = new HashMap();
-        this.logger.debug("getUser Start : " + query);
+        this.logger.debug("getUser Start : ");
 		List rtnList = new ArrayList();
-		ResponseEntity responseEntity = restGetAllUsers(query);
+		ResponseEntity responseEntity = restGetAllUsers();
 		List<ScUser> users = this.getAll();
 		if (null != responseEntity.getBody()){
 			for (ScUser scUser : users) {
@@ -373,7 +371,7 @@ public class ScUserService extends CommonService {
 			}
 
 			user.setProperty("PasswordSet",passwordSet);
-			scmClientSession().getUserHandler().create( user );
+			scmAdminSession().getUserHandler().create( user );
             logger.info(getClass().getName() + " : apiCreateUser end");
 
 		}catch (Exception e){
@@ -396,7 +394,7 @@ public class ScUserService extends CommonService {
 	public ResponseEntity<List> apiGetUsers() {
 		try {
             this.logger.info(getClass().getName() + " : apiGetUsers start");
-			List userList = this.scmClientSession().getUserHandler().getAll();
+			List userList = this.scmAdminSession().getUserHandler().getAll();
             this.logger.info(getClass().getName() + " : apiGetUsers end");
 			return new ResponseEntity<>(userList, null, HttpStatus.OK);
 
@@ -424,12 +422,12 @@ public class ScUserService extends CommonService {
 
 			/** 인스턴스별 레파지 토리 정보가져오기 */
 
-			List<Repository> list = this.scmClientSession().getRepositoryHandler().getAll();
+			List<Repository> list = this.scmAdminSession().getRepositoryHandler().getAll();
 			List rtnList = new ArrayList();
 
 
 			Page<ScUser> page = this.scUserRepository.findByUserNameContaining(userName, pageRequest);
-			List userList = this.scmClientSession().getUserHandler().getAll();
+			List userList = this.scmAdminSession().getUserHandler().getAll();
 //			List list = page.getContent();
 
             this.logger.info(getClass().getName() + " : apiGetUsers end");
@@ -461,11 +459,11 @@ public class ScUserService extends CommonService {
             logger.info(getClass().getName() + " : apiGetUsers start");
 			List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
 			/** 레파지토리별 사용자 정보가져오기*/
-			RepositoryClientHandler repositoryClientHandler = scmClientSession().getRepositoryHandler();
+			RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();
 			Repository repository = repositoryClientHandler.get(repositoryId);
 
 			// 전체 사용자 가져오기
-			UserClientHandler userClientHandler = scmClientSession().getUserHandler();
+			UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
 			List<User> lstUser = userClientHandler.getAll();
 			Map rssMap = new HashMap();
 

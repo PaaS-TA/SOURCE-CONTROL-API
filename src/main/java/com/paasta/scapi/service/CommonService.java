@@ -23,35 +23,12 @@ public class CommonService {
     @Value("${api.base.url}")  private String url;
     @Value("${admin.id}")  private String username;
     @Value("${admin.pwd}")  private String password;
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    ScmClientSession scmClientSession(){
+    ScmClientSession scmAdminSession(){
         return ScmClient.createSession(url, username, password);
     }
-    Object setPageInfo(Page reqPage, Object reqObject) {
-        try {
-            Class<?> aClass = reqObject.getClass();
 
-            Method methodSetPage = aClass.getMethod("setPage", Integer.TYPE);
-            Method methodSetSize = aClass.getMethod("setSize", Integer.TYPE);
-            Method methodSetTotalPages = aClass.getMethod("setTotalPages", Integer.TYPE);
-            Method methodSetTotalElements = aClass.getMethod("setTotalElements", Long.TYPE);
-            Method methodSetLast = aClass.getMethod("setLast", Boolean.TYPE);
-
-            methodSetPage.invoke(reqObject, reqPage.getNumber());
-            methodSetSize.invoke(reqObject, reqPage.getSize());
-            methodSetTotalPages.invoke(reqObject, reqPage.getTotalPages());
-            methodSetTotalElements.invoke(reqObject, reqPage.getTotalElements());
-            methodSetLast.invoke(reqObject, reqPage.isLast());
-
-        } catch (NoSuchMethodException e) {
-            this.logger.error("NoSuchMethodException :: {}", e);
-        } catch (IllegalAccessException e1) {
-            this.logger.error("IllegalAccessException :: {}", e1);
-        } catch (InvocationTargetException e2) {
-            this.logger.error("InvocationTargetException :: {}", e2);
-        }
-        return reqObject;
-    }
 
 }

@@ -5,9 +5,7 @@ import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScUserService;
-import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,7 +20,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/users")
-@Api(description = "사용자 관리를 위한 Api")
 public class ScUserController extends CommonController {
 
 	@Autowired
@@ -33,12 +30,9 @@ public class ScUserController extends CommonController {
 
 	// 사용자 조회
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "모든 사용자 조회", response = List.class)
 	@GetMapping
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = List.class))
 	public ResponseEntity getUsers() throws RestException {
-		Map users = scUserService.getUsers("");
+		Map users = scUserService.getUsers();
 		return new ResponseEntity(users, HttpStatus.OK);
 	}
 
@@ -53,10 +47,7 @@ public class ScUserController extends CommonController {
 	 */
 
 	@SuppressWarnings("unchecked")
-	@ApiOperation("사용자 생성")
 	@PostMapping
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(response = Map.class, code = 201, message = "success"))
 	public ResponseEntity createUser(@RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
 
@@ -84,10 +75,7 @@ public class ScUserController extends CommonController {
 	}
 
 	// 사용자 삭제
-	@ApiOperation("사용자 삭제")
     @DeleteMapping("/{name}")
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name) throws SQLException {
         this.scUserService.restDeleteUser(name);
 		//scUserService.delete(name);
@@ -97,10 +85,7 @@ public class ScUserController extends CommonController {
 
 	// 사용자 수정
 	@SuppressWarnings("unchecked")
-	@ApiOperation("사용자 수정")
     @PutMapping("/{name}")
-    @ApiImplicitParam
-    @ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
     public ResponseEntity updateUser(@PathVariable("name") String id, @RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException {
         ScUser scUser = scUserService.restUpdateUser((String)jsonUser.get("name"), jsonUser);
         return  new ResponseEntity(scUser,HttpStatus.OK);
@@ -109,9 +94,7 @@ public class ScUserController extends CommonController {
 
 
 	// 사용자 상세정보조회
-	@ApiOperation("사용자 상세정보조회")
     @GetMapping("/user/{name}")
-	@ApiImplicitParam
 	@ResponseBody
 	public ResponseEntity<Map> getDetailUser(@PathVariable("name") String name) throws Exception {
 		try {
@@ -135,10 +118,7 @@ public class ScUserController extends CommonController {
 
 	// 인스턴스별 사용자 조회 (query)
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "인스턴스별 부분사용자 조회", response = Page.class)
     @GetMapping("/admin/{instanceId}")
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
 	public ResponseEntity getListUsersByName(@PathVariable("instanceId") String instanceId, HttpServletRequest request) throws RestException {
 
 		Map map = Common.rtnMapByRequestParam(request);
@@ -165,10 +145,7 @@ public class ScUserController extends CommonController {
 	 */
 	// 레파지토리별 사용자 조회 (query)
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "레파지토리별부분사용자 조회", response = Page.class)
     @GetMapping("/repository/{repositoryId}")
-	@ApiImplicitParam
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
 	public ResponseEntity getListUsersByRepositoryId(@PathVariable("repositoryId") String repositoryId, HttpServletRequest request) throws Exception {
 		logger.debug("getListUsersByRepositoryId::repositoryId"+"::"+repositoryId);
 		Map map = Common.rtnMapByRequestParam(request);
@@ -189,8 +166,6 @@ public class ScUserController extends CommonController {
 
 	// 인스턴스 사용자 삭제
 	@DeleteMapping("/{name}/{instance}")
-	@ApiImplicitParam
-	@ApiResponses(@ApiResponse(response = Map.class, code = 200, message = "success"))
 	public ResponseEntity deleteUser(@PathVariable("name") String name, @PathVariable("instance") String instanceid) throws Exception {
 		scInstanceUserService.restInstanceDeleteUser(instanceid, name);
 		return new ResponseEntity(HttpStatus.OK);

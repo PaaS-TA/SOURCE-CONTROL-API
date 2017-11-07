@@ -51,13 +51,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 			<version>${spring.boot.version}</version>
 		</dependency>
-		<!-- API Document swagger -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.6.1</version>
-			<scope>compile</scope>
-		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

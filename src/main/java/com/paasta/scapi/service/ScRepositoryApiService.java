@@ -278,7 +278,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     public sonia.scm.repository.Repository scmRepositoryByNameType(String type, String name) {
 
-        RepositoryClientHandler repositoryClientHandler = scmClientSession().getRepositoryHandler();
+        RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();
 
         return repositoryClientHandler.get(type, name);
 
@@ -349,8 +349,8 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     public Tags getTags(String id) {
-        sonia.scm.repository.Repository repository = scmClientSession().getRepositoryHandler().get(id);
-        return scmClientSession().getRepositoryHandler().getTags(repository);
+        sonia.scm.repository.Repository repository = scmAdminSession().getRepositoryHandler().get(id);
+        return scmAdminSession().getRepositoryHandler().getTags(repository);
     }
 
 
@@ -367,7 +367,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     public ChangesetPagingResult getChangesets(String id) throws NotSupportedFeatuerException {
-        RepositoryClientHandler repositoryHandler = scmClientSession().getRepositoryHandler();
+        RepositoryClientHandler repositoryHandler = scmAdminSession().getRepositoryHandler();
         sonia.scm.repository.Repository repository = repositoryHandler.get(id);
         ClientChangesetHandler changesetHandler = repositoryHandler.getChangesetHandler(repository);
         // get 20 changesets started by 0
@@ -378,7 +378,7 @@ public class ScRepositoryApiService extends  CommonService{
     @Transactional
     public sonia.scm.repository.Repository updateRepository(String id, Repository repository) {
         try {
-            RepositoryClientHandler repositoryClientHandler = scmClientSession().getRepositoryHandler();
+            RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();
             //조회
             sonia.scm.repository.Repository mofiyRepository = repositoryClientHandler.get(id);
 
@@ -397,7 +397,7 @@ public class ScRepositoryApiService extends  CommonService{
     /*
     @Transactional
     public void createRepositoryApiFile(Repository repository){
-        RepositoryClientHandler repositoryClientHandler =  scmClientSession().getRepositoryHandler();
+        RepositoryClientHandler repositoryClientHandler =  scmAdminSession().getRepositoryHandler();
         ImportBundleRequest importBundleRequest = new ImportBundleRequest("file", "README.MD")
         repositoryClientHandler.importFromBundle(importBundleRequest);
     }*/

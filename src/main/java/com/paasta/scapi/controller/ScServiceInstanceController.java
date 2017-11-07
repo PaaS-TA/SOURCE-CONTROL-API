@@ -2,12 +2,12 @@ package com.paasta.scapi.controller;
 
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.exception.RestException;
+import com.paasta.scapi.entity.ScServiceInstance;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.model.ServiceInstanceList;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScServiceInstanceService;
 import com.paasta.scapi.service.ScUserService;
-import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,7 +25,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/serviceInstances")
-@Api(description = "서비스 신청 현황 조회를 위한 Api")
 public class ScServiceInstanceController {
     @Autowired
     ScServiceInstanceService scServiceInstanceService;
@@ -40,10 +39,7 @@ public class ScServiceInstanceController {
     * private static final int PAGE_SIZE = 3; => PageRequest pageable 로 변경
     */
     @SuppressWarnings("unchecked")
-    @ApiOperation(value = "", response = List.class)
-    @ApiImplicitParam
     @GetMapping("")
-    @ApiResponses({@ApiResponse(code = 200, message = "Success", response = List.class), @ApiResponse(code = 401, message = "You are not authorized to view the resource")})
     public ResponseEntity<ServiceInstanceList> getServiceInstances(@RequestParam(value = "organizationName", required = false) String organizationName,
                                                                     @RequestParam(value = "size", required = false) int size,
                                                                     @RequestParam(value = "page", required = false) int page){
@@ -57,11 +53,8 @@ public class ScServiceInstanceController {
      *형상관리 user 신청 목록
      */
     @SuppressWarnings("unchecked")
-    @ApiOperation(value = "", response = List.class)
-    @ApiImplicitParam
     @GetMapping("/user")
-    @ApiResponses({@ApiResponse(code = 200, message = "Success", response = List.class), @ApiResponse(code = 401, message = "You are not authorized to view the resource")})
-    public ResponseEntity<List> getUserServiceInstances(@RequestParam(value = "createUserId", required = false) String createUserId){
+    public ResponseEntity< List<ScServiceInstance>> getUserServiceInstances(@RequestParam(value = "createUserId", required = false) String createUserId){
         List serviceInstances = this.scServiceInstanceService.getServiceInstanceList(createUserId);
         return new ResponseEntity(serviceInstances, HttpStatus.OK);
     }
@@ -75,8 +68,6 @@ public class ScServiceInstanceController {
      */
     @SuppressWarnings("unchecked")
     @PostMapping
-    @ApiImplicitParam
-    @ApiResponses(@ApiResponse(code = 200, message = "success", response = ResponseEntity.class))
     public ResponseEntity createInstanceUser(@RequestBody LinkedHashMap linkMapScInstanceUser) throws SQLException {
         Map<String, String> scInstanceUser = Common.convertMapByLinkedHashMap(linkMapScInstanceUser);
 

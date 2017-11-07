@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 @Service
@@ -28,11 +30,6 @@ public class ScServiceInstanceService extends CommonService{
      * @since 2017.09.15 최초작성
      */
     
-    public List<ScServiceInstance> getAll() {
-        return this.scServiceInstanceRepository.findAll();
-    }
-
-    
     public ServiceInstanceList getServiceInstanceList(String organizationName, Pageable pageable) {
 
         this.logger.info(":::::::::::::::::::::::::::::::::::::::::::::");
@@ -47,30 +44,58 @@ public class ScServiceInstanceService extends CommonService{
         Page<ScServiceInstance> serviceInstanceListPage;
 
         if (organizationName == null || "".equals(organizationName)) {
-            serviceInstanceListPage = this.scServiceInstanceRepository.findAll(pageable);
+            serviceInstanceListPage = scServiceInstanceRepository.findAll(pageable);
         } else {
-            serviceInstanceListPage = this.scServiceInstanceRepository.findAll(ScServiceInstancesSpecifications.hasOrganizationName(organizationName), pageable);
+            serviceInstanceListPage = scServiceInstanceRepository.findAll(ScServiceInstancesSpecifications.hasOrganizationName(organizationName), pageable);
         }
 
-        resultList = (ServiceInstanceList) this.setPageInfo(serviceInstanceListPage, new ServiceInstanceList());
+        resultList = (ServiceInstanceList) setPageInfo(serviceInstanceListPage, new ServiceInstanceList());
         resultList.setServiceInstances(serviceInstanceListPage.getContent());
         return resultList;
     }
-    
-    public List getServiceInstanceList(String creqteUserId) {
+
+    /**
+     * 서비스인스턴스 생성자별 서비스 인스턴스 목록 조회
+     *
+     * @param creqteUserId
+     * @return List
+     *  if() createUserId  삭제함.2017.11.06 by ijlee
+     */
+    public  List<ScServiceInstance> getServiceInstanceList(String creqteUserId) {
 
         this.logger.info(":::::::::::::::::::::::::::::::::::::::::::::");
         this.logger.info("  - creqteUserId :: {}", creqteUserId);
         this.logger.info(":::::::::::::::::::::::::::::::::::::::::::::");
 
-        List list;
-        if (Common.empty(creqteUserId) ){
-            list = this.scServiceInstanceRepository.findAll();
-        } else {
-            list = this.scServiceInstanceRepository.findByCreateUserId(creqteUserId);
-        }
+        List<ScServiceInstance>  list = this.scServiceInstanceRepository.findByCreateUserId(creqteUserId);
 
         return list;
+    }
+
+    private Object setPageInfo(Page reqPage, Object reqObject) {
+        try {
+            Class<?> aClass = reqObject.getClass();
+
+            Method methodSetPage = aClass.getMethod("setPage", Integer.TYPE);
+            Method methodSetSize = aClass.getMethod("setSize", Integer.TYPE);
+            Method methodSetTotalPages = aClass.getMethod("setTotalPages", Integer.TYPE);
+            Method methodSetTotalElements = aClass.getMethod("setTotalElements", Long.TYPE);
+            Method methodSetLast = aClass.getMethod("setLast", Boolean.TYPE);
+
+            methodSetPage.invoke(reqObject, reqPage.getNumber());
+            methodSetSize.invoke(reqObject, reqPage.getSize());
+            methodSetTotalPages.invoke(reqObject, reqPage.getTotalPages());
+            methodSetTotalElements.invoke(reqObject, reqPage.getTotalElements());
+            methodSetLast.invoke(reqObject, reqPage.isLast());
+
+        } catch (NoSuchMethodException e) {
+            this.logger.error("NoSuchMethodException :: {}", e);
+        } catch (IllegalAccessException e1) {
+            this.logger.error("IllegalAccessException :: {}", e1);
+        } catch (InvocationTargetException e2) {
+            this.logger.error("InvocationTargetException :: {}", e2);
+        }
+        return reqObject;
     }
 }
 
