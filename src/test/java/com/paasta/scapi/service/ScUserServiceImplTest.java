@@ -48,22 +48,11 @@ public class ScUserServiceImplTest {
     }
 
     @Test
-    public void findOne() throws Exception {
-        ScUser scUser = new ScUser("useId","uerName", "userEmail");
-        Mockito.when(this.scUserService.findOne("userId")).thenReturn(scUser);
-    }
-
-    @Test
     public void save() throws Exception {
         ScUser scUser = new ScUser("useId","uerName", "userEmail");
         Mockito.when(this.scUserService.save(scUser)).thenReturn(scUser);
     }
 
-    @Test
-    public void update() throws Exception {
-        ScUser scUser = new ScUser("useId","uerName", "userEmail");
-        Mockito.when(this.scUserService.update(scUser)).thenReturn(scUser);
-    }
 /**
     @Test
     public void delete() throws Exception {

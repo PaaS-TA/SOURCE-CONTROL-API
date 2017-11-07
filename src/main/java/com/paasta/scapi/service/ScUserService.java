@@ -55,13 +55,13 @@ public class ScUserService extends CommonService {
 	private
 	RepoPermissionRepository repoPermissionRepository;
 
-	@Autowired
+	/*@Autowired
 	private
 	ScInstanceUserRepository scInstanceUserRepository;
 
 	@Autowired
 	private
-	ScRepositoryApiService scRepositoryApiService;
+	ScRepositoryApiService scRepositoryApiService;*/
 	@Autowired
 	RepoPermissionApiService repoPermissionApiService;
 	@Autowired
@@ -83,20 +83,6 @@ public class ScUserService extends CommonService {
 	
 	public List<ScUser> getAll() {
 		return this.scUserRepository.findAll();
-	}
-
-
-	/**
-	 * DB에서 사용자아이디를 통해 목록을 확인한다.
-	 * @param userId
-	 * @return
-	 * @author 최세지
-	 * @version 1.0
-	 * @since 2017.09.15 최초작성
-	 */
-	
-	public ScUser findOne(String userId) {
-		return scUserRepository.findOne(userId);
 	}
 
 
@@ -124,10 +110,6 @@ public class ScUserService extends CommonService {
 	 * @version 1.0
 	 * @since 2017.09.15 최초작성
 	 */
-	
-	public ScUser update(ScUser scUser) {
-		return scUserRepository.save(scUser);
-	}
 
 	/**
 	 * SCM API의 기능으로 사용자 삭제를 구현한다.
@@ -171,8 +153,8 @@ public class ScUserService extends CommonService {
 		try {
 			String rspApp = "";
 			logger.info("restUpdateUser Start : ");
-			JSONObject jsonObject = new JSONObject(jsonUser);
-			String request = jsonObject.toString();
+//			JSONObject jsonObject = new JSONObject(jsonUser);
+//			String request = jsonObject.toString();
 
 			String displayName = (String) jsonUser.getOrDefault("displayName", "");
 			String mail = (String) jsonUser.getOrDefault("mail", "");
@@ -182,7 +164,7 @@ public class ScUserService extends CommonService {
 			String passwordSet = (String) jsonUser.getOrDefault("PasswordSet", "false");
 			String description = (String) jsonUser.getOrDefault("desc", "");
 			ScUser scUser = new ScUser(name, displayName, mail,description);
-			rtnScUser = update(scUser);
+			rtnScUser = scUserRepository.save(scUser);
 			/**
 			 * syntax check 를 두어 smc 수정오류를 방지함.
 			 */
@@ -200,7 +182,7 @@ public class ScUserService extends CommonService {
 			user.setAdmin(admin);
 			user.setMail(mail);
 			if(!Common.empty(passwordSet)){
-				Map map =user.getProperties();
+//				Map map =user.getProperties();
 				user.setProperty("PasswordSet",passwordSet);
 			}
 
@@ -227,11 +209,11 @@ public class ScUserService extends CommonService {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public Map getUser(String name) {
+	public Map getUser(String name) throws Exception{
 
 		Map rspApp = new HashMap();
         this.logger.debug("getUser Start : " + name);
-		ScUser scUser = this.findOne(name);
+		ScUser scUser = scUserRepository.findOne(name);
 		if(Common.empty(scUser)) {
 			rspApp.put("ScUser", null);
 			rspApp.put("rtnUser",null);
@@ -397,11 +379,11 @@ public class ScUserService extends CommonService {
 	 * @since 2017.09.15 최초작성
 	 */
 	
-	public ResponseEntity<Page> apiGetUsersByName(String instanceId, String userName, PageRequest pageRequest) {
+/*	public ResponseEntity<Page> apiGetUsersByName(String instanceId, String userName, PageRequest pageRequest) {
 		try {
             this.logger.info(getClass().getName() + " : apiGetUsers start::instanceId::"+instanceId);
 
-			/** 인스턴스별 레파지 토리 정보가져오기 */
+			*//** 인스턴스별 레파지 토리 정보가져오기 *//*
 
 			List<Repository> list = this.scmAdminSession().getRepositoryHandler().getAll();
 			List rtnList = new ArrayList();
@@ -418,7 +400,7 @@ public class ScUserService extends CommonService {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
 		}
-	}
+	}*/
 
 
 	/**

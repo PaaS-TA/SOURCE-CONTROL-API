@@ -48,7 +48,7 @@ public class ScUserController extends CommonController {
 
 	@SuppressWarnings("unchecked")
 	@PostMapping
-	public ResponseEntity createUser(@RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException {
+	public ResponseEntity createUser(@RequestBody LinkedHashMap<?, Object> jsonUser) throws SQLException , Exception{
 		Map<String, Object> map = new HashMap<>();
 
 		/* 상용자 정보조회 (DB) & sourcecontrol service*/
@@ -96,27 +96,22 @@ public class ScUserController extends CommonController {
     @GetMapping("/user/{name}")
 	@ResponseBody
 	public ResponseEntity<Map> getDetailUser(@PathVariable("name") String name) throws Exception {
-		try {
-			Map map = scUserService.getUser(name);
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		}catch (Exception e){
-			e.printStackTrace();
-			throw new Exception(e);
-		}
+        Map map = scUserService.getUser(name);
+        return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 
 	/**
 	 * desc query sort direction desc or aesc false boolean limit query the
 	 * limit value for paging -1 int sortby query sort parameter start query the
 	 * start value for paging 0 int
-	 *
+	 ** users/admin/{instanceId}
 	 * @param instanceId  사용자 포함될 이름
 	 * @return
 	 * @throws RestException
 	 */
 
 	// 인스턴스별 사용자 조회 (query)
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
     @GetMapping("/admin/{instanceId}")
 	public ResponseEntity getListUsersByName(@PathVariable("instanceId") String instanceId, HttpServletRequest request) throws RestException {
 
@@ -132,7 +127,7 @@ public class ScUserController extends CommonController {
 		PageRequest pageRequest =  new PageRequest(page, size, sort);
 		return this.scUserService.apiGetUsersByName(instanceId, name, pageRequest);
 
-	}
+	}*/
 	/**
 	 * desc query sort direction desc or aesc false boolean limit query the
 	 * limit value for paging -1 int sortby query sort parameter start query the

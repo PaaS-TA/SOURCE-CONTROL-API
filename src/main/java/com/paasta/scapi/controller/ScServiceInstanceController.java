@@ -5,6 +5,7 @@ import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScServiceInstance;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.model.ServiceInstanceList;
+import com.paasta.scapi.repository.ScUserRepository;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScServiceInstanceService;
 import com.paasta.scapi.service.ScUserService;
@@ -34,6 +35,10 @@ public class ScServiceInstanceController {
 
     @Autowired
     ScUserService scUserService;
+
+    @Autowired
+    private
+    ScUserRepository scUserRepository;
     /*
     *형상관리 amdin 신청 목록
     * private static final int PAGE_SIZE = 3; => PageRequest pageable 로 변경
@@ -81,7 +86,7 @@ public class ScServiceInstanceController {
             String mail = scInstanceUser.getOrDefault("mail", "");
             String desc = scInstanceUser.getOrDefault("desc", "");
             //사용자 정보 : DB정보
-            ScUser scUser = scUserService.findOne(userId);
+            ScUser scUser = scUserRepository.findOne(userId);
             User rtnUser = scUserService.getScmUser(userId);
 
             if (Common.empty(scUser)) {
