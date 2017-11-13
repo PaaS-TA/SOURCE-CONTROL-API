@@ -7,8 +7,6 @@ import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -154,6 +152,7 @@ public class ScUserController extends CommonController {
 			lstProperties.add("no");
 		}
 		PageRequest pageRequest =  new PageRequest(page, size);//, sort);
+		logger.debug("getListUsersByRepositoryId::sdirection"+"::"+sdirection);
 		return scUserService.getUsersByrepositoryId(repositoryId, searchUserName, permission, active, pageRequest);
 
 	}

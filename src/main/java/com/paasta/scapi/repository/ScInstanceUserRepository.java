@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface ScInstanceUserRepository extends JpaRepository<ScInstanceUser, Integer> {
 
-    List<ScInstanceUser> findByInstanceId(String instanceId);
     List<ScInstanceUser> findByInstanceIdAndUserId(String instanceId, String userId);
+    List<ScInstanceUser> findByInstanceIdContainingAndUserIdContaining(String instanceId, String userId);
     List<ScInstanceUser> findByUserId(String userId);
     List<ScInstanceUser> findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(String instanceId, String userId, String createYn);
 

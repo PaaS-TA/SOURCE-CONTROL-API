@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,20 +40,6 @@ public class ScInstanceUserService{
 	@Autowired
 	private RepoPermissionApiService repoPermissionApiService;
 
-	public List<ScInstanceUser> getAll(){
-		return scInstanceUserRepository.findAll();
-	}
-	
-	public List<ScInstanceUser> getByInstanceId(String instanceId){
-		return scInstanceUserRepository.findByInstanceId(instanceId);
-	}
-
-	
-	public List<ScInstanceUser> getByInstanceIdAndUserId(String instanceId,String userId){
-		return scInstanceUserRepository.findByInstanceIdAndUserId(instanceId,userId);
-	}
-
-	
 	@SuppressWarnings("unchecked")
     @Transactional
 	public ResponseEntity createInstanceUser(Map<String, String> map){
@@ -80,7 +65,6 @@ public class ScInstanceUserService{
 	public void restInstanceDeleteUser(String instance, String name) throws Exception{
 
 		// 1. 사용자의 instance 정보 조회
-
 		List<ScInstanceUser> lst = scInstanceUserRepository.findByUserId(name);
 		List<ScInstanceUser> instanceUsers = scInstanceUserRepository.findByInstanceIdAndUserId(instance, name);
 		//인스턴스에 해당하는 레파지토리 정보조회
@@ -108,9 +92,5 @@ public class ScInstanceUserService{
 			List<RepoPermission> lstRepoPermission = repoPermissionRepository.findAllByRepoNoAndUserId(repoNo,name);
 			lstRepoPermission.forEach(repoPermission -> repoPermissionApiService.deleteRepositoryForUserAuth(repoPermission.getNo()));
 		});
-
-		// API 인스턴스 레파지토리 사용자 Permission 정보 삭제
-
-
 	}
 }

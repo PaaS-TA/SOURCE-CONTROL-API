@@ -3,6 +3,7 @@ package com.paasta.scapi.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.entity.RepoPermission;
+import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.service.RepoPermissionApiService;
 import com.paasta.scapi.service.RepoPermissionDBService;
 import com.paasta.scapi.service.ScUserService;
@@ -26,6 +27,9 @@ public class ScPermissionController {
 
     @Autowired
     private RepoPermissionDBService repoPermissionDBService;
+    @Autowired
+    private RepoPermissionRepository repoPermissionRepository;
+
 
     @Autowired
     private
@@ -92,7 +96,7 @@ public class ScPermissionController {
     public ResponseEntity getPermitionByRepoId(@PathVariable int repoId) throws JsonProcessingException {
 
         List<Map> lstMap = new ArrayList<>();
-        List<RepoPermission> lst = repoPermissionDBService.selectByRepoId(repoId);
+        List<RepoPermission> lst = repoPermissionRepository.findAllByRepoNo(repoId);
         Map mapUser = scUserService.getUsers();
         List lstUser = (List) mapUser.get("rtnUser");
         for (RepoPermission repoPermission : lst) {

@@ -19,9 +19,13 @@ public class ScLoginService extends CommonService{
     @Autowired
     private PropertiesUtil propertiesUtil;
 
-    
+    public ScLoginService() {
+        super();
+    }
+
+
     @SuppressWarnings("unchecked")
-    public ResponseEntity login(User user) {
+    public ResponseEntity login(User user, PropertiesUtil propertiesUtil) {
         try {
             logger.info("login Start : ");
             ScmClientSession scmClientSession = ScmClient.createSession(propertiesUtil.getBaseUrl(),user.getName(), user.getPassword());
@@ -31,6 +35,7 @@ public class ScLoginService extends CommonService{
             return new CustomLoginException().CustomLoginException(e);
         }
         catch (Exception e) {
+            e.printStackTrace();
             return new CustomLoginException().CustomLoginException(e);
         }
     }

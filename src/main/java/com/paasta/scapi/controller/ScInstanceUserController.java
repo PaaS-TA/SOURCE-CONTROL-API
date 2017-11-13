@@ -3,8 +3,7 @@ package com.paasta.scapi.controller;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScInstanceUser;
-import com.paasta.scapi.service.ScInstanceUserService;
-import com.paasta.scapi.service.ScUserService;
+import com.paasta.scapi.repository.ScInstanceUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +19,7 @@ import java.util.List;
 public class ScInstanceUserController extends Common {
 
 	@Autowired
-	private ScInstanceUserService scInstanceUserService;
-
-	@Autowired
-	private ScUserService scUserService;
+	private ScInstanceUserRepository scInstanceUserRepository;
 
 	/**
 	 * 인스턴스별 사용자 조회
@@ -39,16 +35,7 @@ public class ScInstanceUserController extends Common {
 	@GetMapping
 	public ResponseEntity getUsers(@RequestParam(value = "instanceId", required = false) String instanceId
 			, @RequestParam(value = "userId", required = false) String userId) throws RestException {
-		List<ScInstanceUser> lstInstanceUsers;
-		if(Common.empty(instanceId)){
-			lstInstanceUsers = scInstanceUserService.getAll();
-		}else{
-			if(Common.empty(userId)){
-				lstInstanceUsers = scInstanceUserService.getByInstanceId(instanceId);
-			}else{
-				lstInstanceUsers = scInstanceUserService.getByInstanceIdAndUserId(instanceId,userId);
-			}
-		}
+		List<ScInstanceUser> lstInstanceUsers = scInstanceUserRepository.findByInstanceIdContainingAndUserIdContaining(instanceId,userId);
 		return new ResponseEntity(lstInstanceUsers, HttpStatus.OK);
 	}
 

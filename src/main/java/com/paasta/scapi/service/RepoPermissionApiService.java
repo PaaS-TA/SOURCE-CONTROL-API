@@ -67,12 +67,7 @@ public class RepoPermissionApiService extends CommonService{
 
     @Autowired
     private
-    RepoPermissionDBService repoPermissionDBService;
-
-    @Autowired
-    private
     ScInstanceUserRepository scInstanceUserRepository;
-
 
     /**
      * Reposity 사용자별 권한 추가  git 툴로 사용자 권한을 추가할 수있으로 개별로 추가함.
@@ -144,7 +139,7 @@ public class RepoPermissionApiService extends CommonService{
             }
             repository.setPermissions(rtnLstPermission);
 
-            repoPermissionDBService.delete(permisionNo);
+            repoPermissionRepository.delete(permisionNo);
             ObjectMapper jackson = new ObjectMapper();
             logger.info("repositoryForUserAuth Start : ");
             String param;
@@ -223,8 +218,6 @@ public class RepoPermissionApiService extends CommonService{
         }
 
     }
-
-
 
     @SuppressWarnings("unchecked")
     public Map permisionByInstanceIdAndParam(String instanceId, String searchUserId, String searchCreateYn, String searchActive, String sPage, String sSize){

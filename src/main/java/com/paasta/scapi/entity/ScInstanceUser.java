@@ -44,6 +44,19 @@ public class ScInstanceUser {
         this.createdDate = new Date();
         this.modifiedDate = new Date();
     }
+
+    @Override
+    public String toString() {
+        return "ScInstanceUser{" +
+                "no=" + no +
+                ", instanceId='" + instanceId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", repoRole='" + repoRole + '\'' +
+                ", createrYn='" + createrYn + '\'' +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                '}';
+    }
 }
 
 

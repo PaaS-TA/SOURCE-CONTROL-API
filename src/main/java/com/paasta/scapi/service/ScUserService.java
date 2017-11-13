@@ -8,10 +8,8 @@ import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.RepoPermissionRepository;
-import com.paasta.scapi.repository.ScInstanceUserRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
 import com.paasta.scapi.repository.ScUserRepository;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -23,9 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sonia.scm.client.RepositoryClientHandler;
 import sonia.scm.client.UserClientHandler;
-import sonia.scm.repository.Repository;
 import sonia.scm.user.User;
 import sonia.scm.util.ValidationUtil;
 
@@ -421,19 +417,12 @@ public class ScUserService extends CommonService {
 		try {
             logger.info(getClass().getName() + " : apiGetUsers start");
 			List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
-			/** 레파지토리별 사용자 정보가져오기*/
-			RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();
-			Repository repository = repositoryClientHandler.get(repositoryId);
 
 			// 전체 사용자 가져오기
 			UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
 			List<User> lstUser = userClientHandler.getAll();
 			Map rssMap = new HashMap();
 
-			/** 검색 추가로 인한 페이지 수정
-			Page pageUsers = repoPermissionRepository.findAllByRepoNo(scRepository.getRepoNo(), pageRequest);
-			List<RepoPermission> lstPermission = pageUsers.getContent();
-			 */
 			List<RepoPermission> lstPermission ;
 			if(Common.empty(searchPermission)){
 				lstPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());

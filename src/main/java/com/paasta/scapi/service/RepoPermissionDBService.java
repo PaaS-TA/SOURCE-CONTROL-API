@@ -47,32 +47,6 @@ public class RepoPermissionDBService extends CommonService{
     private
     ScUserService scUserService;
 
-    
-    @Transactional
-    public RepoPermission save(RepoPermission repoPermission){
-        return repoPermissionRepository.save(repoPermission);
-    }
-
-    
-    @Transactional
-    public List<RepoPermission> save(List<RepoPermission> lstRepoPermission){
-
-        return this.repoPermissionRepository.save(lstRepoPermission);
-    }
-
-      
-    @Transactional
-    public void delete(int permissionId){
-          this.repoPermissionRepository.delete(permissionId);
-    }
-
-    
-    @Transactional
-    public List<RepoPermission> selectByRepoId(int repoId){
-        return this.repoPermissionRepository.findAllByRepoNo(repoId);
-    }
-
-    
     @SuppressWarnings("unchecked")
     @Transactional
     public List searchPermisionByUserIdAndRepositoryId(String searchUserId, String repoId){
@@ -118,7 +92,7 @@ public class RepoPermissionDBService extends CommonService{
      * @param instanceId
      * @return
      */
-    
+
     @SuppressWarnings("unchecked")
     @Transactional
     public List searchPermisionByUserIdAndInstanceId(String searchUserId, String instanceId, String repositoryId){
