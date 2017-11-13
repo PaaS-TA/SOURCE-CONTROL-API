@@ -1,6 +1,5 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.Common;
 import com.paasta.scapi.entity.ScServiceInstance;
 import com.paasta.scapi.model.ServiceInstanceList;
 import com.paasta.scapi.repository.ScServiceInstanceRepository;
@@ -16,9 +15,13 @@ import java.util.List;
 @Service
 public class ScServiceInstanceService extends CommonService{
 
-    @Autowired
-    private
+    private final
     ScServiceInstanceRepository scServiceInstanceRepository;
+
+    @Autowired
+    public ScServiceInstanceService(ScServiceInstanceRepository scServiceInstanceRepository) {
+        this.scServiceInstanceRepository = scServiceInstanceRepository;
+    }
 
     /**
      * 형상관리 서비스 인스턴스 전체 목록을 확인한다.
