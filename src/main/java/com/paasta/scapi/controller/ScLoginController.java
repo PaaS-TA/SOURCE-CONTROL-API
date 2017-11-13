@@ -1,5 +1,6 @@
 package com.paasta.scapi.controller;
 
+import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.service.ScLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,14 @@ public class ScLoginController {
     @Autowired
     private
     ScLoginService scLoginService;
+    @Autowired
+    private
+    PropertiesUtil propertiesUtil;
 
     @SuppressWarnings("unchecked")
     @PostMapping("/login")
     public ResponseEntity<Map> login(@RequestBody User user) {
-        return scLoginService.login(user);
+        return scLoginService.login(user, propertiesUtil);
 
     }
 }
