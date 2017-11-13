@@ -41,6 +41,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.Subject.Builder;
+import org.springframework.test.context.ActiveProfiles;
 import sonia.scm.SCMContextProvider;
 import sonia.scm.security.Role;
 import sonia.scm.user.User;
@@ -60,6 +61,7 @@ import static org.mockito.Mockito.*;
  *
  * @author Sebastian Sdorra
  */
+@ActiveProfiles("test")
 public final class MockUtil
 {
 
