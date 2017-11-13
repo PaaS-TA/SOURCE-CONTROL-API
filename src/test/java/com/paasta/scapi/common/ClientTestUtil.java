@@ -1,30 +1,22 @@
 package com.paasta.scapi.common;
 
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
-
-import sonia.scm.SCMContextProvider;
-import sonia.scm.ScmClientConfig;
 import sonia.scm.ScmState;
-import sonia.scm.Type;
 import sonia.scm.client.ClientUtil;
 import sonia.scm.client.JerseyClientProvider;
 import sonia.scm.client.JerseyClientSession;
 import sonia.scm.config.ScmConfiguration;
-import sonia.scm.security.PermissionDescriptor;
 import sonia.scm.url.UrlProvider;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 import sonia.scm.url.UrlProviderFactory;
 import sonia.scm.user.User;
 
-import java.util.Collection;
-import java.util.List;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+
+//~--- JDK imports ------------------------------------------------------------
 /**
  *
  * @author Sebastian Sdorra

@@ -1,9 +1,6 @@
 package com.paasta.scapi.common;
 
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import sonia.scm.client.UserClientHandler;
 import sonia.scm.user.User;
 
 import javax.servlet.http.HttpServletRequest;

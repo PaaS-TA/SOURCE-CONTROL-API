@@ -45,7 +45,6 @@ import org.springframework.test.context.ActiveProfiles;
 import sonia.scm.SCMContextProvider;
 import sonia.scm.security.Role;
 import sonia.scm.user.User;
-//import UserTestData;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +53,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+
+//import UserTestData;
 
 //~--- JDK imports ------------------------------------------------------------
 

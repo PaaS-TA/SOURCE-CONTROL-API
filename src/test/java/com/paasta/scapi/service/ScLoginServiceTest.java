@@ -1,13 +1,11 @@
 package com.paasta.scapi.service;
 
+import com.paasta.scapi.common.ClientTestUtil;
 import com.paasta.scapi.common.util.PropertiesUtil;
-import com.sun.jersey.api.client.Client;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
@@ -20,7 +18,6 @@ import sonia.scm.user.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import com.paasta.scapi.common.ClientTestUtil;
 /**
  * Created by ijlee on 2017-09-04.
  */
@@ -30,6 +27,7 @@ import com.paasta.scapi.common.ClientTestUtil;
 public class ScLoginServiceTest extends ScLoginService{
 
 //    private MockMvc mockMvc;
+    @Mock
     private ScLoginService scLoginService;
 
     @Override

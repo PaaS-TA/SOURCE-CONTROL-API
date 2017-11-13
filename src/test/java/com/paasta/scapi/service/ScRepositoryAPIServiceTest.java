@@ -3,7 +3,6 @@ package com.paasta.scapi.service;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.ScServiceInstance;
-import com.paasta.scapi.repository.ScServiceInstanceRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

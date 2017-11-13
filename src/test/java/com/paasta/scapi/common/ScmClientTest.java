@@ -1,6 +1,5 @@
 package com.paasta.scapi.common;
 
-import sonia.scm.client.ScmClient;
 import sonia.scm.client.ScmClientException;
 import sonia.scm.client.ScmClientProvider;
 import sonia.scm.client.ScmClientSession;
@@ -17,7 +16,7 @@ public final class ScmClientTest {
      * Constructs ...
      *
      */
-    private ScmClientTest() {}
+    public ScmClientTest() {}
 
     //~--- methods --------------------------------------------------------------
 

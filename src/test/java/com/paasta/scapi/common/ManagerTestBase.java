@@ -1,7 +1,6 @@
 package com.paasta.scapi.common;
 
 
-import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,6 +8,8 @@ import org.junit.rules.TemporaryFolder;
 import sonia.scm.Manager;
 import sonia.scm.ModelObject;
 import sonia.scm.SCMContextProvider;
+
+import java.io.IOException;
 
 /**
  *

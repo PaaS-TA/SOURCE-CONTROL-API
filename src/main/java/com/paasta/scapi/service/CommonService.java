@@ -3,13 +3,9 @@ package com.paasta.scapi.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import sonia.scm.client.ScmClient;
 import sonia.scm.client.ScmClientSession;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Created by ijlee on 2017-07-16.

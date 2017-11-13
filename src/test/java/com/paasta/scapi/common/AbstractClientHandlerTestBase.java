@@ -3,15 +3,14 @@ package com.paasta.scapi.common;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.junit.Test;
-
 import sonia.scm.ModelObject;
 import sonia.scm.client.ClientHandler;
 import sonia.scm.client.JerseyClientSession;
 import sonia.scm.client.ScmForbiddenException;
 import sonia.scm.client.ScmUnauthorizedException;
 
-import static org.junit.Assert.*;
 import static com.paasta.scapi.common.ClientTestUtil.*;
+import static org.junit.Assert.*;
 
 /**
  *
