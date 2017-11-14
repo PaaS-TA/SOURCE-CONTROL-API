@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.Constants;
+import com.paasta.scapi.common.exception.BaseException;
 import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
@@ -90,7 +91,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getUserRepositories(String instanceid, String userid, int start, int end, String repoName, String type1, String type2, String reposort) throws Exception {
+    public Map<String, Object> getUserRepositories(String instanceid, String userid, int start, int end, String repoName, String type1, String type2, String reposort) throws BaseException {
         Map<String, Object> resultMap = new HashMap();
         logger.debug("getUserRepositories::" + instanceid + "::userid::" + userid + "::start::" + start + "::end::" + end + "::repoName::" + repoName + "::type1::" + type1 + "::type2::" + type2 + "::reposort::" + reposort);
         try {
