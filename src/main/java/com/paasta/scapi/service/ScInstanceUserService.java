@@ -62,7 +62,7 @@ public class ScInstanceUserService{
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public void restInstanceDeleteUser(String instance, String name) throws Exception{
+	public void restInstanceDeleteUser(String instance, String name){
 
 		// 1. 사용자의 instance 정보 조회
 		List<ScInstanceUser> lst = scInstanceUserRepository.findByUserId(name);

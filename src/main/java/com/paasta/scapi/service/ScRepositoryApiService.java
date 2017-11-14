@@ -126,7 +126,7 @@ public class ScRepositoryApiService extends  CommonService{
                         List<Permission> permissions = repository.getPermissions();
                         for (Permission permission : permissions) {
                             for (String sType2 : lstType2) {
-                                if (permission.getName().equals(userid) && permission.getType().equals(sType2))
+                                if ((permission.getName().equals(userid)) && (permission.getType().equals(sType2)))
                                     bType2[0] = true;
                             }
                         }
@@ -330,6 +330,7 @@ public class ScRepositoryApiService extends  CommonService{
         }
     }
 
+/*
 
     private ResponseEntity<String> scmUpdateRepository(Repository request) {
 
@@ -339,6 +340,7 @@ public class ScRepositoryApiService extends  CommonService{
         return this.restClientUtil.callRestApi(HttpMethod.PUT, url, entity, String.class);
     }
 
+*/
 
     
     public sonia.scm.repository.Branches getBranches(String id) {
