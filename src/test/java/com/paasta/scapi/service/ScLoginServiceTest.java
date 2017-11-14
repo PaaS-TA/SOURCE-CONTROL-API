@@ -44,7 +44,7 @@ public class ScLoginServiceTest extends ScLoginService{
         scLoginService = new ScLoginService();
     }
     @Test
-    public void login_200() throws Exception {
+    public void login_200() {
         User user = mock(User.class);
         assertEquals(HttpStatus.OK,login(user, propertiesUtil).getStatusCode());
     }
