@@ -41,9 +41,9 @@ public class ScRepositoryDBService extends CommonService{
         // 1-2. RepoPermission insert
 
         String instanceId = repository.getProperties().stream().filter(e -> e.get(Constants.PROPERTIES_KEY).equals(Constants.REPO_PROPERTIES_INSTANCE_ID)).findFirst().get().get(Constants.PROPERTIES_VALUE);
-        String create_user = repository.getProperties().stream().filter(e -> e.get(Constants.PROPERTIES_KEY).equals(Constants.REPO_PROPERTIES_CREATE_USER)).findFirst().get().get(Constants.PROPERTIES_VALUE);
+        String createUser = repository.getProperties().stream().filter(e -> e.get(Constants.PROPERTIES_KEY).equals(Constants.REPO_PROPERTIES_CREATE_USER)).findFirst().get().get(Constants.PROPERTIES_VALUE);
 
-        ScRepository scRepository = new ScRepository(repository.getId(), repository.getName(),repository.getDescription(),instanceId , create_user , create_user);
+        ScRepository scRepository = new ScRepository(repository.getId(), repository.getName(),repository.getDescription(),instanceId , createUser , createUser);
         ScRepository result = this.scRepositoryRepository.save(scRepository);
         RepoPermission repoPermission = new RepoPermission(result.getRepoNo(), result.getCreateUserId());
         this.repoPermissionRepository.save(repoPermission);
