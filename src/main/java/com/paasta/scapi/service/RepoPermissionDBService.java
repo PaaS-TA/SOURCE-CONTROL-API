@@ -56,8 +56,8 @@ public class RepoPermissionDBService extends CommonService{
         List<ScUser> lstScUser = new ArrayList<>();
         List<User> lstUser = (List<User>) scUserService.apiGetUsers().getBody();
         for (ScUser scUser : lstScUserBefore) {
-            for (User User : lstUser) {
-                if(scUser.getUserId().equals(User.getName())){
+            for (User user : lstUser) {
+                if(scUser.getUserId().equals(user.getName())){
                     lstScUser.add(scUser);
                 }
             }
