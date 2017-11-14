@@ -60,7 +60,7 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-    
+    /**
     @SuppressWarnings("unchecked")
     public Map<String, Object> getAllRepositories(String instanceid, int start, int end) throws Exception {
 
@@ -85,6 +85,7 @@ public class ScRepositoryApiService extends  CommonService{
         resultMap.put("pageInfo", pageInfo);
         return resultMap;
     }
+     */
 
 
     
@@ -94,13 +95,13 @@ public class ScRepositoryApiService extends  CommonService{
         logger.debug("getUserRepositories::" + instanceid + "::userid::" + userid + "::start::" + start + "::end::" + end + "::repoName::" + repoName + "::type1::" + type1 + "::type2::" + type2 + "::reposort::" + reposort);
         try {
             // 서비스 인스턴스별 repository
-            List<Repository> InstanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
+            List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
             List<Repository> repositories = new ArrayList<>();
             ObjectMapper objectMapper = new ObjectMapper();
 
             if (!StringUtils.isEmpty(instanceid)) {
                 // Repository <> User 권한 Check : 참여되어있는 Repository 조회
-                InstanceRepositories.forEach((Repository e) -> {
+                instanceRepositories.forEach((Repository e) -> {
                     Repository repository = objectMapper.convertValue(e, Repository.class);
                     boolean[] bRtn = {true};
                     boolean[] bType2 = {true};
@@ -218,12 +219,12 @@ public class ScRepositoryApiService extends  CommonService{
         Map<String, Object> resultMap = new HashMap();
 
         // 서비스 인스턴스별 repository
-        List<Repository> InstanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
+        List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
         List<Repository> repositories = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
         if (!StringUtils.isEmpty(instanceid)) {
-            InstanceRepositories.forEach((Repository e) -> {
+            instanceRepositories.forEach((Repository e) -> {
                 Repository repository = objectMapper.convertValue(e, Repository.class);
                 if (!repository.getPermissions().isEmpty()) {
                     boolean bRtn = true;
