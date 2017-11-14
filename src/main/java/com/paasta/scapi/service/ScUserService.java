@@ -205,7 +205,7 @@ public class ScUserService extends CommonService {
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public Map getUser(String name) throws Exception{
+	public Map getUser(String name){
 
 		Map rspApp = new HashMap();
         this.logger.debug("getUser Start : " + name);
