@@ -19,9 +19,7 @@ import sonia.scm.repository.RepositoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,7 +66,7 @@ public class ScRepositoryController {
      * @apiParam {List} properties instance Id , 레파지토리 생성자 정보 설정
      */
     @PostMapping
-    public ResponseEntity<Repository> createRepository(@RequestBody Repository request) throws RestException, JsonProcessingException {
+    public ResponseEntity<Repository> createRepository(@RequestBody Repository request) throws RestException, JsonProcessingException, BaseException {
 
         // Scm-Server api - Repository 생성 호출
         Repository repository = scRepositoryApiService.createRepositoryApi(request);
@@ -109,25 +107,13 @@ public class ScRepositoryController {
             HttpServletRequest request
     ) throws BaseException {
 
-        Map map = request.getParameterMap();
-        Map rtnMap = new HashMap();
-        if (!Common.empty(map)) {
-            List<String> lstKey = new ArrayList(map.keySet());
-            List<Object[]> lstValue = new ArrayList(map.values());
-            for (int i = 0; i < lstKey.size(); i++) {
-                rtnMap.put(lstKey.get(i), lstValue.get(i)[0]);
-            }
-        }
+        Map rtnMap =  Common.convertMapByRequest(request);
         Map<String, Object> repositories = scRepositoryApiService.getAdminRepositories(
                 instanceid, (String) rtnMap.getOrDefault("userid", ""),
                 Integer.parseInt((String) rtnMap.getOrDefault("start", "-1")),
                 Integer.parseInt((String) rtnMap.getOrDefault("end", "-1")),
                 (String) rtnMap.getOrDefault("repoName", ""), (String) rtnMap.getOrDefault("type", ""),
                 (String) rtnMap.getOrDefault("reposort", ""));
-
-
-//        repositories.stream().distinct().limit(10).collect(toList());
-
         return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 
