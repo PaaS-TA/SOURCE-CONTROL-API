@@ -145,7 +145,7 @@ public class ScRepositoryApiService extends  CommonService{
             Map<String, Object> pageInfo = new HashMap<>();
             if (start == 0 || start > end) {
                 //            Throwable cause = e.getCause();
-                throw new RuntimeException("page error");
+                throw new BaseException("page error");
             } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
                 resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
             } else {
@@ -215,8 +215,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort)
-    {
+    public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort) throws BaseException {
         Map<String, Object> resultMap = new HashMap();
         logger.info("getAdminRepositories::::userid" + userid+":::::::::type :::"+type);
         // 서비스 인스턴스별 repository
@@ -249,7 +248,7 @@ public class ScRepositoryApiService extends  CommonService{
         int totCnt = repositories.size();
         Map<String, Object> pageInfo = new HashMap<>();
         if (start == 0 || start > end) {
-            throw new RuntimeException("page error");
+            throw new BaseException("page error");
         } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
             resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
         } else {
