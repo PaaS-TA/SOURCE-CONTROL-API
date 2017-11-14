@@ -192,9 +192,9 @@ public class RepoPermissionApiService extends CommonService{
             });
 
             //해당 인스턴스 Repository 와 permission 아이디에 사용자 정보를 조합한다. permission {i} --> user {i}
-            instanceRepositories.forEach((Repository Repository) -> {
+            instanceRepositories.forEach((Repository repository) -> {
                 List lst = new ArrayList();
-                Repository.getPermissions().forEach((Permission Permission) -> relstUser.forEach((User User) -> {
+                repository.getPermissions().forEach((Permission Permission) -> relstUser.forEach((User User) -> {
                     if (User.getName().equals(Permission.getName())) {
                         lst.add(User);
                     }
@@ -203,7 +203,7 @@ public class RepoPermissionApiService extends CommonService{
                 if (lst.size() > 0) {
                     Map addMap = new HashMap();
                     addMap.put("user", lst);
-                    addMap.put("repositories", Repository);
+                    addMap.put("repositories", repository);
                     repositories.add(addMap);
                 }
             });
