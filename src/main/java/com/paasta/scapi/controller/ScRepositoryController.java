@@ -363,10 +363,10 @@ public class ScRepositoryController {
 //    @Produces({ MediaType.APPLICATION_OCTET_STREAM })
     public ResponseEntity<byte[]> getContents(@PathVariable String id
             , @RequestParam(value = "revision", required = false) String revision
-            , @RequestParam(value = "_dc", required = false) String _dc
+            , @RequestParam(value = "_dc", required = false) String dc
             , @RequestParam(value = "path") String path) throws NotSupportedFeatuerException, IOException {
         // REX-TEST
-        return scRepositoryApiService.getContent(id, revision, path, _dc);
+        return scRepositoryApiService.getContent(id, revision, path, dc);
     }
 
 }
