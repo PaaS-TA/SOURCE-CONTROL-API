@@ -407,10 +407,10 @@ public class ScRepositoryApiService extends  CommonService{
     }*/
 
     
-    public ResponseEntity<byte[]> getContent(String id, String revision, String path, String _dc) throws NotSupportedFeatuerException, IOException {
+    public ResponseEntity<byte[]> getContent(String id, String revision, String path, String dc) throws NotSupportedFeatuerException, IOException {
         String url = propertiesUtil.getApiRepositoryIdContentPathRevision().replace("{id}", id).replace("{path}", path);
         url = url.replace("{revision}", (String) Common.notNullrtnByobj(revision, ""));
-        url = url.replace("{_dc}", (String) Common.notNullrtnByobj(_dc, ""));
+        url = url.replace("{_dc}", (String) Common.notNullrtnByobj(dc, ""));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
