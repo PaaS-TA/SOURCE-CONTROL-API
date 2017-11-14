@@ -94,59 +94,12 @@ public class ScRepositoryApiService extends  CommonService{
         logger.debug("getUserRepositories::" + instanceid + "::userid::" + userid + "::start::" + start + "::end::" + end + "::repoName::" + repoName + "::type1::" + type1 + "::type2::" + type2 + "::reposort::" + reposort);
         try {
             // 서비스 인스턴스별 repository
-            List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
-            List<Repository> repositories = new ArrayList<>();
-            ObjectMapper objectMapper = new ObjectMapper();
+            List<Repository> repositories = fillterRepositories(instanceid, userid, reposort,  repoName,  type1,  type2);
 
-            if (!StringUtils.isEmpty(instanceid)) {
-                // Repository <> User 권한 Check : 참여되어있는 Repository 조회
-                instanceRepositories.forEach((Repository e) -> {
-                    Repository repository = objectMapper.convertValue(e, Repository.class);
-                    boolean[] bRtn = {true};
-                    boolean[] bType2 = {true};
-                    //사용자 아이디 검색 하지 않음
-                    //레파지토리 이름 검색
-                    if (Common.notEmpty(repoName)) {
-                        if (!repository.getName().contains(repoName)) {
-                            bRtn[0] = false;
-                        }
-                    }
-                    //레파지 토리 타입 검색(git, svn)
-                    if (Common.notEmpty(type1)) {
-                        if (!repository.getType().equals(type1)) {
-                            bRtn[0] = false;
-                        }
-                    }
-                    //레파지토리 권한 검색 OWNER, READ, WRITE
-                    if (Common.notEmpty(type2)) {
-                        String[] lstType2 = type2.split("_");
-                        bType2[0] = false;
-                        List<Permission> permissions = repository.getPermissions();
-                        for (Permission permission : permissions) {
-                            for (String sType2 : lstType2) {
-                                if (permission.getName().equals(userid) && permission.getType().equals(sType2)) {
-                                    bType2[0] = true;
-                                }
-                            }
-                        }
-                    }
-                    if (bRtn[0] && bType2[0]) {
-                        repositories.add(repository);
-                    }
-                });
-            } else {
-                repositories.forEach(e -> {
-                    Repository repository = objectMapper.convertValue(e, Repository.class);
-                    repositories.add(repository);
-                });
-            }
             int totCnt = repositories.size();
-            Map<String, Object> pageInfo = new HashMap<>();
             resultMap = rtnPageInfo(start, end, totCnt, resultMap, repositories);
-            pageInfo.put("totalCnt", totCnt);
-            pageInfo.put("startCnt", start);
-            pageInfo.put("endCnt", end >= totCnt ? totCnt : end);
-            resultMap.put("pageInfo", pageInfo);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -162,6 +115,12 @@ public class ScRepositoryApiService extends  CommonService{
         } else {
             resultMap.put("repositories", repositories);
         }
+        Map<String, Object> pageInfo = new HashMap<>();
+        pageInfo.put("totalCnt", totCnt);
+        pageInfo.put("startCnt", start);
+        pageInfo.put("endCnt", end >= totCnt ? totCnt : end);
+
+        resultMap.put("pageInfo", pageInfo);
         return resultMap;
     }
 
@@ -222,40 +181,9 @@ public class ScRepositoryApiService extends  CommonService{
         Map<String, Object> resultMap = new HashMap();
         logger.info("getAdminRepositories::::userid" + userid+":::::::::type :::"+type);
         // 서비스 인스턴스별 repository
-        List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
-        List<Repository> repositories = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        if (!StringUtils.isEmpty(instanceid)) {
-            instanceRepositories.forEach((Repository e) -> {
-                Repository repository = objectMapper.convertValue(e, Repository.class);
-                if (!repository.getPermissions().isEmpty()) {
-                    boolean bRtn = true;
-                    if (Common.notEmpty(repoName)) {
-                        if (!repository.getName().contains(repoName)) {
-                            bRtn = false;
-                        }
-                    }
-                    if (bRtn) {
-                        repositories.add(repository);
-                    }
-                }
-            });
-        } else {
-            repositories.forEach(e -> {
-                Repository repository = objectMapper.convertValue(e, Repository.class);
-                repositories.add(repository);
-            });
-        }
-
+        List<Repository> repositories = fillterRepositories(instanceid, "" , reposort, repoName, "", "");
         int totCnt = repositories.size();
-        Map<String, Object> pageInfo = new HashMap<>();
         resultMap = rtnPageInfo(start, end, totCnt, resultMap, repositories);
-        pageInfo.put("totalCnt", totCnt);
-        pageInfo.put("startCnt", start);
-        pageInfo.put("endCnt", end >= totCnt ? totCnt : end);
-        resultMap.put("pageInfo", pageInfo);
-
         return resultMap;
     }
 
@@ -408,4 +336,54 @@ public class ScRepositoryApiService extends  CommonService{
         return this.restClientUtil.callRestApi(HttpMethod.GET, url, new HttpEntity<>(null, headers), byte[].class);
     }
 
+    private List<Repository> fillterRepositories(String instanceid, String userid,String reposort, String repoName, String type1, String type2) {
+
+        List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
+        List<Repository> repositories = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (!StringUtils.isEmpty(instanceid)) {
+            // Repository <> User 권한 Check : 참여되어있는 Repository 조회
+            instanceRepositories.forEach((Repository e) -> {
+                Repository repository = objectMapper.convertValue(e, Repository.class);
+                boolean[] bRtn = {true};
+                boolean[] bType2 = {true};
+                //사용자 아이디 검색 하지 않음
+                //레파지토리 이름 검색
+                if (Common.notEmpty(repoName)) {
+                    if (!repository.getName().contains(repoName)) {
+                        bRtn[0] = false;
+                    }
+                }
+                //레파지 토리 타입 검색(git, svn)
+                if (Common.notEmpty(type1)) {
+                    if (!repository.getType().equals(type1)) {
+                        bRtn[0] = false;
+                    }
+                }
+                //레파지토리 권한 검색 OWNER, READ, WRITE
+                if (Common.notEmpty(type2)) {
+                    String[] lstType2 = type2.split("_");
+                    bType2[0] = false;
+                    List<Permission> permissions = repository.getPermissions();
+                    for (Permission permission : permissions) {
+                        for (String sType2 : lstType2) {
+                            if (permission.getName().equals(userid) && permission.getType().equals(sType2)) {
+                                bType2[0] = true;
+                            }
+                        }
+                    }
+                }
+                if (bRtn[0] && bType2[0]) {
+                    repositories.add(repository);
+                }
+            });
+        } else {
+            repositories.forEach(e -> {
+                Repository repository = objectMapper.convertValue(e, Repository.class);
+                repositories.add(repository);
+            });
+        }
+        return repositories;
+    }
 }
