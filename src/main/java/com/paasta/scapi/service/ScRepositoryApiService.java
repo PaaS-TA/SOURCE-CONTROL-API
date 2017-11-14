@@ -141,14 +141,7 @@ public class ScRepositoryApiService extends  CommonService{
             }
             int totCnt = repositories.size();
             Map<String, Object> pageInfo = new HashMap<>();
-            if (start == 0 || start > end) {
-                //            Throwable cause = e.getCause();
-                throw new BaseException("page error");
-            } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
-                resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
-            } else {
-                resultMap.put("repositories", repositories);
-            }
+            resultMap = rtnPageInfo(start, end, totCnt, resultMap, repositories);
             pageInfo.put("totalCnt", totCnt);
             pageInfo.put("startCnt", start);
             pageInfo.put("endCnt", end >= totCnt ? totCnt : end);
@@ -160,7 +153,18 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-    
+    private  Map rtnPageInfo(int start, int end, int totCnt, Map resultMap, List<Repository> repositories) throws BaseException {
+        if (start == 0 || start > end) {
+            throw new BaseException("page error");
+        } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
+            resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
+        } else {
+            resultMap.put("repositories", repositories);
+        }
+        return resultMap;
+    }
+
+
     public Repository getRepositoryByIdApi(String id) throws RestException {
         // scm-manager search repository
         HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(null);
@@ -180,7 +184,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     
-    public Repository createRepositoryApi(Repository request) {
+    public Repository createRepositoryApi(Repository request) throws BaseException {
 
         // step1. scm-manager create repository
         // 1-1. create repository
@@ -245,14 +249,7 @@ public class ScRepositoryApiService extends  CommonService{
 
         int totCnt = repositories.size();
         Map<String, Object> pageInfo = new HashMap<>();
-        if (start == 0 || start > end) {
-            throw new BaseException("page error");
-        } else if (start >= 1 && end > 0 && start <= end && start <= totCnt) {
-            resultMap.put("repositories", repositories.stream().skip(start - 1).limit(end).collect(toList()));
-        } else {
-            resultMap.put("repositories", repositories);
-        }
-
+        resultMap = rtnPageInfo(start, end, totCnt, resultMap, repositories);
         pageInfo.put("totalCnt", totCnt);
         pageInfo.put("startCnt", start);
         pageInfo.put("endCnt", end >= totCnt ? totCnt : end);
@@ -313,17 +310,12 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-    private ResponseEntity<String> scmCreateRepository(Repository request) {
-        try {
-            logger.debug(request.toString());
-            request.setCreationDate(0L);
-            request.setLastModified(new Date().getTime());
-            HttpEntity<Object> entity = restClientUtil.restCommonHeaders(request);
-            return restClientUtil.callRestApi(HttpMethod.POST, this.propertiesUtil.getApiRepo(), entity, String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+    private ResponseEntity<String> scmCreateRepository(Repository request) throws BaseException{
+        logger.debug(request.toString());
+        request.setCreationDate(0L);
+        request.setLastModified(new Date().getTime());
+        HttpEntity<Object> entity = restClientUtil.restCommonHeaders(request);
+        return restClientUtil.callRestApi(HttpMethod.POST, this.propertiesUtil.getApiRepo(), entity, String.class);
     }
 
 /*
@@ -371,8 +363,7 @@ public class ScRepositoryApiService extends  CommonService{
         sonia.scm.repository.Repository repository = repositoryHandler.get(id);
         ClientChangesetHandler changesetHandler = repositoryHandler.getChangesetHandler(repository);
         // get 20 changesets started by 0
-        ChangesetPagingResult changesets = changesetHandler.getChangesets(0, 10);
-        return changesets;
+        return changesetHandler.getChangesets(0, 10);
     }
 
     @Transactional
