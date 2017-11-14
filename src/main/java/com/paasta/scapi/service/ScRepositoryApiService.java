@@ -218,7 +218,7 @@ public class ScRepositoryApiService extends  CommonService{
     public Map<String, Object> getAdminRepositories(String instanceid, String userid, int start, int end, String repoName, String type, String reposort)
     {
         Map<String, Object> resultMap = new HashMap();
-
+        logger.info("getAdminRepositories::::userid" + userid+":::::::::type :::"+type);
         // 서비스 인스턴스별 repository
         List<Repository> instanceRepositories = getRepositoryByInstanceId(instanceid, reposort);
         List<Repository> repositories = new ArrayList<>();
