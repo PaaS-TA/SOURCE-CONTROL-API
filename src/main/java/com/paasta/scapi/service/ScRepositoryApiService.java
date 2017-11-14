@@ -124,8 +124,9 @@ public class ScRepositoryApiService extends  CommonService{
                         List<Permission> permissions = repository.getPermissions();
                         for (Permission permission : permissions) {
                             for (String sType2 : lstType2) {
-                                if (permission.getName().equals(userid) && permission.getType().equals(sType2))
+                                if (permission.getName().equals(userid) && permission.getType().equals(sType2)) {
                                     bType2[0] = true;
+                                }
                             }
                         }
                     }
