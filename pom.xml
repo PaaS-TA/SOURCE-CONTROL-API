@@ -198,20 +198,26 @@
                     is passed as VM argument when Maven the Surefire plugin is executed.
                     -->
                     <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                   <!-- <execution>
                         <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
+                            &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
                             <destFile>${project.build.directory}/surefire-reports/jacoco-ut.exec</destFile>
-                            <!--
+                            &lt;!&ndash;
                             Sets the name of the property containing the settings
                             for JaCoCo runtime agent.
-                            -->
+                            &ndash;&gt;
                             <propertyName>surefireArgLine</propertyName>
                         </configuration>
-                    </execution>
+                    </execution>-->
                     <!--
                     Ensures that the code coverage report for unit tests is created after
                     unit tests have been run.
