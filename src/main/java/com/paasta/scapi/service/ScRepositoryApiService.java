@@ -1,6 +1,5 @@
 package com.paasta.scapi.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.Constants;
@@ -23,7 +22,6 @@ import sonia.scm.repository.ChangesetPagingResult;
 import sonia.scm.repository.Tags;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -91,7 +89,7 @@ public class ScRepositoryApiService extends  CommonService{
 
     
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getUserRepositories(String instanceid, String userid, int start, int end, String repoName, String type1, String type2, String reposort) throws BaseException {
+    public Map<String, Object> getUserRepositories(String instanceid, String userid, int start, int end, String repoName, String type1, String type2, String reposort) {
         Map<String, Object> resultMap = new HashMap();
         logger.debug("getUserRepositories::" + instanceid + "::userid::" + userid + "::start::" + start + "::end::" + end + "::repoName::" + repoName + "::type1::" + type1 + "::type2::" + type2 + "::reposort::" + reposort);
         try {
@@ -126,7 +124,7 @@ public class ScRepositoryApiService extends  CommonService{
                         List<Permission> permissions = repository.getPermissions();
                         for (Permission permission : permissions) {
                             for (String sType2 : lstType2) {
-                                if ((permission.getName().equals(userid)) && ((permission.getType().equals(sType2))))
+                                if ((permission.getName().equals(userid)) && (permission.getType().equals(sType2)))
                                     bType2[0] = true;
                             }
                         }
@@ -182,7 +180,7 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     
-    public Repository createRepositoryApi(Repository request) throws RestException, JsonProcessingException {
+    public Repository createRepositoryApi(Repository request) {
 
         // step1. scm-manager create repository
         // 1-1. create repository
@@ -206,9 +204,9 @@ public class ScRepositoryApiService extends  CommonService{
     public void deleteRepositoryApi(String id) {
 
         // scm-manager delete repository
-        HttpEntity<Object> entity = this.restClientUtil.restCommonHeaders(null);
+        HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
         String url = propertiesUtil.getApiRepoId().replace("{id}", id);
-        ResponseEntity<String> response = this.restClientUtil.callRestApi(HttpMethod.DELETE, url, entity, String.class);
+        restClientUtil.callRestApi(HttpMethod.DELETE, url, entity, String.class);
 
     }
 
@@ -316,7 +314,6 @@ public class ScRepositoryApiService extends  CommonService{
 
 
     private ResponseEntity<String> scmCreateRepository(Repository request) {
-        ResponseEntity<String> response;
         try {
             logger.debug(request.toString());
             request.setCreationDate(0L);
@@ -357,7 +354,7 @@ public class ScRepositoryApiService extends  CommonService{
     }
 
 
-    public BrowserResult getBrowseByParam(String id, boolean disableLastCommit, boolean disableSubRepositoryDetection, String path, boolean recursive, String revision) throws NotSupportedFeatuerException, IOException {
+    public BrowserResult getBrowseByParam(String id, boolean disableLastCommit, boolean disableSubRepositoryDetection, String path, boolean recursive, String revision) {
         HttpEntity<Object> entity = restClientUtil.restCommonHeaders(null);
         String url = propertiesUtil.getApiRepoBrowse().replace("{id}", id);
         String param = "?disableLastCommit=" + disableLastCommit + "&disableSubRepositoryDetection=" + disableSubRepositoryDetection + "&path=" + path + "&recursive=" + recursive + "&revision=" + revision;
@@ -406,7 +403,7 @@ public class ScRepositoryApiService extends  CommonService{
     }*/
 
     
-    public ResponseEntity<byte[]> getContent(String id, String revision, String path, String dc) throws NotSupportedFeatuerException, IOException {
+    public ResponseEntity<byte[]> getContent(String id, String revision, String path, String dc) {
         String url = propertiesUtil.getApiRepositoryIdContentPathRevision().replace("{id}", id).replace("{path}", path);
         url = url.replace("{revision}", (String) Common.notNullrtnByobj(revision, ""));
         url = url.replace("{_dc}", (String) Common.notNullrtnByobj(dc, ""));
