@@ -180,16 +180,8 @@ public class RepoPermissionApiService extends CommonService{
             List<Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instanceId,"");
 
             List<User> lstUser = userClientHandler.getAll();
-            List<User> relstUser = new ArrayList<>();
             //사용자 정보중에서 username을 필터한다.(perfomance 를 위한 작업)
-            lstUser.forEach((User user) -> {
-                if (!Common.empty(username)) {
-                    if (user.getName().contains(username) || user.getDisplayName().contains(username))
-                        relstUser.add(user);
-                } else {
-                    relstUser.add(user);
-                }
-            });
+            List<User> relstUser =Common.fillterUser(username, lstUser);
 
             //해당 인스턴스 Repository 와 permission 아이디에 사용자 정보를 조합한다. permission {i} --> user {i}
             instanceRepositories.forEach((Repository repository) -> {

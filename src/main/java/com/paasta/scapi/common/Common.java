@@ -140,14 +140,14 @@ public class Common {
      * 사용자 아이디 또는 이름 검색을 위한 List 필터
      */
     @SuppressWarnings("unchecked")
-    public List<User> fillterUser(String username, List<User> list) {
+    public static List<User> fillterUser(String username, List<User> list) {
         List rtnList = new ArrayList();
         list.forEach(user -> {
             if (Common.empty(username)) {
                 list.add(user);
             }
             if (Common.notEmpty(username)) {
-                if (user.getName().contains(username) || user.getDisplayName().contains(username)) {
+                if ((user.getName().contains(username)) || (user.getDisplayName().contains(username))) {
                     list.add(user);
                 }
             }
