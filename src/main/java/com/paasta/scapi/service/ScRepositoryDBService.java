@@ -72,9 +72,9 @@ public class ScRepositoryDBService extends CommonService{
         // 1-1. ScRepository Delete
         // 1-2. RepoPermission Delete
         List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(id);
-        int repo_no = scRepository.get(0).getRepoNo();
+        int repoNo = scRepository.get(0).getRepoNo();
     try {
-        repoPermissionRepository.deleteAllByRepoNo(repo_no);
+        repoPermissionRepository.deleteAllByRepoNo(repoNo);
         scRepositoryRepository.delete(scRepository);
     }catch (Exception e){
         e.printStackTrace();
