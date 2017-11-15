@@ -18,7 +18,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sonar.language>java</sonar.language>
-        <slf4j.version>1.7.25</slf4j.version>
         <java.version>1.8</java.version>
         <scm.version>1.54</scm.version>
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
@@ -34,6 +33,12 @@
         </repository>
     </repositories>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all -->
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>cassandra-all</artifactId>
+            <version>3.11.1</version>
+        </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -53,12 +58,6 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
             <version>2.7</version>
@@ -68,11 +67,18 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Json Path -->
         <!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
@@ -98,12 +104,6 @@
             <version>${scm.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -118,18 +118,12 @@
             <version>3.4</version>
             <scope>test</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>3.5.0</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-core</artifactId>-->
-        <!--<version>1.4.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.github.sdorra</groupId>
             <artifactId>shiro-unit</artifactId>
@@ -142,7 +136,6 @@
             <version>3.5</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
     <build>
         <finalName>${final.fileName}-${version}</finalName>
@@ -166,6 +159,25 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+                   <!-- <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
+                            <destFile>${project.build.directory}/surefire-reports/jacoco-ut.exec</destFile>
+                            &lt;!&ndash;
+                            Sets the name of the property containing the settings
+                            for JaCoCo runtime agent.
+                            &ndash;&gt;
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>-->
+                    <!--
+                    Ensures that the code coverage report for unit tests is created after
+                    unit tests have been run.
+                    -->
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>
