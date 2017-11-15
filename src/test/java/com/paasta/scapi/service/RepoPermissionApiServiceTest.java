@@ -8,12 +8,9 @@ import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScInstanceUserRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.annotation.Configuration;
 
 import static org.mockito.Mockito.mock;
 
@@ -21,9 +18,8 @@ import static org.mockito.Mockito.mock;
  * Created by ij
  * lee on 2017-08-02.
  */
-@RunWith(MockitoJUnitRunner.class)
-@Configuration
-public class RepoPermissionApiServiceTest {
+
+public class RepoPermissionApiServiceTest extends CommonServiceTest {
 
     @InjectMocks
     RestClientUtil restClientUtil;

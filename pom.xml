@@ -62,12 +62,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
-<!--        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>2.7</version>
-        </dependency>
--->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -78,12 +72,6 @@
             <version>${spring.boot.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>test</scope>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -163,35 +151,22 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.7.201606060606</version>
                 <executions>
-                    <!--
-                    Prepares the property pointing to the JaCoCo runtime agent which
-                    is passed as VM argument when Maven the Surefire plugin is executed.
-                    -->
                     <execution>
                         <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                   <!-- <execution>
+                    <execution>
                         <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
                             <destFile>${project.build.directory}/surefire-reports/jacoco-ut.exec</destFile>
-                            &lt;!&ndash;
-                            Sets the name of the property containing the settings
-                            for JaCoCo runtime agent.
-                            &ndash;&gt;
                             <propertyName>surefireArgLine</propertyName>
                         </configuration>
-                    </execution>-->
-                    <!--
-                    Ensures that the code coverage report for unit tests is created after
-                    unit tests have been run.
-                    -->
+                    </execution>
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>

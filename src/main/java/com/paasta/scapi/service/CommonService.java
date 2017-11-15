@@ -13,6 +13,10 @@ import sonia.scm.client.ScmClientSession;
 @Service
 public class CommonService {
 
+
+    public CommonService() {
+        super();
+    }
     /**
      * SCM Server connection Session Information
      */
