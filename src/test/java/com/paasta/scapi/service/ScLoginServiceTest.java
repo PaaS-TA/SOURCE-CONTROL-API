@@ -26,17 +26,19 @@ import static org.mockito.Mockito.mock;
 @ActiveProfiles("test")
 public class ScLoginServiceTest extends ScLoginService{
 
-//    private MockMvc mockMvc;
     @Mock
     private ScLoginService scLoginService;
+
+    @Autowired
+    private PropertiesUtil propertiesUtil;
+
 
     @Override
     public ResponseEntity login(User user, PropertiesUtil propertiesUtil) {
         ClientTestUtil.createAdminSession();
         return new ResponseEntity(user,HttpStatus.OK);
     }
-    @Autowired
-    private PropertiesUtil propertiesUtil;
+
 
     @Before
     public void setUp() {
@@ -46,7 +48,7 @@ public class ScLoginServiceTest extends ScLoginService{
     @Test
     public void login_200() {
         User user = mock(User.class);
-        assertEquals(HttpStatus.OK,login(user, propertiesUtil).getStatusCode());
+        assertEquals(HttpStatus.OK,scLoginService.login(user, propertiesUtil).getStatusCode());
     }
 
 }
