@@ -139,4 +139,5 @@ public final class ClientTestUtil
         ScmState rtnScmState = mock(ScmState.class);
         return rtnScmState;
     }
+
 }

@@ -72,7 +72,6 @@ public class Common {
      * @param obj
      * @return Boolean : true / false
      */
-    @org.jetbrains.annotations.Contract("null -> false")
     public static Boolean notEmpty(Object obj) {
         return !Common.empty(obj);
     }

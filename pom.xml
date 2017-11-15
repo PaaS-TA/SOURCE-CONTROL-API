@@ -18,6 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sonar.language>java</sonar.language>
+        <slf4j.version>1.7.25</slf4j.version>
         <java.version>1.8</java.version>
         <scm.version>1.54</scm.version>
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
@@ -33,15 +34,14 @@
         </repository>
     </repositories>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all -->
-        <dependency>
-            <groupId>org.apache.cassandra</groupId>
-            <artifactId>cassandra-all</artifactId>
-            <version>3.11.1</version>
-        </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +53,12 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
             <version>2.7</version>
@@ -61,12 +67,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -119,12 +119,7 @@
             <version>3.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>1.5.4.RELEASE</version>
-            <scope>test</scope>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -149,27 +144,24 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>1.2.0.RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>1.5.7.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>1.5.7.RELEASE</version>
-        </dependency>
-
+        <groupId>org.apache.cassandra</groupId>
+        <artifactId>cassandra-all</artifactId>
+        <version>3.11.1</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-nop</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
     </dependencies>
     <build>
         <finalName>${final.fileName}-${version}</finalName>
@@ -193,25 +185,6 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                   <!-- <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
-                            <destFile>${project.build.directory}/surefire-reports/jacoco-ut.exec</destFile>
-                            &lt;!&ndash;
-                            Sets the name of the property containing the settings
-                            for JaCoCo runtime agent.
-                            &ndash;&gt;
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
-                    </execution>-->
-                    <!--
-                    Ensures that the code coverage report for unit tests is created after
-                    unit tests have been run.
-                    -->
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>
