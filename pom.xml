@@ -73,7 +73,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
-            <scope>provided</scope>
         </dependency>
         <!-- Json Path -->
         <!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
@@ -143,25 +142,7 @@
             <version>3.5</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-        <groupId>org.apache.cassandra</groupId>
-        <artifactId>cassandra-all</artifactId>
-        <version>3.11.1</version>
-        <exclusions>
-            <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-jdk14</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-nop</artifactId>
-            </exclusion>
-            <exclusion>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
+
     </dependencies>
     <build>
         <finalName>${final.fileName}-${version}</finalName>
