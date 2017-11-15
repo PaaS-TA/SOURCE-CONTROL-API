@@ -1,22 +1,32 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.ScmClientTest;
+import com.paasta.scapi.common.ClientTestUtil;
 import com.paasta.scapi.common.util.PropertiesUtil;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import sonia.scm.client.JerseyClientSession;
 import sonia.scm.client.ScmClientSession;
+import sonia.scm.client.ScmUnauthorizedException;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
 @ActiveProfiles("test")
-public class CommonServiceTest extends CommonService{
+public class CommonServiceTest{
 
     private static final String clientSessionId = "clientSessionId";
     private static final String clientSessionPassword = "clientSessionPassword";
@@ -37,31 +47,54 @@ public class CommonServiceTest extends CommonService{
     public static final  int iRepoNo= 0;
     public static final  String sRepoPermission = "repoPermission";
 
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    //    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";private static final String clientSessionId = "clientSessionId";
-//    private static final String clientSessionPassword = "clientSessionPassword";
+    @Mock
+    ScmClientSession scmClientSession;
 
-    @Mock CommonService commonService;
+    @Mock
+    JerseyClientSession jerseyClientSession;
+
+    @Mock
+    Client client;
+
+    @Mock
+    WebResource webResource;
+
+    @Mock
+    ClientResponse clientResponse;
+
+    @InjectMocks
+    private
+    CommonService commonService;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        commonService = new CommonService();
+/*        client = new Client();
+        webResource = client.resource(ClientTestUtil.resourceUrl);
+        webResource.accept("application/json");
+        webResource.post();
+        clientResponse = webResource.post(ClientResponse.class);
+        clientResponse.setStatus(ClientResponse.Status.OK);*/
+
+//        scmClientSession = ClientTestUtil.createAdminSession();
+//        jerseyClientSession =  ClientTestUtil.createAdminSession();
+//        scmClientSession = jerseyClientSession;
+//        Mockito.when(ScmClient.createSession(scmUrl, scmAdminId, scmAdminPassword)).thenReturn(jerseyClientSession);
+//        Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
     }
 
-    @Autowired
-    private PropertiesUtil propertiesUtil;
-
-    @Override
-    ScmClientSession scmAdminSession(){
-        return new ScmClientTest().createSession(propertiesUtil.getBaseUrl(),clientSessionId, clientSessionPassword);
+    @Test(expected = ScmUnauthorizedException.class)
+    public void createSessionAnonymousFailedTest()
+    {
+        ClientTestUtil.createAnonymousSession().close();
     }
+    @Test
+    public void scmAdminSession() throws Exception {
+//        scmClientSession = ClientTestUtil.createAdminSession();
+        Assert.assertEquals(commonService.scmAdminSession(),scmClientSession);
+    }
+
 }

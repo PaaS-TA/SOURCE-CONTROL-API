@@ -1,22 +1,50 @@
+/**
+ * Copyright (c) 2010, Sebastian Sdorra
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 3. Neither the name of SCM-Manager; nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * http://bitbucket.org/sdorra/scm-manager
+ *
+ */
+
+
+
 package com.paasta.scapi.common;
 
+//~--- non-JDK imports --------------------------------------------------------
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.multipart.impl.MultiPartWriter;
-import sonia.scm.ScmState;
 import sonia.scm.client.ClientUtil;
 import sonia.scm.client.JerseyClientProvider;
 import sonia.scm.client.JerseyClientSession;
 import sonia.scm.config.ScmConfiguration;
 import sonia.scm.url.UrlProvider;
-import sonia.scm.url.UrlProviderFactory;
-import sonia.scm.user.User;
-
-import static org.mockito.Mockito.mock;
 
 //~--- JDK imports ------------------------------------------------------------
+
 /**
  *
  * @author Sebastian Sdorra
@@ -34,7 +62,9 @@ public final class ClientTestUtil
     public static final String REPOSITORY_TYPE = "git";
 
     /** Field description */
-    public static final String URL_BASE = "http://localhost:8081/scm";
+//    public static final String URL_BASE = "http://localhost:8081";
+    public static final String URL_BASE = "http://115.68.46.189:49152/scm";
+    public static final String resourceUrl = "http://115.68.46.189:49152/scm/api/rest/authentication/login.xml";
 
     /** Field description */
     public static final boolean REQUEST_LOGGING = false;
@@ -86,16 +116,8 @@ public final class ClientTestUtil
                                                     String password)
     {
         JerseyClientProvider provider = new JerseyClientProvider(REQUEST_LOGGING);
-        UrlProvider urlProvider = UrlProviderFactory.createUrlProvider(URL_BASE,
-                UrlProviderFactory.TYPE_RESTAPI_XML);
-        Client client =Client.create(new DefaultClientConfig(MultiPartWriter.class));
-        User admin = new User(username);
-        admin.setPassword(password);
-        ScmState state = createAdminScmState();
-        state.setUser(admin);
-        JerseyClientSession jerseyClientSession = new JerseyClientSession(client, urlProvider,state);
 
-        return jerseyClientSession;
+        return provider.createSession(URL_BASE, username, password);
     }
 
     //~--- set methods ----------------------------------------------------------
@@ -120,24 +142,4 @@ public final class ClientTestUtil
         resource.post(config);
         adminSession.close();
     }
-
-
-    public static ScmState createAdminScmState()
-    {
-        /*
-        SCMContextProvider provider = mock(SCMContextProvider.class);
-        User user = mock(User.class);
-        Collection<String> groups = mock(Collection.class);
-        Collection<Type> repositoryTypes= mock(Collection.class);
-        String defaultUserType = mock(String.class);
-        ScmClientConfig clientConfig = mock(ScmClientConfig.class);
-        List<String> assignedPermission = mock(List.class);
-        List<PermissionDescriptor> availablePermissions = mock(List.class);
-
-        return provider,user,groups, groups, repositoryTypes, defaultUserType, clientConfig, assignedPermission, availablePermissions);
- */
-        ScmState rtnScmState = mock(ScmState.class);
-        return rtnScmState;
-    }
-
 }

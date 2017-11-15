@@ -82,7 +82,6 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
     @Override
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        MockitoAnnotations.initMocks(this);
         ScRepository scRepository = new ScRepository();
         scRepository.setRepoNo(repoNo);
         scRepository.setRepoScmId(repoScmId);
@@ -102,7 +101,6 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
         repoPermission.setPermission(sRepoPermission);
         repoPermission.setNo(iRepoNo);
         lstRepoPermission.add(repoPermission);
-
 
         Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
         Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUser);
@@ -125,9 +123,6 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
     public void searchPermisionByUserIdAndRepositoryId() throws Exception {
 
         Assert.assertEquals(repoPermissionDBService.searchPermisionByUserIdAndRepositoryId(userId,repoScmId),rtnList);
-
-
-//        (repoPermissionDBService.searchPermisionByUserIdAndRepositoryId(Mockito.anyString(),Mockito.anyString()) !=null);
 
     }
 /*
