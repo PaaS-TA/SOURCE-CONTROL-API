@@ -62,9 +62,7 @@ public final class ClientTestUtil
     public static final String REPOSITORY_TYPE = "git";
 
     /** Field description */
-//    public static final String URL_BASE = "http://localhost:8081";
-    public static final String URL_BASE = "http://115.68.46.189:49152/scm";
-    public static final String resourceUrl = "http://115.68.46.189:49152/scm/api/rest/authentication/login.xml";
+    public static final String URL_BASE = "http://localhost:8081";
 
     /** Field description */
     public static final boolean REQUEST_LOGGING = false;
