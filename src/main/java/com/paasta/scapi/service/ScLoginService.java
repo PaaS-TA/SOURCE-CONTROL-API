@@ -16,13 +16,6 @@ import sonia.scm.user.User;
 @Service
 public class ScLoginService extends CommonService{
 
-    @Autowired
-    private PropertiesUtil propertiesUtil;
-
-    public ScLoginService() {
-        super();
-    }
-
 
     @SuppressWarnings("unchecked")
     public ResponseEntity login(User user, PropertiesUtil propertiesUtil) {

@@ -1,14 +1,18 @@
 package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.ClientTestUtil;
+import com.paasta.scapi.common.MockUtil;
 import com.paasta.scapi.common.util.PropertiesUtil;
+import com.paasta.scapi.entity.RepoPermission;
+import com.paasta.scapi.entity.ScRepository;
+import com.paasta.scapi.entity.ScUser;
+import com.paasta.scapi.repository.RepoPermissionRepository;
+import com.paasta.scapi.repository.ScRepositoryRepository;
+import com.paasta.scapi.repository.ScUserRepository;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,6 +22,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,32 +31,45 @@ import sonia.scm.client.ScmClientSession;
 import sonia.scm.client.ScmUnauthorizedException;
 import sonia.scm.client.UserClientHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
 @ActiveProfiles("test")
-public class CommonServiceTest{
+public class CommonServiceTest extends MockUtil{
 
-    private static final String clientSessionId = "clientSessionId";
-    private static final String clientSessionPassword = "clientSessionPassword";
-    public static final String scmUrl = "scmUrl";
-    public static final String scmAdminId = "scmAdminId";
-    public static final String scmAdminPassword = "scmAdminPassword";
-    public static final int repoNo = 0;
-    public static final  String repoScmId = "repoScmId";
-    public static final  String repoName = "repoName";
-    public static final  String repoDesc = "repoDesc";
-    public static final  String instanceId = "instanceId";
-    public static final  String ownerUserId = "ownerUserId";
-    public static final  String createUserId = "createUserId";
-    public static final  String userId = "userId";
-    public static final  String userName = "userName";
-    public static final  String userMail = "userMail";
-    public static final  String userDesc = "userDesc";
-    public static final  int iRepoNo= 0;
-    public static final  String sRepoPermission = "repoPermission";
+    @InjectMocks
+    public
+    RepoPermissionDBService repoPermissionDBService;
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock
+    public
+    ScRepositoryRepository scRepositoryRepository;
+
+    @Mock
+    public
+    ScUserRepository scUserRepository;
+
+    @Mock
+    public
+    RepoPermissionRepository repoPermissionRepository;
+
+    @Mock
+    public
+    ScUserService scUserService;
+
+    static final List<Map> rtnList = new ArrayList();
+    static final List<ScRepository> lstScRepository = new ArrayList();
+    static final List<ScUser> lstScUserBefore  = new ArrayList();
+    static final List<ScUser> lstScUser = new ArrayList();
+    static final List<sonia.scm.user.User> lstUser = new ArrayList();
+    static final List<RepoPermission> lstRepoPermission = new ArrayList();
+
+    @MockBean
+    ResponseEntity responseEntity;
 
     @MockBean
     ScmClientSession scmClientSession;
@@ -59,37 +77,44 @@ public class CommonServiceTest{
     @MockBean
     UserClientHandler userClientHandler;
 
-   /* @Mock
-    JerseyClientSession jerseyClientSession;
-*/
-   /* @Mock
-    Client client;*/
-
- /*   @Mock
-    WebResource webResource;
-
     @Mock
-    ClientResponse clientResponse;*/
-
-    @InjectMocks
-    private
     CommonService commonService;
 
-    @Before
-    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-/*        client = new Client();
-        webResource = client.resource(ClientTestUtil.resourceUrl);
-        webResource.accept("application/json");
-        webResource.post();
-        clientResponse = webResource.post(ClientResponse.class);
-        clientResponse.setStatus(ClientResponse.Status.OK);*/
+    public void setUpMockUtil() {
 
-//        scmClientSession = ClientTestUtil.createAdminSession();
-//        jerseyClientSession =  ClientTestUtil.createAdminSession();
-//        scmClientSession = jerseyClientSession;
-//        Mockito.when(ScmClient.createSession(scmUrl, scmAdminId, scmAdminPassword)).thenReturn(jerseyClientSession);
+        ScRepository scRepository = new ScRepository();
+        scRepository.setRepoNo(repoNo);
+        scRepository.setRepoScmId(repoScmId);
+        scRepository.setRepoName(repoName);
+        scRepository.setCreateUserId(createUserId);
+        scRepository.setInstanceId(instanceId);
+        scRepository.setOwnerUserId(ownerUserId);
+        lstScRepository.add(scRepository);
+
+        ScUser scUser= new ScUser(userId, userName, userMail, userDesc);
+        lstScUserBefore.add(scUser);
+
+        sonia.scm.user.User user = new sonia.scm.user.User(userId, userName,userMail);
+        lstUser.add(user);
+
+        RepoPermission repoPermission = new RepoPermission(repoNo, userId);
+        repoPermission.setPermission(sRepoPermission);
+        repoPermission.setNo(iRepoNo);
+        lstRepoPermission.add(repoPermission);
+
+        Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
+        Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUserBefore);
+
+        Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
+        Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
+        Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
+        Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
+        Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
+
+
+        Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
+
     }
 
     /*@Test(expected = ScmUnauthorizedException.class)
@@ -97,6 +122,7 @@ public class CommonServiceTest{
     {
         ClientTestUtil.createAnonymousSession().close();
     }*/
+    @Ignore
     @Test
     public void scmAdminSession() throws Exception {
         ScmClientSession rtnScmClientSession = commonService.scmAdminSession();

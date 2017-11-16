@@ -1,40 +1,4 @@
-/**
- * Copyright (c) 2010, Sebastian Sdorra
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- * 3. Neither the name of SCM-Manager; nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * http://bitbucket.org/sdorra/scm-manager
- *
- */
-
-
-
 package com.paasta.scapi.common;
-
-//~--- non-JDK imports --------------------------------------------------------
-
 
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -54,38 +18,33 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-//import UserTestData;
-
-//~--- JDK imports ------------------------------------------------------------
-
-/**
- *
- * @author Sebastian Sdorra
- */
 @ActiveProfiles("test")
-public final class MockUtil
+public class MockUtil
 {
+    private static final String clientSessionId = "clientSessionId";
+    private static final String clientSessionPassword = "clientSessionPassword";
+    public static final String scmUrl = "scmUrl";
+    public static final String scmAdminId = "scmAdminId";
+    public static final String scmAdminPassword = "scmAdminPassword";
+    public static final int repoNo = 0;
+    public static final  String repoScmId = "repoScmId";
+    public static final  String repoName = "repoName";
+    public static final  String repoDesc = "repoDesc";
+    public static final  String instanceId = "instanceId";
+    public static final  String ownerUserId = "ownerUserId";
+    public static final  String createUserId = "createUserId";
+    public static final  String searchUserId = "userId";
+    public static final  String userId = "userId";
+    public static final  String userName = "userName";
+    public static final  String userMail = "userMail";
+    public static final  String userDesc = "userDesc";
+    public static final  int iRepoNo= 0;
+    public static final  String sRepoPermission = "repoPermission";
 
     /** Field description */
     private static final User ADMIN = new User("scmadmin", "SCM Admin",
             "scmadmin@scm.org");
 
-    //~--- constructors ---------------------------------------------------------
-
-    /**
-     * Constructs ...
-     *
-     */
-    private MockUtil() {}
-
-    //~--- methods --------------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     @SuppressWarnings("unchecked")
     public static Subject createAdminSubject()
     {
@@ -121,25 +80,12 @@ public final class MockUtil
         return subject;
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     public static Subject createUserSubject()
     {
         return createUserSubject(null);
     }
 
-    /**
-     * Method description
-     *
-     *
-     *
-     * @param securityManager
-     * @return
-     */
+
     public static Subject createUserSubject(
             org.apache.shiro.mgt.SecurityManager securityManager)
     {
@@ -163,14 +109,7 @@ public final class MockUtil
         return builder.principals(collection).authenticated(true).buildSubject();
     }
 
-    //~--- get methods ----------------------------------------------------------
 
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     public static HttpServletRequest getHttpServletRequest()
     {
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -180,25 +119,12 @@ public final class MockUtil
         return request;
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     public static HttpServletResponse getHttpServletResponse()
     {
         return mock(HttpServletResponse.class);
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @param directory
-     *
-     * @return
-     */
+
     public static SCMContextProvider getSCMContextProvider(File directory)
     {
         SCMContextProvider provider = mock(SCMContextProvider.class);

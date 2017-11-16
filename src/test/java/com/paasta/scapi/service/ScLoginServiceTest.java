@@ -39,16 +39,11 @@ public class ScLoginServiceTest extends ScLoginService{
         return new ResponseEntity(user,HttpStatus.OK);
     }
 
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        scLoginService = new ScLoginService();
-    }
     @Test
     public void login_200() {
         User user = mock(User.class);
-        assertEquals(HttpStatus.OK,scLoginService.login(user, propertiesUtil).getStatusCode());
+        ResponseEntity rtnResponseEntity = scLoginService.login(user, propertiesUtil);
+        assertEquals(rtnResponseEntity.getStatusCode(),HttpStatus.OK);
     }
 
 }
