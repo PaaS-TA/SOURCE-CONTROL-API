@@ -1,5 +1,9 @@
 package com.paasta.scapi.common;
 
+import com.paasta.scapi.entity.RepoPermission;
+import com.paasta.scapi.entity.ScInstanceUser;
+import com.paasta.scapi.entity.ScRepository;
+import com.paasta.scapi.entity.ScUser;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
@@ -13,15 +17,19 @@ import sonia.scm.user.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 public class MockUtil
 {
+    //TODO confing로 바꿀 부분
+    /**
+     * static final validation
+     * then service excute then  not changed
+     */
+
     private static final String clientSessionId = "clientSessionId";
     private static final String clientSessionPassword = "clientSessionPassword";
     public static final String scmUrl = "scmUrl";
@@ -48,6 +56,26 @@ public class MockUtil
     public static final  String userCreateYn = "userCreateYn";
     public static final  Date userCreatedDate = new Date();
     public static final  Date userModifiedDate = new Date();
+    public static final  String organizationGuid = "organizationGuid";
+    public static final  String organizationName = "organizationName";
+    public static final  String planId = "planId";
+    public static final  String seryiceId = "seryiceId";
+    public static final  String spaceGuid = "spaceGuid";
+    public static final  String sCreatedDate = "sCreatedDate";
+
+    /**
+     * service excute end then
+     * return List
+     */
+
+    public static List<ScRepository> lstScRepository = new ArrayList();
+    public static List<ScUser> lstScUserBefore  = new ArrayList();
+    public static List<ScUser> lstScUser = new ArrayList();
+    public static List<sonia.scm.user.User> lstUser = new ArrayList();
+    public static List<RepoPermission> lstRepoPermission = new ArrayList();
+    public static List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
+    public static List<Map> rtnList = new ArrayList();
+
 
     /** Field description */
     private static final User ADMIN = new User("scmadmin", "SCM Admin",
