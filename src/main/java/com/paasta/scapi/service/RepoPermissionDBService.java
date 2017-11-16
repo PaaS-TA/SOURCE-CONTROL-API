@@ -104,7 +104,6 @@ public class RepoPermissionDBService extends CommonService{
             List<ScUser> lstScUser = scUserRepository.findAllByUserIdContaining(searchUserId);
             List<RepoPermission> lstRepoPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
 
-
             for (ScInstanceUser lstScInstanceUser : lstScInstanceUsers) {
                 Map map = new HashMap();
                 for (ScUser scUser : lstScUser) {
