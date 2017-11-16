@@ -19,6 +19,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.client.ScmClient;
 
@@ -58,25 +61,22 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
     @Mock
     private
     ScUserService scUserService;
-
     @Mock
     private
-    ScmClient scmClient;
+    CommonService commonService;
+/*    @Mock
+    private
+    ScmClient scmClient;*/
 
-    @Mock
     List<Map> rtnList = new ArrayList();
-
-    @Mock
     List<ScRepository> lstScRepository = new ArrayList();
-
-    @Mock
     List<ScUser> lstScUserBefore  = new ArrayList();
-    @Mock
     List<ScUser> lstScUser = new ArrayList();
-    @Mock
-    List<User> lstUser = new ArrayList();
-    @Mock
+    List<sonia.scm.user.User> lstUser = new ArrayList();
     List<RepoPermission> lstRepoPermission = new ArrayList();
+
+    @MockBean
+    ResponseEntity responseEntity;
 
 
     @Override
@@ -94,7 +94,7 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
         ScUser scUser= new ScUser(userId, userName, userMail, userDesc);
         lstScUserBefore.add(scUser);
 
-        User user = new User(userId, userName,userMail);
+        sonia.scm.user.User user = new sonia.scm.user.User(userId, userName,userMail);
         lstUser.add(user);
 
         RepoPermission repoPermission = new RepoPermission(repoNo, userId);
@@ -103,11 +103,14 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
         lstRepoPermission.add(repoPermission);
 
         Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
-        Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUser);
-        Mockito.when(scUserService.apiGetUsers().getBody()).thenReturn(lstUser);
-        Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
-        Mockito.when(scmClient.createSession(scmUrl, scmAdminId,scmAdminPassword));
+        Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUserBefore);
 
+        Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
+        Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
+        Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
+        Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
+        Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
+        Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
 
         Map map = new HashMap<>();
         map.put("userId",userId);
@@ -121,8 +124,8 @@ public class RepoPermissionDBServiceTest extends CommonServiceTest{
 
     @Test
     public void searchPermisionByUserIdAndRepositoryId() throws Exception {
-
-        Assert.assertEquals(repoPermissionDBService.searchPermisionByUserIdAndRepositoryId(userId,repoScmId),rtnList);
+        List<Map> mathRtnList = repoPermissionDBService.searchPermisionByUserIdAndRepositoryId(userId,repoScmId);
+        Assert.assertEquals(mathRtnList,rtnList);
 
     }
 /*
