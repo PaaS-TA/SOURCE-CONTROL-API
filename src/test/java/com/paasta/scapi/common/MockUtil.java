@@ -1,14 +1,13 @@
 package com.paasta.scapi.common;
 
-import com.paasta.scapi.entity.RepoPermission;
-import com.paasta.scapi.entity.ScInstanceUser;
-import com.paasta.scapi.entity.ScRepository;
-import com.paasta.scapi.entity.ScUser;
+import com.paasta.scapi.entity.*;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.Subject.Builder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
 import sonia.scm.SCMContextProvider;
 import sonia.scm.security.Role;
@@ -35,6 +34,8 @@ public class MockUtil
     public static final String scmUrl = "scmUrl";
     public static final String scmAdminId = "scmAdminId";
     public static final String scmAdminPassword = "scmAdminPassword";
+    public static final int iSuccess = 1;
+    public static final int iFail = 0;
     public static final int repoNo = 0;
     public static final  String repoScmId = "repoScmId";
     public static final  String repoName = "repoName";
@@ -49,11 +50,12 @@ public class MockUtil
     public static final  String userDesc = "userDesc";
     public static final  int iRepoNo= 0;
     public static final  int getInstanceNo = 0;
-    public static final  String getInstanceId = "getInstanceId";
+    public static final  int getInstanceId = 0;
     public static final  int getPermissionNo = 0;
     public static final  String sRepoPermission = "repoPermission";
     public static final  String userRepoRole = "userRepoRole";
     public static final  String userCreateYn = "userCreateYn";
+    public static final  String userSearchCreateYn = "";
     public static final  Date userCreatedDate = new Date();
     public static final  Date userModifiedDate = new Date();
     public static final  String organizationGuid = "organizationGuid";
@@ -74,6 +76,8 @@ public class MockUtil
     public static List<sonia.scm.user.User> lstUser = new ArrayList();
     public static List<RepoPermission> lstRepoPermission = new ArrayList();
     public static List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
+    public static List<ScServiceInstance> lstScServiceInstance = new ArrayList();
+    public static Page<ScServiceInstance> pageScServiceInstance = new PageImpl<ScServiceInstance>(lstScServiceInstance);
     public static List<Map> rtnList = new ArrayList();
 
 

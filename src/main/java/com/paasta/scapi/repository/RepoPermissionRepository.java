@@ -12,14 +12,8 @@ import java.util.List;
 public interface RepoPermissionRepository extends JpaRepository<RepoPermission, Integer> {
 
     int deleteAllByRepoNo(int repo_no);
-
     void delete(int no);
-
     List<RepoPermission>  findAllByRepoNo(int repo_no);
-
     List<RepoPermission>  findAllByRepoNoAndPermission(int repo_no, String permission);
     List<RepoPermission>  findAllByRepoNoAndUserId(int repo_no, String userId);
-
-    Page<RepoPermission> findAllByRepoNo(int repo_no, Pageable pageable);
-
 }

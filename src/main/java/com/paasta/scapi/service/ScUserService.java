@@ -51,51 +51,15 @@ public class ScUserService extends CommonService {
 	private
 	RepoPermissionRepository repoPermissionRepository;
 
-	/*@Autowired
-	private
-	ScInstanceUserRepository scInstanceUserRepository;
-
-	@Autowired
-	private
-	ScRepositoryApiService scRepositoryApiService;*/
 	@Autowired
 	RepoPermissionApiService repoPermissionApiService;
+
 	@Autowired
 	private
 	RestClientUtil restClientUtil;
 
 	@Value("${api.users}")
     private String userUrl;
-
-	/**
-	 * DB에서 사용자 전체 목록을 확인한다.
-	 * @param
-	 * @return List<ScUser>
-	 * @throws
-	 * @author 최세지
-	 * @version 1.0
-	 * @since 2017.09.15 최초작성
-	 */
-	
-	public List<ScUser> getAll() {
-		return this.scUserRepository.findAll();
-	}
-
-
-	/**
-	 * DB에서 사용자 변경 내역을 저장한다.
-	 * @param scUser
-	 * @return
-	 * @throws
-	 * @author 최세지
-	 * @version 1.0
-	 * @since 2017.09.15 최초작성
-	 */
-	
-	public ScUser save(ScUser scUser) {
-		return scUserRepository.save(scUser);
-	}
-
 
 	/**
 	 * DB에서 사용자 변경 내역을 수정한다.
@@ -119,17 +83,13 @@ public class ScUserService extends CommonService {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public void restDeleteUser(String name) {
-//		String rspApp = "";
         this.logger.info("restDeleteUser Start : ");
 		try {
-//			HttpEntity httEntity = this.restClientUtil.restCommonHeaders(null);
 			scUserRepository.delete(name);
 			scmAdminSession().getUserHandler().delete(name);
-//			rspApp = this.restClientUtil.callRestApi(HttpMethod.DELETE, this.userUrl +"/"+name, httEntity, Object.class).getBody().toString();
 		}catch (Exception exception){
 			exception.printStackTrace();
 		}
-//        this.logger.info("restDeleteUser End "+ rspApp);
 	}
 
 	/**
@@ -149,8 +109,6 @@ public class ScUserService extends CommonService {
 		try {
 			String rspApp = "";
 			logger.info("restUpdateUser Start : ");
-//			JSONObject jsonObject = new JSONObject(jsonUser);
-//			String request = jsonObject.toString();
 
 			String displayName = (String) jsonUser.getOrDefault("displayName", "");
 			String mail = (String) jsonUser.getOrDefault("mail", "");
@@ -178,14 +136,11 @@ public class ScUserService extends CommonService {
 			user.setAdmin(admin);
 			user.setMail(mail);
 			if(!Common.empty(passwordSet)){
-//				Map map =user.getProperties();
 				user.setProperty("PasswordSet",passwordSet);
 			}
-
 			scmAdminSession().getUserHandler().modify(user);
-
-//        this.restClientUtil.callRestApi(HttpMethod.PUT, this.userUrl +"/"+name , httEntity, String.class);
 			this.logger.info("restUpdateUser End " + rspApp);
+
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -362,41 +317,6 @@ public class ScUserService extends CommonService {
 			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
 		}
 	}
-
-
-	/**
-	 * Scm APT의 기능으로 인스턴스별 사용자리스트 조회를 한다.
-	 * @param instanceId
-	 * @param userName
-	 * @param pageRequest
-	 * @return
-	 * @author 최세지
-	 * @version 1.0
-	 * @since 2017.09.15 최초작성
-	 */
-	
-/*	public ResponseEntity<Page> apiGetUsersByName(String instanceId, String userName, PageRequest pageRequest) {
-		try {
-            this.logger.info(getClass().getName() + " : apiGetUsers start::instanceId::"+instanceId);
-
-			*//** 인스턴스별 레파지 토리 정보가져오기 *//*
-
-			List<Repository> list = this.scmAdminSession().getRepositoryHandler().getAll();
-			List rtnList = new ArrayList();
-
-
-			Page<ScUser> page = this.scUserRepository.findByUserNameContaining(userName, pageRequest);
-			List userList = this.scmAdminSession().getUserHandler().getAll();
-//			List list = page.getContent();
-
-            this.logger.info(getClass().getName() + " : apiGetUsers end");
-			return new ResponseEntity<>(page, null, HttpStatus.OK);
-
-		}catch (Exception e){
-			e.printStackTrace();
-			return new ResponseEntity<>(null, null, HttpStatus.FORBIDDEN);
-		}
-	}*/
 
 
 	/**

@@ -7,44 +7,27 @@ import com.paasta.scapi.model.Repository;
 import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScInstanceUserRepository;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.mock;
 
 /**
- * Created by ij
- * lee on 2017-08-02.
+ * Created by ijlee
  */
-
+@RunWith(SpringRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RepoPermissionApiServiceTest extends CommonServiceTest {
 
-    @InjectMocks
-    RestClientUtil restClientUtil;
-
-    @InjectMocks
-    PropertiesUtil propertiesUtil;
-
-    @Mock
-    ScRepositoryApiService scRepositoryApiService;
-
-    @Mock
-    RepoPermissionRepository repoPermissionRepository;
-
-    @Mock
-    RepoPermissionDBService repoPermissionDBService;
-
-    @InjectMocks
-    RepoPermissionApiService repoPermissionApiService;
-
-    @Mock
-    ScInstanceUserRepository scInstanceUserRepository;
-
     @Before
-    public void setup() throws Exception{
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
+        setUpMockUtil();
     }
 
     @Test

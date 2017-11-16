@@ -90,7 +90,7 @@ public class ScServiceInstanceController {
             User rtnUser = scUserService.getScmUser(userId);
 
             if (Common.empty(scUser)) {
-                scUser = scUserService.save(new ScUser(userId, displayName, mail, desc));
+                scUser = scUserRepository.save(new ScUser(userId, displayName, mail, desc));
             }
 
             linkMapScInstanceUser.put("name",userId);

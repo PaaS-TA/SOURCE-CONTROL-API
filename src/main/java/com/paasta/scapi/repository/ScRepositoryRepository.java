@@ -14,10 +14,6 @@ public interface ScRepositoryRepository extends JpaRepository<ScRepository, Inte
 
     List<ScRepository> findAllByRepoScmId(String repoScmId);
 
-    List<ScRepository> findByInstanceId(String InstanceId);
-
-    Integer deleteByRepoScmId(String id);
-
     List<ScRepository> findAllByInstanceId(String instanceId);
 
 }

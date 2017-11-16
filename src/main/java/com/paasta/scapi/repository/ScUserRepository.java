@@ -9,7 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ScUserRepository extends JpaRepository<ScUser, String> {
-//    Page<ScUser> findAllByUserNameOrUserDescOrUserId(String userName, String userDesc, String userId, Pageable pageable);
-//    Page<ScUser> findByUserNameContaining(String userName, Pageable pageRequest);
     List<ScUser> findAllByUserIdContaining(String userName);
 }

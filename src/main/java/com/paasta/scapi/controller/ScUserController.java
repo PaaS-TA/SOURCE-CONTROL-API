@@ -3,6 +3,7 @@ package com.paasta.scapi.controller;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScUser;
+import com.paasta.scapi.repository.ScUserRepository;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class ScUserController extends CommonController {
 
 	@Autowired
 	private ScUserService scUserService;
+
+	@Autowired
+	private ScUserRepository scUserRepository;
 
 	@Autowired
 	private ScInstanceUserService scInstanceUserService;
@@ -57,7 +61,7 @@ public class ScUserController extends CommonController {
 		if(Common.empty(scUser) ){
 			scUser = new ScUser((String) jsonUser.getOrDefault("name", ""),
 					(String) jsonUser.getOrDefault("displayName", ""), (String) jsonUser.getOrDefault("mail", ""), (String) jsonUser.getOrDefault("desc", ""));
-			scUser = scUserService.save(scUser);
+			scUser = scUserRepository.save(scUser);
 		}
 		if(Common.empty(rtnUser)){
             scUserService.apiCreateUser(jsonUser);

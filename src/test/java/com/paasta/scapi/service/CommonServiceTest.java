@@ -1,16 +1,13 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.ClientTestUtil;
-import com.paasta.scapi.common.MockUtil;
+import com.paasta.scapi.common.*;
 import com.paasta.scapi.common.util.PropertiesUtil;
+import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScInstanceUser;
 import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.entity.ScUser;
-import com.paasta.scapi.repository.RepoPermissionRepository;
-import com.paasta.scapi.repository.ScInstanceUserRepository;
-import com.paasta.scapi.repository.ScRepositoryRepository;
-import com.paasta.scapi.repository.ScUserRepository;
+import com.paasta.scapi.repository.*;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -28,10 +25,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import sonia.scm.client.JerseyClientSession;
-import sonia.scm.client.ScmClientSession;
-import sonia.scm.client.ScmUnauthorizedException;
-import sonia.scm.client.UserClientHandler;
+import sonia.scm.client.*;
+import sonia.scm.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +41,38 @@ public class CommonServiceTest extends MockUtil{
     @InjectMocks
     public
     RepoPermissionDBService repoPermissionDBService;
+
+    @InjectMocks
+    public
+    RepoPermissionApiService repoPermissionApiService;
+
+    @InjectMocks
+    public
+    RepoPermissionDBService getRepoPermissionDBService;
+
+    @InjectMocks
+    public
+    ScInstanceUserService scInstanceUserService;
+
+    @InjectMocks
+    public
+    ScLoginService scLoginService;
+
+    @InjectMocks
+    public
+    ScRepositoryApiService scRepositoryApiService;
+
+    @InjectMocks
+    public ScRepositoryDBService scRepositoryDBService;
+
+    @InjectMocks
+    public ScServiceInstanceService scServiceInstanceService;
+
+    @InjectMocks
+    public ScServiceInstancesSpecifications scServiceInstancesSpecifications;
+
+    @InjectMocks
+    public ScUserService injectionScUserService;
 
     @Mock
     public
@@ -65,26 +92,11 @@ public class CommonServiceTest extends MockUtil{
 
     @Mock
     public
+    ScServiceInstanceRepository scServiceInstanceRepository;
+
+    @Mock
+    public
     ScUserService scUserService;
-/*
-
-    static final List<ScRepository> lstScRepository = new ArrayList();
-    static final List<ScUser> lstScUserBefore  = new ArrayList();
-    static final List<ScUser> lstScUser = new ArrayList();
-    static final List<sonia.scm.user.User> lstUser = new ArrayList();
-    static final List<RepoPermission> lstRepoPermission = new ArrayList();
-    static final List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
-    static List<Map> rtnList = new ArrayList();
-*/
-
-
-    static List<ScRepository> lstScRepository = new ArrayList();
-    static List<ScUser> lstScUserBefore  = new ArrayList();
-    static List<ScUser> lstScUser = new ArrayList();
-    static List<sonia.scm.user.User> lstUser = new ArrayList();
-    static List<RepoPermission> lstRepoPermission = new ArrayList();
-    static List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
-    static List<Map> rtnList = new ArrayList();
 
     @MockBean
     ResponseEntity responseEntity;
@@ -95,12 +107,25 @@ public class CommonServiceTest extends MockUtil{
     @MockBean
     UserClientHandler userClientHandler;
 
+    @MockBean
+    RepositoryClientHandler repositoryClientHandler;
+
     @Mock
     CommonService commonService;
 
+    @Mock
+    RestClientUtil restClientUtil;
+
+    /**
+     * It is required to perform the service.
+     * To prevent errors when changing service.
+     */
     public void setUpMockUtil() {
         MockitoAnnotations.initMocks(this);
 
+        /**
+         * List initalize
+         */
         lstScRepository = new ArrayList();
         lstScUserBefore  = new ArrayList();
         lstScUser = new ArrayList();
@@ -109,46 +134,79 @@ public class CommonServiceTest extends MockUtil{
         lstScInstanceUsers = new ArrayList();
         rtnList = new ArrayList();
 
-        ScRepository scRepository = new ScRepository();
-        scRepository.setRepoNo(repoNo);
-        scRepository.setRepoScmId(repoScmId);
-        scRepository.setRepoName(repoName);
-        scRepository.setRepoDesc(repoDesc);
-        scRepository.setCreateUserId(createUserId);
-        scRepository.setInstanceId(instanceId);
-        scRepository.setOwnerUserId(ownerUserId);
-        lstScRepository.add(scRepository);
+        /**
+         * entity initialize
+         */
 
-        ScUser scUser= new ScUser(userId, userName, userMail, userDesc);
-        lstScUserBefore.add(scUser);
+        lstUser = UserEntityTestData.getLstUser();
+        lstScUserBefore = UserEntityTestData.getLstScUser();
+        lstScRepository = RepositoryEntityTestData.getLstScRepository();
+        lstRepoPermission = RepoPermissionEntityTestData.getLstRepoPermissiony();
+        lstScInstanceUsers = ScInstanceUserEntityTestData.getSearchScInstanceUser();
+        lstScServiceInstance = ScServiceInstanceEntityTestData.getLstScServiceInstance();
+        pageScServiceInstance = ScServiceInstanceEntityTestData.getPageScServiceInstance();
 
-        sonia.scm.user.User user = new sonia.scm.user.User(userId, userName,userMail);
-        lstUser.add(user);
+        /**
+         * scUserRepository mockito init
+         */
+        Mockito.when(scUserRepository.findOne(userId)).thenReturn(UserEntityTestData.createScUser());
+        Mockito.when(scUserRepository.findAll()).thenReturn(lstScUser);
+        Mockito.when(scUserRepository.save(UserEntityTestData.createScUser())).thenReturn(UserEntityTestData.createScUser());
+        Mockito.doNothing().when(scUserRepository).delete(userId);
 
-        RepoPermission repoPermission = new RepoPermission(repoNo, userId);
-        repoPermission.setPermission(sRepoPermission);
-        repoPermission.setNo(getPermissionNo);
-        repoPermission.setRepoNo(repoNo);
-        lstRepoPermission.add(repoPermission);
+        /**
+         * repoPermissionRepository mockito init
+         */
+        Mockito.when(repoPermissionRepository.deleteAllByRepoNo(repoNo)).thenReturn(iSuccess);
+        Mockito.doNothing().when(repoPermissionRepository).delete(repoNo);
+        Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
+        Mockito.when(repoPermissionRepository.findAllByRepoNoAndPermission(repoNo, sRepoPermission)).thenReturn(lstRepoPermission);
+        Mockito.when(repoPermissionRepository.findAllByRepoNoAndUserId(repoNo, userId)).thenReturn(lstRepoPermission);
 
-        ScInstanceUser scInstanceUser = new ScInstanceUser(instanceId, userId, userRepoRole, userCreateYn);
-        scInstanceUser.setNo(getPermissionNo);
-        scInstanceUser.setCreatedDate(userCreatedDate);
-        scInstanceUser.setModifiedDate(userModifiedDate);
-        lstScInstanceUsers.add(scInstanceUser);
+        /**
+         * scInstanceUserRepository mockito init
+         */
+        Mockito.when(scInstanceUserRepository.findByInstanceIdAndUserId(instanceId, userId)).thenReturn(lstScInstanceUsers);
+        Mockito.when(scInstanceUserRepository.findByInstanceIdContainingAndUserIdContaining(instanceId, userId)).thenReturn(lstScInstanceUsers);
+        Mockito.when(scInstanceUserRepository.findByUserId(userId)).thenReturn(lstScInstanceUsers);
+        Mockito.when(scInstanceUserRepository.findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(instanceId,searchUserId,userSearchCreateYn)).thenReturn(lstScInstanceUsers);
+        Mockito.doNothing().when(scInstanceUserRepository).delete(getInstanceId);
 
+        /**
+         * scUserRepository mockito init
+         */
         Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
+        Mockito.when(scRepositoryRepository.findAllByInstanceId(instanceId)).thenReturn(lstScRepository);
+        Mockito.when(scRepositoryRepository.save(RepositoryEntityTestData.createRepoitory())).thenReturn(RepositoryEntityTestData.createRepoitory());
+        Mockito.doNothing().when(scRepositoryRepository).delete(RepositoryEntityTestData.createRepoitory());
+
+        /**
+         * scServiceInstanceRepository mockito init
+         */
+
+        Mockito.when(scServiceInstanceRepository.findByCreateUserId(userId)).thenReturn(lstScServiceInstance);
+//        Mockito.when(scServiceInstanceRepository.findAll(ScServiceInstanceEntityTestData.geSpecScServiceInstance()).thenReturn(ScServiceInstanceEntityTestData.geSpecScServiceInstance());
+
+        /**
+         * scUserRepository mockito init
+         */
+        Mockito.when(scUserRepository.findOne(userId)).thenReturn(UserEntityTestData.createScUser());
+        Mockito.when(scUserRepository.findAll()).thenReturn(lstScUser);
+        Mockito.when(scUserRepository.save(UserEntityTestData.createScUser())).thenReturn(UserEntityTestData.createScUser());
+        Mockito.doNothing().when(scUserRepository).delete(userId);
         Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUserBefore);
 
-        Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
         Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
+
         Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
+        Mockito.doNothing().when(userClientHandler).delete(userId);
+        Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.createUser());
+
         Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
+        Mockito.doNothing().when(scUserService).restDeleteUser(userId);
+
         Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
-
-        Mockito.when(scInstanceUserRepository.findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(instanceId,searchUserId,"")).thenReturn(lstScInstanceUsers);
-
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
 
     }
