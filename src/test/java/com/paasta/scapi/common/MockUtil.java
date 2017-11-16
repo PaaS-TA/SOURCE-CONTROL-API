@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -39,7 +40,14 @@ public class MockUtil
     public static final  String userMail = "userMail";
     public static final  String userDesc = "userDesc";
     public static final  int iRepoNo= 0;
+    public static final  int getInstanceNo = 0;
+    public static final  String getInstanceId = "getInstanceId";
+    public static final  int getPermissionNo = 0;
     public static final  String sRepoPermission = "repoPermission";
+    public static final  String userRepoRole = "userRepoRole";
+    public static final  String userCreateYn = "userCreateYn";
+    public static final  Date userCreatedDate = new Date();
+    public static final  Date userModifiedDate = new Date();
 
     /** Field description */
     private static final User ADMIN = new User("scmadmin", "SCM Admin",

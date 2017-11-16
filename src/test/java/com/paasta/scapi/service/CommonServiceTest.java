@@ -4,9 +4,11 @@ import com.paasta.scapi.common.ClientTestUtil;
 import com.paasta.scapi.common.MockUtil;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.entity.RepoPermission;
+import com.paasta.scapi.entity.ScInstanceUser;
 import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.RepoPermissionRepository;
+import com.paasta.scapi.repository.ScInstanceUserRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
 import com.paasta.scapi.repository.ScUserRepository;
 import com.sun.jersey.api.client.Client;
@@ -59,14 +61,30 @@ public class CommonServiceTest extends MockUtil{
 
     @Mock
     public
-    ScUserService scUserService;
+    ScInstanceUserRepository scInstanceUserRepository;
 
-    static final List<Map> rtnList = new ArrayList();
+    @Mock
+    public
+    ScUserService scUserService;
+/*
+
     static final List<ScRepository> lstScRepository = new ArrayList();
     static final List<ScUser> lstScUserBefore  = new ArrayList();
     static final List<ScUser> lstScUser = new ArrayList();
     static final List<sonia.scm.user.User> lstUser = new ArrayList();
     static final List<RepoPermission> lstRepoPermission = new ArrayList();
+    static final List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
+    static List<Map> rtnList = new ArrayList();
+*/
+
+
+    static List<ScRepository> lstScRepository = new ArrayList();
+    static List<ScUser> lstScUserBefore  = new ArrayList();
+    static List<ScUser> lstScUser = new ArrayList();
+    static List<sonia.scm.user.User> lstUser = new ArrayList();
+    static List<RepoPermission> lstRepoPermission = new ArrayList();
+    static List<ScInstanceUser> lstScInstanceUsers = new ArrayList();
+    static List<Map> rtnList = new ArrayList();
 
     @MockBean
     ResponseEntity responseEntity;
@@ -81,11 +99,21 @@ public class CommonServiceTest extends MockUtil{
     CommonService commonService;
 
     public void setUpMockUtil() {
+        MockitoAnnotations.initMocks(this);
+
+        lstScRepository = new ArrayList();
+        lstScUserBefore  = new ArrayList();
+        lstScUser = new ArrayList();
+        lstUser = new ArrayList();
+        lstRepoPermission = new ArrayList();
+        lstScInstanceUsers = new ArrayList();
+        rtnList = new ArrayList();
 
         ScRepository scRepository = new ScRepository();
         scRepository.setRepoNo(repoNo);
         scRepository.setRepoScmId(repoScmId);
         scRepository.setRepoName(repoName);
+        scRepository.setRepoDesc(repoDesc);
         scRepository.setCreateUserId(createUserId);
         scRepository.setInstanceId(instanceId);
         scRepository.setOwnerUserId(ownerUserId);
@@ -99,8 +127,15 @@ public class CommonServiceTest extends MockUtil{
 
         RepoPermission repoPermission = new RepoPermission(repoNo, userId);
         repoPermission.setPermission(sRepoPermission);
-        repoPermission.setNo(iRepoNo);
+        repoPermission.setNo(getPermissionNo);
+        repoPermission.setRepoNo(repoNo);
         lstRepoPermission.add(repoPermission);
+
+        ScInstanceUser scInstanceUser = new ScInstanceUser(instanceId, userId, userRepoRole, userCreateYn);
+        scInstanceUser.setNo(getPermissionNo);
+        scInstanceUser.setCreatedDate(userCreatedDate);
+        scInstanceUser.setModifiedDate(userModifiedDate);
+        lstScInstanceUsers.add(scInstanceUser);
 
         Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
         Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUserBefore);
@@ -112,6 +147,7 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
         Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
 
+        Mockito.when(scInstanceUserRepository.findByInstanceIdAndUserIdIsContainingAndCreaterYnContaining(instanceId,searchUserId,"")).thenReturn(lstScInstanceUsers);
 
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
 
@@ -129,6 +165,4 @@ public class CommonServiceTest extends MockUtil{
 //        scmClientSession = ClientTestUtil.createAdminSession();
         Assert.assertEquals(commonService.scmAdminSession(),scmClientSession);
     }
-
-
 }
