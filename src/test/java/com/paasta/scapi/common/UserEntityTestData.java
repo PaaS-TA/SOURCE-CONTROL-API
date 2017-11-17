@@ -75,8 +75,8 @@ public final class UserEntityTestData
 
     public static Map getMapUser(){
         Map rspApp = new HashMap();
-        rspApp.put("ScUser", getUser());
-        rspApp.put("rtnUser",getScUser());
+        rspApp.put("ScUser", getScUser());
+        rspApp.put("rtnUser",getUser());
         rspApp.put("status", HttpStatus.OK.value());
         rspApp.put("message", "사용자 정보 조회에 성공하였습니다.");
         return rspApp;

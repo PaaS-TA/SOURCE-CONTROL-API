@@ -1,20 +1,12 @@
 package com.paasta.scapi.common;
 
 import com.paasta.scapi.entity.*;
-import org.apache.shiro.authz.Permission;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.Subject.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.ActiveProfiles;
 import sonia.scm.SCMContextProvider;
-import sonia.scm.security.Role;
 import sonia.scm.user.User;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.*;
 

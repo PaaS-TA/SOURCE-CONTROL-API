@@ -127,7 +127,7 @@ public class CommonServiceTest extends MockUtil{
         /**
          * entity initialize
          */
-
+        lstScUser = UserEntityTestData.getLstScUser();
         lstUser = UserEntityTestData.getLstUser();
         lstScUserBefore = UserEntityTestData.getLstScUser();
         lstScRepository = RepositoryEntityTestData.getLstScRepository();
@@ -196,6 +196,8 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(userClientHandler.get(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.doNothing().when(userClientHandler).delete(userId);
         Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.modifyeUser());
+//        Mockito.when(scUserService.getUsers()).thenReturn(UserEntityTestData.getMapAllUsers());
+
 
         Mockito.when(scUserApiService.getScmUser(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.when(scUserApiService.restGetAllUsers()).thenReturn(UserEntityTestData.getLstUser());
@@ -206,7 +208,7 @@ public class CommonServiceTest extends MockUtil{
 
        /* Mockito.when(scUserService.getUser(userId)).thenReturn(UserEntityTestData.getMapUser());
         Mockito.when(scUserService.getUser(emptyId)).thenReturn(UserEntityTestData.getEmptyUser());
-        Mockito.when(scUserService.getUsers()).thenReturn(UserEntityTestData.getMapAllUsers());
+
         Mockito.when(scUserService.apiCreateUser(UserEntityTestData.createModifyUser())).thenReturn(responseEntity);
 
         Mockito.doNothing().when(scUserService).restDeleteUser(userId);

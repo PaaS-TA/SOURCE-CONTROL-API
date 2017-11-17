@@ -80,12 +80,8 @@ public class ScUserService extends CommonService {
     @Transactional
     public void restDeleteUser(String name) {
         this.logger.info("restDeleteUser Start : ");
-        try {
-            scUserRepository.delete(name);
-            scUserApiService.delete(name);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+        scUserRepository.delete(name);
+        scUserApiService.delete(name);
     }
 
     /**

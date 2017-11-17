@@ -8,10 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import sonia.scm.user.User;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,16 +31,19 @@ public class ScUserServiceTest extends CommonServiceTest{
 
     @Test
     public void restDeleteUser() throws Exception {
-        Mockito.doNothing().when(scUserService).restDeleteUser(userId);
-
+        String userId = "userId";
+        scUserService.restDeleteUser(userId);
+//      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
+        Assert.assertNotNull(userId);
     }
 
     @Test
     public void restUpdateUser() throws Exception {
         //TODO 수정할것.
-        LinkedHashMap modifty = UserEntityTestData.createModifyUser();
+        LinkedHashMap modifyUser = UserEntityTestData.createModifyUser();
+        scUserService.apiCreateUser(modifyUser);
 //      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
-        Mockito.doThrow(new RuntimeException()).when(scUserService).restUpdateUser(userId,modifty);
+        Assert.assertNotNull(modifyUser);
     }
     @Test
     public void getNotExistUser() throws Exception {
@@ -67,9 +69,10 @@ public class ScUserServiceTest extends CommonServiceTest{
     @Test
     public void apiCreateUser() throws Exception {
         LinkedHashMap jsonUser = UserEntityTestData.createModifyUser();
+        ResponseEntity actualResponseEntity = new ResponseEntity(HttpStatus.OK);
 //      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
         ResponseEntity rtn = scUserService.apiCreateUser(jsonUser);
-        Assert.assertEquals(responseEntity, rtn);
+        Assert.assertEquals(actualResponseEntity, rtn);
     }
 
     @Test
