@@ -1,5 +1,6 @@
 package com.paasta.scapi.service;
 
+import com.paasta.scapi.common.UserEntityTestData;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.RepoPermissionRepository;
@@ -37,21 +38,13 @@ public class ScUserServiceTest extends CommonServiceTest{
     public void restDeleteUser() throws Exception {
         Mockito.doNothing().when(scUserService).restDeleteUser(userId);
     }
-    @Test
-    public void beforeSaveDBrestCreateUser() throws Exception {
-        LinkedHashMap linkedHashMap = new LinkedHashMap();
-        linkedHashMap.put("name","name");
-        linkedHashMap.put("displayName","displayName");
-        linkedHashMap.put("mail","mail");
-//        Mockito.when(scUserService.beforeSaveDBrestCreateUser(linkedHashMap)doNothing().when(scUserService).restDeleteUser(userId);
-    }
-
-    @Test
-    public void restCreateUser() throws Exception {
-    }
 
     @Test
     public void restUpdateUser() throws Exception {
+        //TODO 수정할것.
+        LinkedHashMap modifty = UserEntityTestData.createModifyUser();
+//        Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
+                Mockito.doThrow(new RuntimeException()).when(scUserService).restUpdateUser(userId,modifty);
     }
 
     @Test
