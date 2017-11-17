@@ -6,10 +6,7 @@ public final class UserTestData
 
     private UserTestData() {}
 
-    public static User createAdams()
-    {
-        return new User("adams", "Douglas Adams", "douglas.adams@hitchhiker.com");
-    }
+
 
 
     public static User createDent()

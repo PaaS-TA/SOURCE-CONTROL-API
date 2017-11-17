@@ -45,6 +45,7 @@ public class MockUtil
     public static final  String createUserId = "createUserId";
     public static final  String searchUserId = "userId";
     public static final  String userId = "userId";
+    public static final  String emptyId = "emptyId";
     public static final  String userName = "userName";
     public static final  String userMail = "userMail";
     public static final  String userDesc = "userDesc";

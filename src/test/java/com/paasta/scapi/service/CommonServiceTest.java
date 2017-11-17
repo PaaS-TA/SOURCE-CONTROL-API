@@ -3,22 +3,13 @@ package com.paasta.scapi.service;
 import com.paasta.scapi.common.*;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
-import com.paasta.scapi.entity.RepoPermission;
-import com.paasta.scapi.entity.ScInstanceUser;
-import com.paasta.scapi.entity.ScRepository;
-import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.*;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.client.*;
-import sonia.scm.user.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
@@ -149,7 +136,8 @@ public class CommonServiceTest extends MockUtil{
         /**
          * scUserRepository mockito init
          */
-        Mockito.when(scUserRepository.findOne(userId)).thenReturn(UserEntityTestData.createScUser());
+        Mockito.when(scUserRepository.findOne(userId)).thenReturn(UserEntityTestData.getScUser());
+        Mockito.when(scUserRepository.findOne(emptyId)).thenReturn(UserEntityTestData.getEmptyScUser());
         Mockito.when(scUserRepository.findAll()).thenReturn(lstScUser);
         Mockito.when(scUserRepository.save(UserEntityTestData.createScUser())).thenReturn(UserEntityTestData.createScUser());
         Mockito.doNothing().when(scUserRepository).delete(userId);
@@ -200,11 +188,14 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
 
         Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
+        Mockito.when(userClientHandler.get(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.doNothing().when(userClientHandler).delete(userId);
-        Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.createUser());
+        Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.modifyeUser());
 
         Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
         Mockito.doNothing().when(scUserService).restDeleteUser(userId);
+        Mockito.doThrow(new RuntimeException()).when(scUserService).restDeleteUser(userId);
+
 
         Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
