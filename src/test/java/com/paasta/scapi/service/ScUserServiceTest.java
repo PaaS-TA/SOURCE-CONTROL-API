@@ -7,10 +7,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,10 +40,8 @@ public class ScUserServiceTest extends CommonServiceTest{
 
     @Test
     public void restUpdateUser() throws Exception {
-        //TODO 수정할것.
         LinkedHashMap modifyUser = UserEntityTestData.createModifyUser();
         scUserService.apiCreateUser(modifyUser);
-//      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
         Assert.assertNotNull(modifyUser);
     }
     @Test
@@ -70,13 +69,15 @@ public class ScUserServiceTest extends CommonServiceTest{
     public void apiCreateUser() throws Exception {
         LinkedHashMap jsonUser = UserEntityTestData.createModifyUser();
         ResponseEntity actualResponseEntity = new ResponseEntity(HttpStatus.OK);
-//      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
         ResponseEntity rtn = scUserService.apiCreateUser(jsonUser);
         Assert.assertEquals(actualResponseEntity, rtn);
     }
 
     @Test
     public void getUsersByrepositoryId() throws Exception {
+        ResponseEntity actRss = UserEntityTestData.getUsersByrepositoryId();
+        ResponseEntity<Map> rtnrss = scUserService.getUsersByrepositoryId(repoScmId, searchUserId, sRepoPermission, sActive, pageRequest);
+        Assert.assertEquals(actRss, rtnrss);
     }
 
 }

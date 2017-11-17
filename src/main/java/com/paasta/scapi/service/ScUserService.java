@@ -268,14 +268,17 @@ public class ScUserService extends CommonService {
             List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
             // 전체 사용자 가져오기
             List<User> lstUser = scUserApiService.restGetAllUsers();
+
             Map rssMap = new HashMap();
+
+            List rtnList = new ArrayList();
+            //참여자 정보 에 사용자 정보를 병합한다.
             List<RepoPermission> lstPermission;
             if (Common.empty(searchPermission)) {
                 lstPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
             } else {
                 lstPermission = repoPermissionRepository.findAllByRepoNoAndPermission(scRepository.get(0).getRepoNo(), searchPermission);
             }
-            List rtnList = new ArrayList();
             lstPermission.forEach(permission -> lstUser.forEach(user -> {
                 if (permission.getUserId().equals(user.getName())) {
                     ObjectMapper objectMapper = new ObjectMapper();
@@ -288,34 +291,35 @@ public class ScUserService extends CommonService {
                     rtnList.add(rtnMap);
                 }
             }));
+
+            List rssList = new ArrayList();
+            //참여자 정보 중에서 이름과 활성정보를 필터링한다.
             if (Common.notEmpty(searchUserName) || Common.notEmpty(active)) {
-                List rssList = new ArrayList();
                 rtnList.forEach(hashMap -> {
+                    boolean bAdd = false;
                     ObjectMapper objectMapper = new ObjectMapper();
                     HashMap map = objectMapper.convertValue(hashMap, HashMap.class);
                     //searchUserName이 있을경우 필터한다.
-                    if (Common.notEmpty(searchUserName)) {
-                        if (map.getOrDefault("displayName", "").toString().contains(searchUserName) || map.getOrDefault("name", "").toString().contains(searchUserName)) {
-                            rssList.add(map);
-                        }
+                    if (map.getOrDefault("displayName", "").toString().contains(searchUserName) || map.getOrDefault("name", "").toString().contains(searchUserName)) {
+                        bAdd = true;
                     }
-                    //active가 있을경우 필터한다.
-                    if (Common.notEmpty(active)) {
-                        boolean bActive = Boolean.parseBoolean(active);
-                        if (map.get("active").equals(bActive)) {
-                            rssList.add(map);
-                        }
+                    boolean bActive = Boolean.parseBoolean(active);
+                    if (map.get("active").equals(bActive)) {
+                        bAdd = true;
+                    }
+                    if(bAdd){
+                        rssList.add(hashMap);
                     }
                 });
                 rssMap.put("rtnList", rssList);
             } else {
                 rssMap.put("rtnList", rtnList);
             }
-
             logger.info(getClass().getName() + " : getUsersByrepositoryId end");
-            List pageList = (List) rssMap.getOrDefault("rtnList", new ArrayList());
+            List pageList = rssList;
+            //page,size
             int start = pageRequest.getPageNumber() * pageList.size();
-            pageList = (List) pageList.stream().skip(start).limit(pageList.size()).collect(toList());
+            pageList = (List) pageList.stream().skip(start).limit(start+pageRequest.getPageSize()).collect(toList());
             Page pageImpl = new PageImpl(pageList, pageRequest, pageList.size());
             rssMap.replace("rtnList", pageImpl);
             return new ResponseEntity<>(rssMap, null, HttpStatus.OK);

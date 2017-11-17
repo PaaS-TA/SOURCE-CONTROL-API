@@ -3,6 +3,7 @@ package com.paasta.scapi.common;
 import com.paasta.scapi.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import sonia.scm.SCMContextProvider;
 import sonia.scm.user.User;
@@ -59,6 +60,8 @@ public class MockUtil
     public static final  String serviceId = "serviceId";
     public static final  String spaceGuid = "spaceGuid";
     public static final  String sCreatedDate = "sCreatedDate";
+    public static final  String sActive = "true";
+    public static final  PageRequest pageRequest =  new PageRequest(0, 1) ;
 
     /**
      * service excute end then

@@ -1,8 +1,13 @@
 package com.paasta.scapi.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.util.DateUtil;
+import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import sonia.scm.user.User;
 
 import java.util.*;
@@ -111,5 +116,25 @@ public final class UserEntityTestData
         }
         rspApp.put("rtnUser",rtnList);
         return rspApp;
+    }
+
+    public static ResponseEntity getUsersByrepositoryId(){
+        List pageList = new ArrayList();
+        PageRequest pageRequest =  new PageRequest(0, 1);
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = getUser();
+        RepoPermission permission = RepoPermissionEntityTestData.createRepoPermission();
+        Map rtnMap =  objectMapper.convertValue(user,Map.class);
+        String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
+        String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
+        rtnMap.put("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
+        rtnMap.put("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
+        rtnMap.put("permission", permission);
+
+        pageList.add(rtnMap);
+        Map rtnrss = new HashMap<>();
+        Page pageImpl = new PageImpl(pageList, pageRequest, pageList.size());
+        rtnrss.put("rtnList", pageImpl);
+        return new ResponseEntity<>(rtnrss, null, HttpStatus.OK);
     }
 }
