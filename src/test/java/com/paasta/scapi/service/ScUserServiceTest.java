@@ -1,13 +1,16 @@
 package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.UserEntityTestData;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import sonia.scm.user.User;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class ScUserServiceTest extends CommonServiceTest{
     @Test
     public void restDeleteUser() throws Exception {
         Mockito.doNothing().when(scUserService).restDeleteUser(userId);
+
     }
 
     @Test
@@ -40,37 +44,32 @@ public class ScUserServiceTest extends CommonServiceTest{
         Mockito.doThrow(new RuntimeException()).when(scUserService).restUpdateUser(userId,modifty);
     }
     @Test
+    public void getNotExistUser() throws Exception {
+        Map getEmptyUser = UserEntityTestData.getEmptyUser();
+        Map rtnUser = scUserService.getUser(emptyId);
+        Assert.assertEquals(getEmptyUser, rtnUser);
+    }
+    @Test
     public void getExistUser() throws Exception {
         Map getUser = UserEntityTestData.getMapUser();
-        Mockito.when(scUserService.getUser(userId)).thenReturn(getUser);
-    }
-    @Test
-    public void getEmptyUser() throws Exception {
-        Map getEmptyUser = UserEntityTestData.getEmptyUser();
-        Mockito.when(scUserService.getUser(emptyId)).thenReturn(getEmptyUser);
-    }
-    @Test
-    public void getScmUser() throws Exception {
+        Map rtnUser = scUserService.getUser(userId);
+        Assert.assertEquals(getUser, rtnUser);
     }
 
-    @Test
-    public void restGetAllUsers() throws Exception {
-    }
 
     @Test
     public void getUsers() throws Exception {
+        Map getMapUser = UserEntityTestData.getMapAllUsers();
+        Map resultMap = scUserService.getUsers();
+        Assert.assertEquals(getMapUser, resultMap);
     }
 
     @Test
     public void apiCreateUser() throws Exception {
-    }
-
-    @Test
-    public void apiGetUsers() throws Exception {
-    }
-
-    @Test
-    public void apiGetUsersByName() throws Exception {
+        LinkedHashMap jsonUser = UserEntityTestData.createModifyUser();
+//      Mockito.doNothing().when(scUserService).restUpdateUser(userId,modifty);
+        ResponseEntity rtn = scUserService.apiCreateUser(jsonUser);
+        Assert.assertEquals(responseEntity, rtn);
     }
 
     @Test

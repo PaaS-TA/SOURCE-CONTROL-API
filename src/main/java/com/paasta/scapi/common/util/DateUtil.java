@@ -13,6 +13,13 @@ import java.util.Locale;
 @Component
 public class DateUtil extends Common {
 
+
+    public static String convertLongToTime(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+
+        return sdf.format(date);
+    }
     public static String currentDateTime() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm", Locale.KOREA);

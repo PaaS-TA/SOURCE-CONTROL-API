@@ -8,6 +8,7 @@ import com.paasta.scapi.model.ServiceInstanceList;
 import com.paasta.scapi.repository.ScUserRepository;
 import com.paasta.scapi.service.ScInstanceUserService;
 import com.paasta.scapi.service.ScServiceInstanceService;
+import com.paasta.scapi.service.ScUserApiService;
 import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,8 @@ public class ScServiceInstanceController {
 
     @Autowired
     ScUserService scUserService;
+    @Autowired
+    ScUserApiService scUserApiService;
 
     @Autowired
     private
@@ -87,7 +90,7 @@ public class ScServiceInstanceController {
             String desc = scInstanceUser.getOrDefault("desc", "");
             //사용자 정보 : DB정보
             ScUser scUser = scUserRepository.findOne(userId);
-            User rtnUser = scUserService.getScmUser(userId);
+            User rtnUser = scUserApiService.getScmUser(userId);
 
             if (Common.empty(scUser)) {
                 scUser = scUserRepository.save(new ScUser(userId, displayName, mail, desc));
@@ -96,7 +99,7 @@ public class ScServiceInstanceController {
             linkMapScInstanceUser.put("name",userId);
             if (Common.empty(rtnUser)) {
                 scUserService.apiCreateUser(linkMapScInstanceUser);
-                rtnUser = scUserService.getScmUser(userId);
+                rtnUser = scUserApiService.getScmUser(userId);
             }
             map.put("scUser", scUser);
             map.put("rtnUser", rtnUser);

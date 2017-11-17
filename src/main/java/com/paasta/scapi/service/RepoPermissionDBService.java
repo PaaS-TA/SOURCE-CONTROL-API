@@ -45,7 +45,7 @@ public class RepoPermissionDBService extends CommonService{
 
     @Autowired
     private
-    ScUserService scUserService;
+    ScUserApiService scUserApiService;
 
     @SuppressWarnings("unchecked")
     @Transactional
@@ -54,7 +54,7 @@ public class RepoPermissionDBService extends CommonService{
         List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repoId);
         List<ScUser> lstScUserBefore = scUserRepository.findAllByUserIdContaining(searchUserId);
         List<ScUser> lstScUser = new ArrayList<>();
-        List<User> lstUser = (List<User>) scUserService.apiGetUsers().getBody();
+        List<User> lstUser = scUserApiService.restGetAllUsers();
         for (ScUser scUser : lstScUserBefore) {
             for (User user : lstUser) {
                 if(scUser.getUserId().equals(user.getName())){

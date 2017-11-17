@@ -16,4 +16,5 @@ public interface RepoPermissionRepository extends JpaRepository<RepoPermission, 
     List<RepoPermission>  findAllByRepoNo(int repo_no);
     List<RepoPermission>  findAllByRepoNoAndPermission(int repo_no, String permission);
     List<RepoPermission>  findAllByRepoNoAndUserId(int repo_no, String userId);
+
 }

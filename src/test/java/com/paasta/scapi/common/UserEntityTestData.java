@@ -1,4 +1,6 @@
 package com.paasta.scapi.common;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paasta.scapi.common.util.DateUtil;
 import com.paasta.scapi.entity.ScUser;
 import org.springframework.http.HttpStatus;
 import sonia.scm.user.User;
@@ -85,6 +87,29 @@ public final class UserEntityTestData
         rspApp.put("rtnUser",null);
         rspApp.put("status",HttpStatus.NOT_FOUND.value());
         rspApp.put("message","사용자 존재하지 않습니다.");
+        return rspApp;
+    }
+
+    public static Map getMapAllUsers(){
+        Map rspApp = new HashMap();
+        List rtnList = new ArrayList();
+        List<User> lstUser = getLstUser();
+        List<ScUser> lstScUser = getLstScUser();
+        for (ScUser testScUser : lstScUser) {
+            for (User testUser : lstUser) {
+                if (testScUser.getUserId().equals(testUser.getName())) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Map rtnMap = objectMapper.convertValue(testUser, LinkedHashMap.class);
+                    String creationDate = Objects.equals(String.valueOf(rtnMap.get("creationDate")), "null") ? "" : String.valueOf(rtnMap.get("creationDate"));
+                    String lastModified = Objects.equals(String.valueOf(rtnMap.get("lastModified")), "null") ? "" : String.valueOf(rtnMap.get("lastModified"));
+                    rtnMap.replace("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
+                    rtnMap.replace("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
+                    rtnMap.put("desc", testScUser.getUserDesc());
+                    rtnList.add(rtnMap);
+                }
+            }
+        }
+        rspApp.put("rtnUser",rtnList);
         return rspApp;
     }
 }

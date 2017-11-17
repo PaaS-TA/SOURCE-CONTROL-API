@@ -5,6 +5,7 @@ import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.entity.ScUser;
 import com.paasta.scapi.repository.ScUserRepository;
 import com.paasta.scapi.service.ScInstanceUserService;
+import com.paasta.scapi.service.ScUserApiService;
 import com.paasta.scapi.service.ScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ public class ScUserController extends CommonController {
 
 	@Autowired
 	private ScUserService scUserService;
+	@Autowired
+	private ScUserApiService scUserApiService;
 
 	@Autowired
 	private ScUserRepository scUserRepository;
@@ -56,7 +59,7 @@ public class ScUserController extends CommonController {
 		/* 상용자 정보조회 (DB) & sourcecontrol service*/
 		Map mapScUserMap = scUserService.getUser((String) jsonUser.getOrDefault("name", ""));
 		ScUser scUser = (ScUser)mapScUserMap.get("ScUser");
-		User rtnUser = scUserService.getScmUser((String) jsonUser.getOrDefault("name", ""));
+		User rtnUser = scUserApiService.getScmUser((String) jsonUser.getOrDefault("name", ""));
 
 		if(Common.empty(scUser) ){
 			scUser = new ScUser((String) jsonUser.getOrDefault("name", ""),
@@ -65,7 +68,7 @@ public class ScUserController extends CommonController {
 		}
 		if(Common.empty(rtnUser)){
             scUserService.apiCreateUser(jsonUser);
-			rtnUser = scUserService.getScmUser((String) jsonUser.getOrDefault("name", ""));
+			rtnUser = scUserApiService.getScmUser((String) jsonUser.getOrDefault("name", ""));
 		}
 
 		map.put("scUser", scUser);

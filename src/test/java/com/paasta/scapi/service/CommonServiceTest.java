@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.client.*;
+import static org.mockito.Mockito.*;
+
 
 import java.util.ArrayList;
 
@@ -56,10 +58,11 @@ public class CommonServiceTest extends MockUtil{
     public ScServiceInstanceService scServiceInstanceService;
 
     @InjectMocks
-    public ScServiceInstancesSpecifications scServiceInstancesSpecifications;
+    public
+    ScUserService scUserService;
 
     @InjectMocks
-    public ScUserService injectionScUserService;
+    public ScServiceInstancesSpecifications scServiceInstancesSpecifications;
 
     @Mock
     public
@@ -83,7 +86,7 @@ public class CommonServiceTest extends MockUtil{
 
     @Mock
     public
-    ScUserService scUserService;
+    ScUserApiService scUserApiService;
 
     @MockBean
     ResponseEntity responseEntity;
@@ -133,6 +136,7 @@ public class CommonServiceTest extends MockUtil{
         lstScServiceInstance = ScServiceInstanceEntityTestData.getLstScServiceInstance();
         pageScServiceInstance = ScServiceInstanceEntityTestData.getPageScServiceInstance();
 
+//        scmAdminSession();
         /**
          * scUserRepository mockito init
          */
@@ -186,20 +190,31 @@ public class CommonServiceTest extends MockUtil{
 
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
         Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
+        Mockito.when(scmClientSession.getUserHandler().get(userId)).thenReturn(UserEntityTestData.getUser());
 
         Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
         Mockito.when(userClientHandler.get(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.doNothing().when(userClientHandler).delete(userId);
         Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.modifyeUser());
 
-        Mockito.when(scUserService.apiGetUsers()).thenReturn(responseEntity);
-        Mockito.doNothing().when(scUserService).restDeleteUser(userId);
-        Mockito.doThrow(new RuntimeException()).when(scUserService).restDeleteUser(userId);
+        Mockito.when(scUserApiService.getScmUser(userId)).thenReturn(UserEntityTestData.getUser());
+        Mockito.when(scUserApiService.restGetAllUsers()).thenReturn(UserEntityTestData.getLstUser());
+        Mockito.doNothing().when(scUserApiService).create(UserEntityTestData.createUser());
+        Mockito.doNothing().when(scUserApiService).modify(UserEntityTestData.modifyeUser());
+        Mockito.doNothing().when(scUserApiService).delete(userId);
 
+
+       /* Mockito.when(scUserService.getUser(userId)).thenReturn(UserEntityTestData.getMapUser());
+        Mockito.when(scUserService.getUser(emptyId)).thenReturn(UserEntityTestData.getEmptyUser());
+        Mockito.when(scUserService.getUsers()).thenReturn(UserEntityTestData.getMapAllUsers());
+        Mockito.when(scUserService.apiCreateUser(UserEntityTestData.createModifyUser())).thenReturn(responseEntity);
+
+        Mockito.doNothing().when(scUserService).restDeleteUser(userId);
+        Mockito.doThrow(new RuntimeException()).doCallRealMethod().doNothing().when(scUserService).restDeleteUser(userId);
+        Mockito.doNothing().when(scUserService).restDeleteUser(userId);
+        Mockito.doThrow(new RuntimeException()).when(scUserService).restUpdateUser("", UserEntityTestData.createModifyUser());*/
 
         Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
-        Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
-
     }
 
     /*@Test(expected = ScmUnauthorizedException.class)
@@ -210,8 +225,11 @@ public class CommonServiceTest extends MockUtil{
     @Ignore
     @Test
     public void scmAdminSession() throws Exception {
-        ScmClientSession rtnScmClientSession = commonService.scmAdminSession();
+//        ScmClientSession rtnScmClientSession = commonService.scmAdminSession();
 //        scmClientSession = ClientTestUtil.createAdminSession();
-        Assert.assertEquals(commonService.scmAdminSession(),scmClientSession);
+//        ScmClientSession rtnScmClientSession =ScmClientTest.createSession(scmUrl,adminId,adminPassword);
+//        ScmClientSession rtnScmClientSession = ScmClientTest.createSession(null);
+
+//        Assert.assertEquals(scmClientSession, rtnScmClientSession);
     }
 }
