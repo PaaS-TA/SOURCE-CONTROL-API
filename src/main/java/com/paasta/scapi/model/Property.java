@@ -17,4 +17,8 @@ public class Property {
     @JsonProperty("value")
     private String value;
 
+    public Property(String key, String value){
+        this.key = key;
+        this.value = value;
+    }
 }

@@ -14,8 +14,6 @@ import sonia.scm.client.ScmClientSession;
 public class CommonService {
 
 
-    public CommonService() {
-    }
     /**
      * SCM Server connection Session Information
      */

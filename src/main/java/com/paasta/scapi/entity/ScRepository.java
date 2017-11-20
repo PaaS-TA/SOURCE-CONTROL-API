@@ -47,4 +47,5 @@ public class ScRepository {
         this.ownerUserId = ownerUserId;
         createTime = DateUtil.currentDateTime();
     }
+
 }
