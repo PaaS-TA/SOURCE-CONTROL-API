@@ -21,7 +21,7 @@
         <java.version>1.8</java.version>
         <scm.version>1.54</scm.version>
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
-        <!--<maven.test.skip>false</maven.test.skip>-->
+        <maven.test.skip>false</maven.test.skip>
         <final.fileName>paasta-sourcecontrol-api</final.fileName>
         <sonar.jacoco.reportPath>target/surefire-reports/jacoco-ut.exec</sonar.jacoco.reportPath>
     </properties>
@@ -182,6 +182,46 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <skip>${maven.test.skip}</skip>
+                    <destFile>${basedir}/target/jacoco/jacoco-overall.exec</destFile>
+                    <output>file</output>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>target/jacoco/jacoco.exec</dataFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+
+
+
         </plugins>
     </build>
     <reporting>
