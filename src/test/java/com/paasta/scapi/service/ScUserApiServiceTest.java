@@ -12,8 +12,6 @@ import sonia.scm.user.User;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * create ScUserService
  * @author ijlee
