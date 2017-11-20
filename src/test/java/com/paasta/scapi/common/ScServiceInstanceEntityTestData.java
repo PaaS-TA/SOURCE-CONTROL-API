@@ -1,12 +1,14 @@
 package com.paasta.scapi.common;
+
 import com.paasta.scapi.entity.ScServiceInstance;
+import org.junit.Ignore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Ignore
 public final class ScServiceInstanceEntityTestData
 {
 
@@ -31,11 +33,7 @@ public final class ScServiceInstanceEntityTestData
         Page<ScServiceInstance> scServiceInstancePage = new PageImpl<ScServiceInstance>(lstPage);
         return scServiceInstancePage;
     }
-    public static Specification<ScServiceInstance> geSpecScServiceInstance(){
 
-        List<ScServiceInstance> lstPage =getLstScServiceInstance();
-        Page<ScServiceInstance> scServiceInstancePage =new PageImpl<ScServiceInstance>(lstPage);
-        return (Specification<ScServiceInstance>) scServiceInstancePage;
-    }
+
 
 }

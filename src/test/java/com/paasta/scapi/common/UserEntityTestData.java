@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.util.DateUtil;
 import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScUser;
+import org.junit.Ignore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import sonia.scm.user.User;
 
 import java.util.*;
 
+@Ignore
 public final class UserEntityTestData
 {
 
@@ -33,6 +35,13 @@ public final class UserEntityTestData
     public static ScUser getScUser()
     {
         return new ScUser(MockUtil.userId, MockUtil.userName, MockUtil.userMail, MockUtil.userDesc);
+    }
+
+    public static User getAdminUser()
+    {
+        User user = new User(MockUtil.scmAdminId, MockUtil.userName, MockUtil.userMail);
+        user.setPassword(MockUtil.scmAdminPassword);
+        return user;
     }
     public static ScUser getEmptyScUser()
     {

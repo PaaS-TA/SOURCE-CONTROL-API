@@ -1,11 +1,11 @@
 package com.paasta.scapi.common;
 import com.paasta.scapi.entity.ScRepository;
-import com.paasta.scapi.entity.ScUser;
-import sonia.scm.user.User;
+import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Ignore
 public final class RepositoryEntityTestData
 {
 

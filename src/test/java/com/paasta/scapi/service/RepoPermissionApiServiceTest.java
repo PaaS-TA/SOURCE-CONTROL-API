@@ -1,19 +1,12 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.util.PropertiesUtil;
-import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.model.Repository;
-import com.paasta.scapi.repository.RepoPermissionRepository;
-import com.paasta.scapi.repository.ScInstanceUserRepository;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.mock;

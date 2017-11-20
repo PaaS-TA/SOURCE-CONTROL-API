@@ -1,12 +1,10 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.common.ClientTestUtil;
+import com.paasta.scapi.common.UserEntityTestData;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.http.HttpStatus;
@@ -17,33 +15,36 @@ import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.user.User;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 /**
  * Created by ijlee on 2017-09-04.
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
 @ActiveProfiles("test")
-public class ScLoginServiceTest extends ScLoginService{
-
-    @Mock
-    private ScLoginService scLoginService;
+public class ScLoginServiceTest extends CommonServiceTest{
 
     @Autowired
     private PropertiesUtil propertiesUtil;
 
-
-    @Override
-    public ResponseEntity login(User user, PropertiesUtil propertiesUtil) {
-        ClientTestUtil.createAdminSession();
-        return new ResponseEntity(user,HttpStatus.OK);
+    @Before
+    public void setUp() {
+        setUpMockUtil();
     }
 
     @Test
     public void login_200() {
-        User user = mock(User.class);
-        ResponseEntity rtnResponseEntity = scLoginService.login(user, propertiesUtil);
+
+//        User user = UserEntityTestData.getUser();
+        User user = UserEntityTestData.getAdminUser();
+        ResponseEntity rtnResponseEntity = scLoginService.login(user, null);
         assertEquals(rtnResponseEntity.getStatusCode(),HttpStatus.OK);
     }
 
+    @Test
+    public void login_403() {
+
+        User user = UserEntityTestData.getUser();
+        ResponseEntity rtnResponseEntity = scLoginService.login(user, null);
+        assertEquals(rtnResponseEntity.getStatusCode(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
