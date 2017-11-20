@@ -1,10 +1,11 @@
 package com.paasta.scapi.common;
+
 import com.paasta.scapi.entity.RepoPermission;
-import com.paasta.scapi.entity.ScRepository;
+import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Ignore
 public final class RepoPermissionEntityTestData
 {
 

@@ -3,6 +3,7 @@ package com.paasta.scapi.common;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import sonia.scm.Manager;
@@ -18,6 +19,7 @@ import java.io.IOException;
  * @param <T>
  * @param <E>
  */
+@Ignore
 public abstract class ManagerTestBase<T extends ModelObject, E extends Exception>
 {
 

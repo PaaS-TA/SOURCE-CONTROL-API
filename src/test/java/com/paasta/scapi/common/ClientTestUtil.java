@@ -37,6 +37,7 @@ package com.paasta.scapi.common;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import org.junit.Ignore;
 import sonia.scm.client.ClientUtil;
 import sonia.scm.client.JerseyClientProvider;
 import sonia.scm.client.JerseyClientSession;
@@ -49,6 +50,7 @@ import sonia.scm.url.UrlProvider;
  *
  * @author Sebastian Sdorra
  */
+@Ignore
 public final class ClientTestUtil
 {
 

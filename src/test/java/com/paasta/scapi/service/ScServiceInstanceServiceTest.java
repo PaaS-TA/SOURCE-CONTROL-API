@@ -1,17 +1,16 @@
 package com.paasta.scapi.service;
 
+import com.paasta.scapi.common.ScServiceInstanceEntityTestData;
 import com.paasta.scapi.entity.ScServiceInstance;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * create ScServiceInstanceServiceTest
@@ -29,19 +28,28 @@ public class ScServiceInstanceServiceTest  extends CommonServiceTest{
     }
 
     @Test
-    public void getAll() throws Exception {
-        List<ScServiceInstance> list = mock(List.class);
-        scServiceInstanceRepository.findAll();
+    public void getServiceInstanceList() throws Exception {
+
+        List<ScServiceInstance>  list = this.scServiceInstanceRepository.findByCreateUserId(userId);
+        Assert.assertEquals(ScServiceInstanceEntityTestData.getLstScServiceInstance(),list);
     }
 
-    @Test
-    public void getServiceInstanceListC() throws Exception {
-        //String organizationName, Pageable pageable
-        Page<ScServiceInstance> serviceInstanceListPage = mock(Page.class);
-        scServiceInstanceService.getServiceInstanceList("");
 
-        //String creqteUserId
-        scServiceInstanceRepository.findAll();
-    }
+//    @Test
+//    public void geServiceInstanceListPage() throws Exception {
+//        ServiceInstanceList resultList;
+//        Page<ScServiceInstance> serviceInstanceListPage;
+//
+//        if (organizationName == null || "".equals(organizationName)) {
+//            serviceInstanceListPage = scServiceInstanceRepository.findAll(pageRequest);
+//        } else {
+//            serviceInstanceListPage = scServiceInstanceRepository.findAll(ScServiceInstancesSpecifications.hasOrganizationName(organizationName), pageRequest);
+//        }
+//
+////        resultList = (ServiceInstanceList) setPageInfo(serviceInstanceListPage, new ServiceInstanceList());
+////        resultList.setServiceInstances(serviceInstanceListPage.getContent());
+//        return resultList;;
+//    }
+
 
 }

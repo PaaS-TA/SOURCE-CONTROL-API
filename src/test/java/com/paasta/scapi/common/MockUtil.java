@@ -1,18 +1,30 @@
 package com.paasta.scapi.common;
 
+import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.entity.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.SCMContextProvider;
 import sonia.scm.user.User;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
 @ActiveProfiles("test")
 public class MockUtil
 {
@@ -21,6 +33,9 @@ public class MockUtil
      * static final validation
      * then service excute then  not changed
      */
+
+    @Autowired
+    public static PropertiesUtil propertiesUtil;
 
     private static final String clientSessionId = "clientSessionId";
     private static final String clientSessionPassword = "clientSessionPassword";
@@ -37,8 +52,6 @@ public class MockUtil
     public static final  String ownerUserId = "ownerUserId";
     public static final  String createUserId = "createUserId";
     public static final  String searchUserId = "userId";
-    public static final  String adminId = "adminId";
-    public static final  String adminPassword = "adminPassword";
     public static final  String userId = "userId";
     public static final  String emptyId = "emptyId";
     public static final  String userName = "userName";

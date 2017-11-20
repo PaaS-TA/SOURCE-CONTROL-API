@@ -1,5 +1,6 @@
 package com.paasta.scapi.common;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import sonia.scm.user.User;
 
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by ijlee on 2017-08-02.
  */
-
+@Ignore
 public class CommonTest {
     @Test
     public void diffDay() throws Exception {
