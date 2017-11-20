@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import sonia.scm.client.ScmUnauthorizedException;
 import sonia.scm.user.User;
 
 import static org.junit.Assert.assertEquals;
@@ -34,17 +35,20 @@ public class ScLoginServiceTest extends CommonServiceTest{
     @Test
     public void login_200() {
 
-//        User user = UserEntityTestData.getUser();
         User user = UserEntityTestData.getAdminUser();
         ResponseEntity rtnResponseEntity = scLoginService.login(user, null);
         assertEquals(rtnResponseEntity.getStatusCode(),HttpStatus.OK);
     }
 
-    @Test
-    public void login_403() {
-
+    @Test(expected = ScmUnauthorizedException.class)
+    public void login_401() throws Exception{
         User user = UserEntityTestData.getUser();
-        ResponseEntity rtnResponseEntity = scLoginService.login(user, null);
-        assertEquals(rtnResponseEntity.getStatusCode(),HttpStatus.INTERNAL_SERVER_ERROR);
+        scLoginService.login(user, null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void login_500() {
+        User user = null;
+        scLoginService.login(user, null);
     }
 }
