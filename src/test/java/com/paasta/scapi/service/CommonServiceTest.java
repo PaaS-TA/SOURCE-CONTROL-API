@@ -1,7 +1,6 @@
 package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.*;
-import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.repository.*;
 import org.junit.Ignore;
@@ -11,14 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.client.RepositoryClientHandler;
 import sonia.scm.client.ScmClientSession;
@@ -26,9 +23,7 @@ import sonia.scm.client.ScmUnauthorizedException;
 import sonia.scm.client.UserClientHandler;
 
 import java.util.ArrayList;
-@Ignore
 @RunWith(SpringRunner.class)
-@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
 @ActiveProfiles("test")
 public class CommonServiceTest extends MockUtil{
 

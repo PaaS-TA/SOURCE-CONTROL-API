@@ -11,17 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import sonia.scm.SCMContextProvider;
-import sonia.scm.user.User;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = { PropertiesUtil.class })
@@ -35,7 +29,7 @@ public class MockUtil
      */
 
     @Autowired
-    public static PropertiesUtil propertiesUtil;
+    public PropertiesUtil propertiesUtilTest;
 
     private static final String clientSessionId = "clientSessionId";
     private static final String clientSessionPassword = "clientSessionPassword";
@@ -65,7 +59,7 @@ public class MockUtil
     public static final  String userRepoRole = "userRepoRole";
     public static final  String userCreateYn = "userCreateYn";
     public static final  String userSearchCreateYn = "";
-    public static final  Date userCreatedDate = new Date();
+    public static final Date userCreatedDate = new Date();
     public static final  Date userModifiedDate = new Date();
     public static final  String organizationGuid = "organizationGuid";
     public static final  String organizationName = "organizationName";
@@ -81,7 +75,7 @@ public class MockUtil
      * return List
      */
 
-    public static List<ScRepository> lstScRepository = new ArrayList();
+    public static List<ScRepository> lstScRepository = new ArrayList<>();
     public static List<ScUser> lstScUserBefore  = new ArrayList();
     public static List<ScUser> lstScUser = new ArrayList();
     public static List<sonia.scm.user.User> lstUser = new ArrayList();
@@ -92,16 +86,4 @@ public class MockUtil
     public static List<Map> rtnList = new ArrayList();
 
 
-    /** Field description */
-    private static final User ADMIN = new User("scmadmin", "SCM Admin",
-            "scmadmin@scm.org");
-
-    public static SCMContextProvider getSCMContextProvider(File directory)
-    {
-        SCMContextProvider provider = mock(SCMContextProvider.class);
-
-        when(provider.getBaseDirectory()).thenReturn(directory);
-
-        return provider;
-    }
 }
