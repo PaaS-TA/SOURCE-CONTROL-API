@@ -1,7 +1,6 @@
 package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.*;
-import com.paasta.scapi.common.exception.CustomLoginException;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.repository.*;
@@ -23,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import sonia.scm.client.RepositoryClientHandler;
 import sonia.scm.client.ScmClientSession;
+import sonia.scm.client.ScmUnauthorizedException;
 import sonia.scm.client.UserClientHandler;
 
 import java.util.ArrayList;
@@ -198,7 +198,10 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(scmClientSession.getUserHandler().get(userId)).thenReturn(UserEntityTestData.getUser());
 
         Mockito.when(scLoginService.login(UserEntityTestData.getAdminUser(), null)).thenReturn(new ResponseEntity(UserEntityTestData.getUser(), HttpStatus.OK));
-        Mockito.when(scLoginService.login(UserEntityTestData.getUser(), null)).thenReturn(new CustomLoginException().CustomLoginException(new Exception("Fobidden Auth")));
+        Mockito.when(scLoginService.login(UserEntityTestData.getUser(), null)).thenThrow(new ScmUnauthorizedException());
+        Mockito.when(scLoginService.login(null, null)).thenThrow(new RuntimeException("serverError"));
+//        Mockito.doThrow(new ScmUnauthorizedException()).when(scLoginService.login(UserEntityTestData.getUser(), null)).getStatusCode();
+//        Mockito.when(scLoginService.login(UserEntityTestData.getUser(), null)).thenReturn(new CustomLoginException().CustomLoginException(new Exception("Fobidden Auth")));
 
 
         Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
