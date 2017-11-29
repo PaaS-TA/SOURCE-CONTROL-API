@@ -2,7 +2,6 @@ package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.UserEntityTestData;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,11 +22,11 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ScUserServiceTest extends CommonServiceTest{
-
-    @Before
-    public void setUp() {
-        setUpMockUtil();
-    }
+//
+//    @Before
+//    public void setUp() {
+//        setUpMockUtil();
+//    }
 
     @Test
     public void restDeleteUser() throws Exception {

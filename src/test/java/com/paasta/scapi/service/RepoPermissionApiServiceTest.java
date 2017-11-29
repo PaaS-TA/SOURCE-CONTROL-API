@@ -1,7 +1,6 @@
 package com.paasta.scapi.service;
 
 import com.paasta.scapi.entity.RepoPermission;
-import com.paasta.scapi.model.Repository;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -25,14 +24,12 @@ public class RepoPermissionApiServiceTest extends CommonServiceTest {
 
     @Test
     public void insertRepositoryForUserAuth() throws Exception {
-        Repository repository = mock(Repository.class);
-        String repositoryId="";
 
         RepoPermission permission = mock(RepoPermission.class);
         permission.getUserId();
         permission.getPermission();
 
-        scRepositoryApiService.getRepositoryByIdApi("");
+//        scRepositoryApiService.getRepositoryByIdApi("");
 }
 
     @Test

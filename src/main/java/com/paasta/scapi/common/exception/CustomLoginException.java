@@ -2,7 +2,6 @@ package com.paasta.scapi.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import sonia.scm.client.ScmUnauthorizedException;
 
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import java.util.Map;
  * @Description Login RuntimeException 관련 CutomException 처리
  */
 
-@ControllerAdvice
 public class CustomLoginException extends Exception {
 
     public CustomLoginException() {

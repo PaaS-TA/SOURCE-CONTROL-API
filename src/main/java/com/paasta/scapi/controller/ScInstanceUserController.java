@@ -26,7 +26,6 @@ public class ScInstanceUserController extends Common {
 	 * @param instanceId
 	 * @param userId
 	 * @return
-	 * @throws RestException
 	 * @author 이인정
 	 * @version 1.0
 	 * @since 2017.8.16 최초작성

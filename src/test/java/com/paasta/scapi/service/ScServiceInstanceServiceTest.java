@@ -3,7 +3,6 @@ package com.paasta.scapi.service;
 import com.paasta.scapi.common.ScServiceInstanceEntityTestData;
 import com.paasta.scapi.entity.ScServiceInstance;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +21,10 @@ import java.util.List;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ScServiceInstanceServiceTest  extends CommonServiceTest{
 
-    @Before
-    public void setUp() {
-        setUpMockUtil();
-    }
+//    @Before
+//    public void setUp() {
+//        setUpMockUtil();
+//    }
 
     @Test
     public void getServiceInstanceList() throws Exception {

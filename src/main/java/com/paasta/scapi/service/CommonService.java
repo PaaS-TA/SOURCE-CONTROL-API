@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import sonia.scm.client.RepositoryClientHandler;
 import sonia.scm.client.ScmClient;
 import sonia.scm.client.ScmClientSession;
 
@@ -21,11 +22,14 @@ public class CommonService {
     @Value("${admin.id}")  private String username;
     @Value("${admin.pwd}")  private String password;
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(super.getClass());
 
     ScmClientSession scmAdminSession(){
         return ScmClient.createSession(url, username, password);
     }
 
+    RepositoryClientHandler createRepositoryClientHandler(){
+        return scmAdminSession().getRepositoryHandler();
+    }
 
 }

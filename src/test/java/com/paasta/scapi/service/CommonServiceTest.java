@@ -3,7 +3,8 @@ package com.paasta.scapi.service;
 import com.paasta.scapi.common.*;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.repository.*;
-import org.junit.Ignore;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -43,9 +44,8 @@ public class CommonServiceTest extends MockUtil{
     public
     ScInstanceUserService scInstanceUserService;
 
-    @InjectMocks
-    public
-    ScRepositoryApiService scRepositoryApiService;
+    @Mock
+    public ScRepositoryApiService scRepositoryApiService;
 
     @InjectMocks
     public ScRepositoryDBService scRepositoryDBService;
@@ -110,6 +110,7 @@ public class CommonServiceTest extends MockUtil{
      * It is required to perform the service.
      * To prevent errors when changing service.
      */
+    @Before
     public void setUpMockUtil() {
         MockitoAnnotations.initMocks(this);
 
@@ -131,7 +132,7 @@ public class CommonServiceTest extends MockUtil{
         lstUser = UserEntityTestData.getLstUser();
         lstScUserBefore = UserEntityTestData.getLstScUser();
         lstScRepository = RepositoryEntityTestData.getLstScRepository();
-        lstRepoPermission = RepoPermissionEntityTestData.getLstRepoPermissiony();
+        lstRepoPermission = RepoPermissionEntityTestData.getLstRepoPermission();
         lstScInstanceUsers = ScInstanceUserEntityTestData.getSearchScInstanceUser();
         lstScServiceInstance = ScServiceInstanceEntityTestData.getLstScServiceInstance();
         pageScServiceInstance = ScServiceInstanceEntityTestData.getPageScServiceInstance();
@@ -154,6 +155,8 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(repoPermissionRepository.findAllByRepoNo(repoNo)).thenReturn(lstRepoPermission);
         Mockito.when(repoPermissionRepository.findAllByRepoNoAndPermission(repoNo, sRepoPermission)).thenReturn(lstRepoPermission);
         Mockito.when(repoPermissionRepository.findAllByRepoNoAndUserId(repoNo, userId)).thenReturn(lstRepoPermission);
+        Mockito.when(repoPermissionRepository.save(RepoPermissionEntityTestData.createRepoPermission())).thenReturn(RepoPermissionEntityTestData.createRepoPermission());
+
 
         /**
          * scInstanceUserRepository mockito init
@@ -169,8 +172,8 @@ public class CommonServiceTest extends MockUtil{
          */
         Mockito.when(scRepositoryRepository.findAllByRepoScmId(repoScmId)).thenReturn(lstScRepository);
         Mockito.when(scRepositoryRepository.findAllByInstanceId(instanceId)).thenReturn(lstScRepository);
-        Mockito.when(scRepositoryRepository.save(RepositoryEntityTestData.createRepoitory())).thenReturn(RepositoryEntityTestData.createRepoitory());
-        Mockito.doNothing().when(scRepositoryRepository).delete(RepositoryEntityTestData.createRepoitory());
+        Mockito.when(scRepositoryRepository.save(RepositoryEntityTestData.createScRepoitory())).thenReturn(RepositoryEntityTestData.createScRepoitory());
+        Mockito.doNothing().when(scRepositoryRepository).delete(RepositoryEntityTestData.createScRepoitory());
 
         /**
          * scServiceInstanceRepository mockito init
@@ -188,23 +191,23 @@ public class CommonServiceTest extends MockUtil{
         Mockito.doNothing().when(scUserRepository).delete(userId);
         Mockito.when(scUserRepository.findAllByUserIdContaining(userId)).thenReturn(lstScUserBefore);
 
+        Mockito.doNothing().when(repositoryClientHandler).delete(repoScmId);
+
+
         Mockito.when(commonService.scmAdminSession()).thenReturn(scmClientSession);
         Mockito.when(scmClientSession.getUserHandler()).thenReturn(userClientHandler);
         Mockito.when(scmClientSession.getUserHandler().get(userId)).thenReturn(UserEntityTestData.getUser());
 
+        Mockito.when(commonService.createRepositoryClientHandler()).thenReturn(repositoryClientHandler);
+
         Mockito.when(scLoginService.login(UserEntityTestData.getAdminUser(), null)).thenReturn(new ResponseEntity(UserEntityTestData.getUser(), HttpStatus.OK));
         Mockito.when(scLoginService.login(UserEntityTestData.getUser(), null)).thenThrow(new ScmUnauthorizedException());
         Mockito.when(scLoginService.login(null, null)).thenThrow(new RuntimeException("serverError"));
-//        Mockito.doThrow(new ScmUnauthorizedException()).when(scLoginService.login(UserEntityTestData.getUser(), null)).getStatusCode();
-//        Mockito.when(scLoginService.login(UserEntityTestData.getUser(), null)).thenReturn(new CustomLoginException().CustomLoginException(new Exception("Fobidden Auth")));
-
 
         Mockito.when(userClientHandler.getAll()).thenReturn(lstUser);
         Mockito.when(userClientHandler.get(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.doNothing().when(userClientHandler).delete(userId);
         Mockito.doNothing().when(userClientHandler).modify(UserEntityTestData.modifyeUser());
-//        Mockito.when(scUserService.getUsers()).thenReturn(UserEntityTestData.getMapAllUsers());
-
 
         Mockito.when(scUserApiService.getScmUser(userId)).thenReturn(UserEntityTestData.getUser());
         Mockito.when(scUserApiService.restGetAllUsers()).thenReturn(UserEntityTestData.getLstUser());
@@ -226,19 +229,15 @@ public class CommonServiceTest extends MockUtil{
         Mockito.when(responseEntity.getBody()).thenReturn(lstUser);
     }
 
-    /*@Test(expected = ScmUnauthorizedException.class)
-    public void createSessionAnonymousFailedTest()
-    {
-        ClientTestUtil.createAnonymousSession().close();
-    }*/
-    @Ignore
     @Test
     public void scmAdminSession() throws Exception {
-//        ScmClientSession rtnScmClientSession = commonService.scmAdminSession();
-//        scmClientSession = ClientTestUtil.createAdminSession();
-//        ScmClientSession rtnScmClientSession =ScmClientTest.createSession(scmUrl,adminId,adminPassword);
-//        ScmClientSession rtnScmClientSession = ScmClientTest.createSession(null);
+        ScmClientSession rtnScmClientSession = commonService.scmAdminSession();
+        Assert.assertEquals(scmClientSession, rtnScmClientSession);
+    }
 
-//        Assert.assertEquals(scmClientSession, rtnScmClientSession);
+    @Test
+    public void createRepositoryClientHandler() throws Exception {
+        RepositoryClientHandler rtnRepositoryClientHandler = commonService.createRepositoryClientHandler();
+        Assert.assertEquals(repositoryClientHandler, rtnRepositoryClientHandler);
     }
 }

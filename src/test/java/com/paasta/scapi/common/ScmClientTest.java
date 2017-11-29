@@ -1,11 +1,10 @@
 package com.paasta.scapi.common;
 
-import org.junit.Ignore;
 import sonia.scm.client.ScmClientException;
 import sonia.scm.client.ScmClientProvider;
 import sonia.scm.client.ScmClientSession;
 import sonia.scm.util.ServiceUtil;
-@Ignore
+
 public final class ScmClientTest {
 
     /** Field description */

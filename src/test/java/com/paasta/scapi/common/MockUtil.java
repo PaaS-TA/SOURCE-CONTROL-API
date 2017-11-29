@@ -31,6 +31,8 @@ public class MockUtil
     @Autowired
     public PropertiesUtil propertiesUtilTest;
 
+    public static final String properyKey = "key";
+    public static final String properyValue = "value";
     private static final String clientSessionId = "clientSessionId";
     private static final String clientSessionPassword = "clientSessionPassword";
     public static final String scmUrl = "scmUrl";
@@ -43,7 +45,7 @@ public class MockUtil
     public static final  String repoName = "repoName";
     public static final  String repoDesc = "repoDesc";
     public static final  String instanceId = "instanceId";
-    public static final  String ownerUserId = "ownerUserId";
+    public static final  String ownerUserId = "createUserId";
     public static final  String createUserId = "createUserId";
     public static final  String searchUserId = "userId";
     public static final  String userId = "userId";
@@ -51,6 +53,8 @@ public class MockUtil
     public static final  String userName = "userName";
     public static final  String userMail = "userMail";
     public static final  String userDesc = "userDesc";
+    public static final  String repoType = "repoType";
+
     public static final  int iRepoNo= 0;
     public static final  int getInstanceNo = 0;
     public static final  int getInstanceId = 0;
@@ -84,6 +88,5 @@ public class MockUtil
     public static List<ScServiceInstance> lstScServiceInstance = new ArrayList();
     public static Page<ScServiceInstance> pageScServiceInstance = new PageImpl<ScServiceInstance>(lstScServiceInstance);
     public static List<Map> rtnList = new ArrayList();
-
 
 }

@@ -1,14 +1,13 @@
 package com.paasta.scapi.service;
 
-import com.paasta.scapi.model.Repository;
+import com.paasta.scapi.common.RepositoryEntityTestData;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
+import sonia.scm.repository.Repository;
 
-import static org.mockito.Mockito.mock;
 
 /**
  * Created by SEJI on 2017-10-16.
@@ -16,33 +15,25 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ScRepositoryDBServiceTest {
-
-    @Mock
-    ScRepositoryDBService scRepositoryDBService;
-
-    @Mock
-    RepoPermissionDBService repoPermissionDBService;
-
+public class ScRepositoryDBServiceTest extends CommonServiceTest{
 
     @Test
     public void createRepositoryDB() throws  Exception {
-        Repository repository = mock(Repository.class);
-//        RepoPermission repoPermission = mock(RepoPermission.class);
-        scRepositoryDBService.createRepositoryDB(repository);
-//        repoPermissionDBService.save(repoPermission);
+//        Repository reqRepository = RepositoryEntityTestData.createRepoitory();
+//        ScRepository expectedScRepository = RepositoryEntityTestData.createScRepoitory();
+//        ScRepository rtnRepository = scRepositoryDBService.createRepositoryDB(reqRepository);
+//        expectedScRepository.setCreateTime(rtnRepository.getCreateTime());
+//        Assert.assertEquals(expectedScRepository, rtnRepository);
     }
 
     @Test
     public void updateRepositoryDB() throws Exception {
-        Repository repository = mock(Repository.class);
-        scRepositoryDBService.updateRepositoryDB(repository);
+        Repository reqRepository = RepositoryEntityTestData.getRepoitory();
+        scRepositoryDBService.updateRepositoryDB(reqRepository);
     }
 
     @Test
     public void deleteRepositoryDB() throws Exception {
-        Repository repository = mock(Repository.class);
-        String id = "";
-        scRepositoryDBService.deleteRepositoryDB(id);
+        scRepositoryDBService.deleteRepositoryDB(repoScmId);
     }
 }

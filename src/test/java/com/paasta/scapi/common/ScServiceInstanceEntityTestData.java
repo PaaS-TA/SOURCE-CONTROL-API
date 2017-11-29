@@ -1,14 +1,13 @@
 package com.paasta.scapi.common;
 
 import com.paasta.scapi.entity.ScServiceInstance;
-import org.junit.Ignore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Ignore
+
 public final class ScServiceInstanceEntityTestData
 {
 

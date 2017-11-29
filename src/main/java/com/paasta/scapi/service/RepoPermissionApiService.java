@@ -1,18 +1,13 @@
 package com.paasta.scapi.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.Common;
 import com.paasta.scapi.common.Constants;
-import com.paasta.scapi.common.exception.RestException;
 import com.paasta.scapi.common.util.DateUtil;
 import com.paasta.scapi.common.util.PropertiesUtil;
 import com.paasta.scapi.common.util.RestClientUtil;
 import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScInstanceUser;
 import com.paasta.scapi.entity.ScRepository;
-import com.paasta.scapi.model.Permission;
-import com.paasta.scapi.model.Repository;
 import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScInstanceUserRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
@@ -20,13 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sonia.scm.client.UserClientHandler;
+import sonia.scm.repository.PermissionType;
 import sonia.scm.user.User;
 
 import java.util.ArrayList;
@@ -79,68 +73,45 @@ public class RepoPermissionApiService extends CommonService{
     @SuppressWarnings("unchecked")
     @Transactional
     public ResponseEntity insertRepositoryForUserAuth(String repositoryId, RepoPermission permission) {
-        ResponseEntity entity;
 
-        try {
             UserClientHandler userClientHandler = scmAdminSession().getUserHandler();
             User user = scmAdminSession().getUserHandler().get(permission.getUserId());
             if(Common.empty(user)){
                 userClientHandler.create(new User(permission.getUserId()));
             }
-            Repository repository = scRepositoryApiService.getRepositoryByIdApi(repositoryId);
-            List<Permission> lstPermission = repository.getPermissions();
-            lstPermission.add(new Permission(permission.getUserId(), permission.getPermission()));
+            sonia.scm.repository.Repository repository = scRepositoryApiService.getRepositoryByIdApi(repositoryId);
+            List<sonia.scm.repository.Permission> lstPermission = repository.getPermissions();
+            lstPermission.add(new sonia.scm.repository.Permission(permission.getUserId(), PermissionType.OWNER));
             repository.setPermissions(lstPermission);
-            ObjectMapper jackson = new ObjectMapper();
-            logger.info("repositoryForUserAuth Start : ");
-
-            String param = null;
-            try {
-                param = jackson.writeValueAsString(repository);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            logger.info("repositoryForUserAuth Start :param:: "+param);
-
-            HttpEntity<Object> httEntity = restClientUtil.restCommonHeader(repository);
-            entity = restClientUtil.callRestApi(HttpMethod.PUT, this.propertiesUtil.getApiRepo() + "/" + repositoryId, httEntity, String.class);
-            if (entity.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
-                List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
-                permission.setRepoNo(scRepository.get(0).getRepoNo());
-                repoPermissionRepository.save(permission);
-                return new ResponseEntity(entity.getHeaders(), HttpStatus.OK);
-            }
-        } catch (RestException restException) {
-            restException.printStackTrace();
-            return new ResponseEntity(restException.getMessage(), HttpStatus.EXPECTATION_FAILED);
-        }
-        return entity;
+            createRepositoryClientHandler().modify(repository);
+            List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);
+            permission.setRepoNo(scRepository.get(0).getRepoNo());
+            repoPermissionRepository.save(permission);
+            return new ResponseEntity(HttpStatus.OK);
     }
 
 
     @SuppressWarnings("unchecked")
     @Transactional
     public ResponseEntity deleteRepositoryForUserAuth(Integer permisionNo) {
-        ResponseEntity entity;
-        try {
-            RepoPermission repoPermission = repoPermissionRepository.getOne(permisionNo);
+//        ResponseEntity entity;
+//        try {
+        RepoPermission repoPermission = repoPermissionRepository.getOne(permisionNo);
+        ScRepository scRepository = scRepositoryRepository.findOne(repoPermission.getRepoNo());
+        sonia.scm.repository.Repository repository = scRepositoryApiService.getRepositoryByIdApi(scRepository.getRepoScmId());
 
-            ScRepository scRepository = scRepositoryRepository.findOne(repoPermission.getRepoNo());
-            String repositoryId = scRepository.getRepoScmId();
-            Repository repository = scRepositoryApiService.getRepositoryByIdApi(scRepository.getRepoScmId());
+        List<sonia.scm.repository.Permission> lstPermission = repository.getPermissions();
+        List rtnLstPermission = new ArrayList();
 
-            List<Permission> lstPermission = repository.getPermissions();
-            List rtnLstPermission = new ArrayList();
-
-            for (Permission vo : lstPermission) {
-                if (!(repoPermission.getUserId().equals(vo.getName()) && repoPermission.getPermission().equals(vo.getType()))) {
-                    rtnLstPermission.add(vo);
-                }
+        for (sonia.scm.repository.Permission vo : lstPermission) {
+            if (!(repoPermission.getUserId().equals(vo.getName()) && repoPermission.getPermission().equals(vo.getType().toString()))) {
+                rtnLstPermission.add(vo);
             }
-            repository.setPermissions(rtnLstPermission);
-
-            repoPermissionRepository.delete(permisionNo);
-            ObjectMapper jackson = new ObjectMapper();
+        }
+        repository.setPermissions(rtnLstPermission);
+        repoPermissionRepository.delete(permisionNo);
+        createRepositoryClientHandler().modify(repository);
+            /*ObjectMapper jackson = new ObjectMapper();
             logger.info("repositoryForUserAuth Start : ");
             String param;
             try {
@@ -158,13 +129,11 @@ public class RepoPermissionApiService extends CommonService{
             restException.printStackTrace();
             return new ResponseEntity(restException.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
-
-        return entity;
+*/
+        return new ResponseEntity( HttpStatus.OK);
 
     }
 
-
-    
     @SuppressWarnings("unchecked")
     @Transactional
     public ResponseEntity getListPermitionByInstanceId(String instanceId, int page, int size, String username) {
@@ -177,16 +146,16 @@ public class RepoPermissionApiService extends CommonService{
             List<Map> repositories = new ArrayList<>();
 
             // 서비스 인스턴스별 repository
-            List<Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instanceId,"");
+            List<sonia.scm.repository.Repository> instanceRepositories = scRepositoryApiService.getRepositoryByInstanceId(instanceId,"");
 
             List<User> lstUser = userClientHandler.getAll();
             //사용자 정보중에서 username을 필터한다.(perfomance 를 위한 작업)
             List<User> relstUser =Common.fillterUser(username, lstUser);
 
             //해당 인스턴스 Repository 와 permission 아이디에 사용자 정보를 조합한다. permission {i} --> user {i}
-            instanceRepositories.forEach((Repository repository) -> {
+            instanceRepositories.forEach((sonia.scm.repository.Repository repository) -> {
                 List lst = new ArrayList();
-                repository.getPermissions().forEach((Permission permission) -> relstUser.forEach((User user) -> {
+                repository.getPermissions().forEach((sonia.scm.repository.Permission permission) -> relstUser.forEach((User user) -> {
                     if (user.getName().equals(permission.getName())) {
                         lst.add(user);
                     }

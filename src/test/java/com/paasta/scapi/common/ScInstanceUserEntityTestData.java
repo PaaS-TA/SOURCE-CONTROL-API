@@ -1,11 +1,10 @@
 package com.paasta.scapi.common;
+
 import com.paasta.scapi.entity.ScInstanceUser;
-import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Ignore
 public final class ScInstanceUserEntityTestData
 {
 

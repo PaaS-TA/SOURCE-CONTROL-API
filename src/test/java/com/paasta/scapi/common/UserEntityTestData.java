@@ -1,9 +1,9 @@
 package com.paasta.scapi.common;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paasta.scapi.common.util.DateUtil;
 import com.paasta.scapi.entity.RepoPermission;
 import com.paasta.scapi.entity.ScUser;
-import org.junit.Ignore;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +13,6 @@ import sonia.scm.user.User;
 
 import java.util.*;
 
-@Ignore
 public final class UserEntityTestData
 {
 

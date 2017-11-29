@@ -2,10 +2,8 @@ package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.UserEntityTestData;
 import com.paasta.scapi.common.util.PropertiesUtil;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +22,13 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles("test")
 public class ScLoginServiceTest extends CommonServiceTest{
 
-    @Autowired
-    private PropertiesUtil propertiesUtil;
-
-    @Before
-    public void setUp() {
-        setUpMockUtil();
-    }
+//    @Autowired
+//    private PropertiesUtil propertiesUtil;
+//
+//    @Before
+//    public void setUp() {
+//        setUpMockUtil();
+//    }
 
     @Test
     public void login_200() {

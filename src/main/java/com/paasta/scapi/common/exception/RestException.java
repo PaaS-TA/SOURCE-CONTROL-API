@@ -9,12 +9,6 @@ public class RestException extends RuntimeException {
         super(msg);
     }
 
-    /*
-    public RestException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
-    */
-
 }
 
 
