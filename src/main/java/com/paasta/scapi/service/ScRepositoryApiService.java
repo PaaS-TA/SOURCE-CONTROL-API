@@ -57,6 +57,7 @@ public class ScRepositoryApiService extends  CommonService{
 
         int start = page* size;
         size  = (0==size) ? repositories.size():size;
+        size  = (0==size) ? 1:size;
         PageRequest pageRequest =  new PageRequest(page, size);
         int totalSize = repositories.size();
         repositories = repositories.stream().skip(start).limit(start+size).collect(toList());
