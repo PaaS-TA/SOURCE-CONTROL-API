@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 /**
@@ -201,11 +202,13 @@ public class ScRepositoryApiService extends  CommonService{
         String url = propertiesUtil.getApiRepositoryIdContentPathRevision().replace("{id}", id).replace("{path}", path);
         url = url.replace("{revision}", (String) Common.notNullrtnByobj(revision, ""));
         url = url.replace("{dc}", (String) Common.notNullrtnByobj(dc, ""));
-        logger.debug("getContent:::url" + url);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
-        return restClientUtil.callRestApi(HttpMethod.GET, url, entity, byte[].class);
+        headers.add("Authorization", this.propertiesUtil.getBasicAuth());
+        headers.add(ACCEPT, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+
+        return this.restClientUtil.callRestApi(HttpMethod.GET, url, new HttpEntity<>(null, headers), byte[].class);
 
     }
 
