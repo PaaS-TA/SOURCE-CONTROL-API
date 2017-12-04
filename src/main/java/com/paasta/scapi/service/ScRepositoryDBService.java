@@ -83,7 +83,7 @@ public class ScRepositoryDBService extends CommonService{
         if(scRepository.size()>0) {
             int repoNo = scRepository.get(0).getRepoNo();
             repoPermissionRepository.deleteAllByRepoNo(repoNo);
-            scRepositoryRepository.delete(scRepository);
+            scRepositoryRepository.delete(scRepository.get(0).getRepoNo());
         }
     }
 

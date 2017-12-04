@@ -21,7 +21,6 @@ import sonia.scm.repository.ChangesetPagingResult;
 import sonia.scm.repository.Repository;
 import sonia.scm.repository.Tags;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 
@@ -96,7 +95,6 @@ public class ScRepositoryApiService extends  CommonService{
         createRepositoryClientHandler().create(request);
     }
 
-    @Transactional
     public void deleteRepositoryApi(String id) throws ScmClientException {
 
         // scm-manager delete repository
@@ -180,7 +178,6 @@ public class ScRepositoryApiService extends  CommonService{
         return changesetHandler.getChangesets(0, 20);
     }
 
-    @Transactional
     public Repository updateRepository(String id, Repository repository) throws ScmClientException{
         try {
             RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();

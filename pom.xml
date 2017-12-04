@@ -5,7 +5,7 @@
     <groupId>com.paasta.scapi</groupId>
     <artifactId>paasta-sourcecontrol-api</artifactId>
     <version>0.1</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>scapi</name>
     <description>source control api</description>
     <parent>
@@ -134,7 +134,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${final.fileName}-${version}</finalName>
+        <finalName>${final.fileName}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

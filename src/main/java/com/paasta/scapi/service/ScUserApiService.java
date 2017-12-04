@@ -2,7 +2,6 @@ package com.paasta.scapi.service;
 
 import com.paasta.scapi.common.util.RestClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sonia.scm.user.User;
 
@@ -21,9 +20,6 @@ public class ScUserApiService extends CommonService {
     @Autowired
     private
     RestClientUtil restClientUtil;
-
-    @Value("${api.users}")
-    private String userUrl;
 
     /**
      * DB와 Scm APT 사용자 정보 내역을 가져온다.

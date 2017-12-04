@@ -10,7 +10,6 @@ import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
 import com.paasta.scapi.repository.ScUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -52,9 +51,6 @@ public class ScUserService extends CommonService {
 
     @Autowired
     ScUserApiService scUserApiService;
-
-    @Value("${api.users}")
-    private String userUrl;
 
     /**
      * DB에서 사용자 변경 내역을 수정한다.
@@ -316,7 +312,7 @@ public class ScUserService extends CommonService {
                 rssMap.put("rtnList", rtnList);
             }
             logger.info(getClass().getName() + " : getUsersByrepositoryId end");
-            List pageList = rssList;
+            List pageList = (List) rssMap.get("rtnList");
             //page,size
             int start = pageRequest.getPageNumber() * pageList.size();
             pageList = (List) pageList.stream().skip(start).limit(start+pageRequest.getPageSize()).collect(toList());

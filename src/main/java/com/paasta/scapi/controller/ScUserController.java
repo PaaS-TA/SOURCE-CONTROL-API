@@ -16,7 +16,9 @@ import sonia.scm.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -154,10 +156,6 @@ public class ScUserController extends CommonController {
 		String active = (String)map.getOrDefault("type2", "");
 		String sdirection = (String) map.getOrDefault("direction", "DESC");
 		String searchUserName = (String) map.getOrDefault("searchUserName", "");
-		List lstProperties = (List) map.getOrDefault("proierties", new ArrayList<>());
-		if(lstProperties.size()==0){
-			lstProperties.add("no");
-		}
 		PageRequest pageRequest =  new PageRequest(page, size);//, sort);
 		logger.debug("getListUsersByRepositoryId::sdirection"+"::"+sdirection);
 		return scUserService.getUsersByrepositoryId(repositoryId, searchUserName, permission, active, pageRequest);
