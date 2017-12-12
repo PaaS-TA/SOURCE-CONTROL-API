@@ -43,6 +43,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
+            <version>20171018</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,6 +67,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.42</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,20 +79,20 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.16.8</version>
         </dependency>
         <!-- Json Path -->
-        <!-- https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path -->
+       <!-- &lt;!&ndash; https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path &ndash;&gt;
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>2.4.0</version>
-        </dependency>
+            <version>LATEST</version>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.13.0-M2</version>
+            <version>2.11.0</version>
         </dependency>
         <dependency>
             <groupId>sonia.scm.clients</groupId>
@@ -106,32 +108,32 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
+            <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-plugin-api -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.5.0</version>
+            <version>3.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.sdorra</groupId>
-            <artifactId>shiro-unit</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.shiro-core</groupId>-->
+            <!--<artifactId>shiro-unit</artifactId>-->
+            <!--<version>RELEASE</version>-->
+        <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugin-tools/maven-plugin-annotations -->
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>3.5</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>4.3.11.RELEASE</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <finalName>${final.fileName}</finalName>
