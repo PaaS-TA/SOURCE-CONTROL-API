@@ -6,6 +6,7 @@ import com.paasta.scapi.entity.ScRepository;
 import com.paasta.scapi.repository.RepoPermissionRepository;
 import com.paasta.scapi.repository.ScRepositoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sonia.scm.repository.Repository;
@@ -50,6 +51,8 @@ public class ScRepositoryDBService extends CommonService{
             scRepositoryRepository.save(scRepository);
             List<ScRepository> lstScRepository = scRepositoryRepository.findAllByRepoScmId(scRepository.getRepoScmId());
             RepoPermission repoPermission = new RepoPermission(lstScRepository.get(0).getRepoNo(), createUser);
+            List<RepoPermission> lstRepoPermissionRepository = repoPermissionRepository.findAll(new Sort(Sort.Direction.DESC,"no"));
+            repoPermission.setNo(lstRepoPermissionRepository.get(0).getNo()+1);
             repoPermissionRepository.save(repoPermission);
 
         return repository;
