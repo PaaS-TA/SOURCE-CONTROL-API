@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sonia.scm.client.UserClientHandler;
+import sonia.scm.repository.Permission;
 import sonia.scm.repository.PermissionType;
 import sonia.scm.user.User;
 
@@ -81,7 +82,17 @@ public class RepoPermissionApiService extends CommonService{
             }
             sonia.scm.repository.Repository repository = scRepositoryApiService.getRepositoryByIdApi(repositoryId);
             List<sonia.scm.repository.Permission> lstPermission = repository.getPermissions();
-            lstPermission.add(new sonia.scm.repository.Permission(permission.getUserId(), PermissionType.OWNER));
+            Permission permission1 = new Permission(permission.getUserId());
+            if(Constants.REPO_PERMITION_OWNER.equals(permission.getPermission())){
+                permission1.setType(PermissionType.OWNER);
+            }
+            if(Constants.REPO_PERMITION_WRITE.equals(permission.getPermission())){
+                permission1.setType(PermissionType.WRITE);
+            }
+            if(Constants.REPO_PERMITION_READ.equals(permission.getPermission())){
+                 permission1.setType(PermissionType.READ);
+             }
+            lstPermission.add(permission1);
             repository.setPermissions(lstPermission);
             createRepositoryClientHandler().modify(repository);
             List<ScRepository> scRepository = scRepositoryRepository.findAllByRepoScmId(repositoryId);

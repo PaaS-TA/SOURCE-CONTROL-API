@@ -12,9 +12,9 @@ public class Constants {
 
     /** Permition */
     public static final String REPO_PERMITION_OWNER = "OWNER";
-   /* public static final String REPO_PERMITION_WRITE = "WRITE";
+    public static final String REPO_PERMITION_WRITE = "WRITE";
     public static final String REPO_PERMITION_READ = "READ";
-
+    /*
     public static final String USER_PERMITION_OWNER = "repository:*:OWNER";
     public static final String USER_PERMITION_WRITE = "repository:*:WRITE";
     public static final String USER_PERMITION_READ = "repository:*:READ";*/
