@@ -41,18 +41,29 @@ public class ScRepositoryDBService extends CommonService{
     @Transactional
     public sonia.scm.repository.Repository createRepositoryDB(sonia.scm.repository.Repository repository) {
             scRepositoryApiService.createRepositoryApi(repository);
-            repository = scRepositoryApiService.scmRepositoryByNameType(repository.getType(),repository.getName());
+            Repository resultRepository = scRepositoryApiService.scmRepositoryByNameType(repository.getType(),repository.getName());
+            List<ScRepository> lst = scRepositoryRepository.findAll((new Sort(Sort.Direction.DESC,"repoNo")));
+
             // 1-1. ScRepository insert
             // 1-2. RepoPermission insert
             Map mapReposiotry = repository.getProperties();
             String instanceId = (String)mapReposiotry.getOrDefault(Constants.REPO_PROPERTIES_INSTANCE_ID,"");
             String createUser = (String)mapReposiotry.getOrDefault(Constants.REPO_PROPERTIES_CREATE_USER,"");
-            ScRepository scRepository = new ScRepository(repository.getId(), repository.getName(),repository.getDescription(),instanceId , createUser , createUser);
+            ScRepository scRepository = new ScRepository(resultRepository.getId(), repository.getName(),repository.getDescription(),instanceId , createUser , createUser);
+            if(lst.size()==0) {
+                scRepository.setRepoNo(0);
+            }else{
+                scRepository.setRepoNo(lst.get(0).getRepoNo() + 1);
+            }
             scRepositoryRepository.save(scRepository);
             List<ScRepository> lstScRepository = scRepositoryRepository.findAllByRepoScmId(scRepository.getRepoScmId());
             RepoPermission repoPermission = new RepoPermission(lstScRepository.get(0).getRepoNo(), createUser);
             List<RepoPermission> lstRepoPermissionRepository = repoPermissionRepository.findAll(new Sort(Sort.Direction.DESC,"no"));
-            repoPermission.setNo(lstRepoPermissionRepository.get(0).getNo()+1);
+            if(lstRepoPermissionRepository.size()==0) {
+                repoPermission.setNo(1);
+            }else{
+                repoPermission.setNo(lstRepoPermissionRepository.get(0).getNo() + 1);
+            }
             repoPermissionRepository.save(repoPermission);
 
         return repository;

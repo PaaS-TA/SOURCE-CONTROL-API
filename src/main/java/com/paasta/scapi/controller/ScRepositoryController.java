@@ -141,41 +141,7 @@ public class ScRepositoryController {
         return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 
-    /**
-     * Repository Update.
-     * @apiVersion 0.1.0
-     * @api {POST} /repositories     Repository Update
-     * @apiDescription Repository 수정
-     * @apiName updateRepository
-     * @apiGroup Repositories
-     * @apiExample {curl} Example usage:
-     * curl 'http://localhost:9091/repositories' -i -X PUT \
-     * -H 'Content-Type: application/json' \
-     * -d '{"name" : "repository name",
-     * "description" : "description",
-     * "type" : "git/svn",
-     * "permissions" : [ {"groupPermission" : false,"name" : "user name","type" : "OWNER"}],
-     * "public" : true/false,
-     * "properties" : [ {"key" : "instance_id", "value" : "instanceId"}, {"key" : "create_user","value" : "userId"}]}'
-     * @apiHeader {String} Content-Type Body Data Type
-     * @apiParam {String} name 레파지토리 명
-     * @apiParam {String} description 레파지토리 설명
-     * @apiParam {String} type 레파지토리 계정 타입 (git/svn)
-     * @apiParam {List} permissions 레파지토리 permission 리스트
-     * @apiParam {boolean} public 공개/비공개 (true/false)
-     * @apiParam {List} properties instance Id , 레파지토리 생성자 정보 설정
 
-     @PutMapping public ResponseEntity<String> updateRepository(@RequestBody Repository request) throws RestException, JsonProcessingException {
-
-
-     // Scm-Server api - Repository 수정 호출
-     this.scRepositoryApiService.updateRepositoryApi(request);
-     // DB Update
-     this.scRepositoryDBService.updateRepositoryDB(request);
-
-     return new ResponseEntity<String>("{}", HttpStatus.OK);
-     }
-     */
     /**
      * Repository Delete
      *

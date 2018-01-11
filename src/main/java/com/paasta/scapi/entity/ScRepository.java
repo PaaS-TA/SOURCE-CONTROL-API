@@ -36,7 +36,6 @@ public class ScRepository {
     private String createTime;
 
     public ScRepository(){}
-    public ScRepository(String id, String reponame, String mail, String desc) { }
 
     public ScRepository(String repoScmId, String repoName, String repoDesc, String instanceId,String createUserId, String ownerUserId) {
         this.repoScmId = repoScmId;

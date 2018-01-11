@@ -46,6 +46,7 @@ public class PropertiesUtil {
      */
     @Value("${api.repository.id.content.path.revision}") String apiRepositoryIdContentPathRevision;
 
+    @Value("${api.clone.url}") String  apiCloneUrl;
     //====== [Scm Server User Resource Api]
 
     /**
@@ -66,6 +67,7 @@ public class PropertiesUtil {
                 ", adminPwd='" + adminPwd + '\'' +
                 ", apiRepoBranches='" + apiRepoBranches + '\'' +
                 ", apiRepoBrowse='" + apiRepoBrowse + '\'' +
+                ", apiCloneUrl='" + apiCloneUrl + '\'' +
                 ", apiRepositoryIdContentPathRevision='" + apiRepositoryIdContentPathRevision + '\'' +
                 '}';
     }

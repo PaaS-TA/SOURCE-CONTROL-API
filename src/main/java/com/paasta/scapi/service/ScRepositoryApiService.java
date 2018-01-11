@@ -84,6 +84,8 @@ public class ScRepositoryApiService extends  CommonService{
     public Repository getRepositoryByIdApi(String id){
         // scm-manager search repository
         Repository repository = createRepositoryClientHandler().get(id);
+        String url = repository.createUrl(propertiesUtil.getApiCloneUrl());
+        repository.setUrl(url);
         return repository;
     }
 
@@ -307,7 +309,8 @@ public class ScRepositoryApiService extends  CommonService{
     public Repository scmRepositoryByNameType(String type, String name) throws ScmClientException {
 
         RepositoryClientHandler repositoryClientHandler = scmAdminSession().getRepositoryHandler();
-        return repositoryClientHandler.get(type, name);
+        Repository repository =repositoryClientHandler.get(type,name);
+        return repository;
 
     }
 }

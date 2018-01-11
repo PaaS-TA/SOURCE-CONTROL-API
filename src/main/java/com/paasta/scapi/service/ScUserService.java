@@ -270,24 +270,26 @@ public class ScUserService extends CommonService {
             List rtnList = new ArrayList();
             //참여자 정보 에 사용자 정보를 병합한다.
             List<RepoPermission> lstPermission;
-            if (Common.empty(searchPermission)) {
-                lstPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
-            } else {
-                lstPermission = repoPermissionRepository.findAllByRepoNoAndPermission(scRepository.get(0).getRepoNo(), searchPermission);
-            }
-            lstPermission.forEach(permission -> lstUser.forEach(user -> {
-                if (permission.getUserId().equals(user.getName())) {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    Map rtnMap =  objectMapper.convertValue(user,Map.class);
-                    String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
-                    String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
-                    rtnMap.put("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
-                    rtnMap.put("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
-                    rtnMap.put("permission", permission);
-                    rtnList.add(rtnMap);
+            if(scRepository.size()!=0) {
+                if (Common.empty(searchPermission)) {
+                    lstPermission = repoPermissionRepository.findAllByRepoNo(scRepository.get(0).getRepoNo());
+                } else {
+                    lstPermission = repoPermissionRepository.findAllByRepoNoAndPermission(scRepository.get(0).getRepoNo(), searchPermission);
                 }
-            }));
+                lstPermission.forEach(permission -> lstUser.forEach(user -> {
+                    if (permission.getUserId().equals(user.getName())) {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        Map rtnMap = objectMapper.convertValue(user, Map.class);
+                        String creationDate = user.getCreationDate() == null ? "" : String.valueOf(user.getCreationDate());
+                        String lastModified = user.getLastModified() == null ? "" : String.valueOf(user.getLastModified());
+                        rtnMap.put("creationDate", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", creationDate));
+                        rtnMap.put("lastModified", DateUtil.parseStringDatebyInt("yyyy-MM-dd HH:mm:ss", lastModified));
+                        rtnMap.put("permission", permission);
+                        rtnList.add(rtnMap);
+                    }
+                }));
 
+            }
             List rssList = new ArrayList();
             //참여자 정보 중에서 이름과 활성정보를 필터링한다.
             if (Common.notEmpty(searchUserName) || Common.notEmpty(active)) {
