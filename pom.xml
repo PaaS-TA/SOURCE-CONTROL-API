@@ -24,6 +24,7 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <maven.test.skip>true</maven.test.skip>
         <final.fileName>sourcecontrol-api</final.fileName>
+        <tomcat.version>8.5.63</tomcat.version>
     </properties>
     <repositories>
         <repository>
