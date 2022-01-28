@@ -22,7 +22,7 @@ public class CustomLoginException extends Exception {
     public ResponseEntity CustomLoginException(ScmUnauthorizedException exception) {
         Map map = new HashMap();
         if (401 == exception.getStatusCode()) {
-            map.put("error", "로그인에 실패하였습니다.");
+            map.put("error", "Login failed.");
             return new ResponseEntity(map, HttpStatus.UNAUTHORIZED);
         } else {
             map.put("error", exception.getMessage());

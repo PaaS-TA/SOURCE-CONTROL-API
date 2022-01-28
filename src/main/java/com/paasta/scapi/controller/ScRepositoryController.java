@@ -159,7 +159,7 @@ public class ScRepositoryController {
     public ResponseEntity<String> deleteRepository(@PathVariable String id) {
         // Scm-Server api - Repository 삭제 호출 transaction 을 위한 통합.
         scRepositoryDBService.deleteRepositoryDB(id);
-        return new ResponseEntity<>("삭제를 성공하였습니다.", HttpStatus.OK);
+        return new ResponseEntity<>("Deletion was successful.", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

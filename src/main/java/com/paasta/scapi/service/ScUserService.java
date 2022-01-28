@@ -156,14 +156,14 @@ public class ScUserService extends CommonService {
             rspApp.put("ScUser", null);
             rspApp.put("rtnUser", null);
             rspApp.put("status", HttpStatus.NOT_FOUND.value());
-            rspApp.put("message", "사용자 존재하지 않습니다.");
+            rspApp.put("message", "User not found.");
             return rspApp;
         } else {
             User user = scUserApiService.getScmUser(name);
             rspApp.put("ScUser", scUser);
             rspApp.put("rtnUser", user);
             rspApp.put("status", HttpStatus.OK.value());
-            rspApp.put("message", "사용자 정보 조회에 성공하였습니다.");
+            rspApp.put("message", "User information inquiry was successful.");
             return rspApp;
         }
     }
